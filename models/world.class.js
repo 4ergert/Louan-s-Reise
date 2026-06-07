@@ -1,15 +1,7 @@
 class World {
 
   character = new Character();
-  enemies = [
-    new SkeletonWarriorLVL1(),
-    new SkeletonWarriorLVL1(),
-    new SkeletonWarriorLVL1()
-  ];
-  backgroundObjects = [
-    new BackgroundObject('img/Background/Autumn_Forest_2D_Platformer_Tileset_Background - Layer 00.png'),
-    new BackgroundObject('img/Background/Autumn_Forest_2D_Platformer_Tileset_Background - Layer 01.png')
-  ];
+  lvl = lvl_1;
   canvas;
   ctx;
   keyboard;
@@ -32,8 +24,8 @@ class World {
 
     this.ctx.translate(this.camera_x, 0);
     
-    this.addObjectsToMap(this.backgroundObjects);
-    this.addObjectsToMap(this.enemies);
+    this.addObjectsToMap(this.lvl.backgroundObjects);
+    this.addObjectsToMap(this.lvl.enemies);
     this.addToMap(this.character);
 
     this.ctx.translate(-this.camera_x, 0);

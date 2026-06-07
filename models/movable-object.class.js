@@ -1,5 +1,5 @@
 class MovableObject {
-  x = 100;
+  x = 0;
   y = 300;
   img;
   width = 150;
@@ -26,6 +26,8 @@ class MovableObject {
   }
 
   moveLeft() {
-    this.x -= 5;
+    if (this.x > 0) {
+      this.x -= 5;
+    }
   }
 }

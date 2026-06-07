@@ -84,7 +84,7 @@ class Character extends MovableObject {
         this.imgDirectionChange = false;
       }
 
-      if (this.world.keyboard.LEFT) {
+      if (this.world.keyboard.LEFT && this.x > 0) {
         this.x -= this.speed;
         this.imgDirectionChange = true;
       }
