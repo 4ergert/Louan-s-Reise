@@ -21,13 +21,4 @@ class MovableObject {
     });
   }
 
-  moveRight() {
-    this.x += 5;
-  }
-
-  moveLeft() {
-    if (this.x > 0) {
-      this.x -= 5;
-    }
-  }
 }

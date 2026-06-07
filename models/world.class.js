@@ -22,9 +22,9 @@ class World {
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+    this.drawBackgrounds(); // Draw backgrounds before translating the context for parallax effect
+
     this.ctx.translate(this.camera_x, 0);
-    
-    this.addObjectsToMap(this.lvl.backgroundObjects);
     this.addObjectsToMap(this.lvl.enemies);
     this.addToMap(this.character);
 
@@ -34,6 +34,18 @@ class World {
     let self = this;
     requestAnimationFrame(function () {
       self.draw();
+    });
+  }
+
+  // Draw backgrounds with parallax effect
+  drawBackgrounds() {
+    this.lvl.backgroundObjects.forEach(background => {
+      const offsetX = this.camera_x * background.parallaxFactor;
+
+      this.ctx.save();
+      this.ctx.translate(offsetX, 0);
+      this.addToMap(background);
+      this.ctx.restore();
     });
   }
 
