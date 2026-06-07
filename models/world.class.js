@@ -22,9 +22,12 @@ class World {
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.drawBackgrounds(); // Draw backgrounds before translating the context for parallax effect
-
+    this.drawBackgrounds();
+    
     this.ctx.translate(this.camera_x, 0);
+
+    this.addObjectsToMap(this.lvl.platformObjects);
+    this.addObjectsToMap(this.lvl.environmentObjects);
     this.addObjectsToMap(this.lvl.enemies);
     this.addToMap(this.character);
 
