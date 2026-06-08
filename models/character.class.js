@@ -1,8 +1,12 @@
 class Character extends MovableObject {
 
+  y = 80;
   IDLE_ANIMATION = CHARACTER_SPRITES.IDLE_ANIMATION;
   WALKING_ANIMATION = CHARACTER_SPRITES.WALKING_ANIMATION;
   RUNNING_ANIMATION = CHARACTER_SPRITES.RUNNING_ANIMATION;
+  JUMPING_ANIMATION = CHARACTER_SPRITES.JUMPING_ANIMATION;
+  JUMPING_LOOP_ANIMATION = CHARACTER_SPRITES.JUMPING_LOOP_ANIMATION;
+  FALLING_ANIMATION = CHARACTER_SPRITES.FALLING_ANIMATION;
   world;
   speed = 1;
 
@@ -12,7 +16,11 @@ class Character extends MovableObject {
     this.loadImages(this.IDLE_ANIMATION);
     this.loadImages(this.WALKING_ANIMATION);
     this.loadImages(this.RUNNING_ANIMATION);
+    this.loadImages(this.JUMPING_ANIMATION);
+    this.loadImages(this.JUMPING_LOOP_ANIMATION);
+    this.loadImages(this.FALLING_ANIMATION);
 
+    this.applyGravity();
     this.animation();
   }
 
@@ -32,13 +40,22 @@ class Character extends MovableObject {
         this.imgDirectionChange = true;
       }
 
+      if(this.world.keyboard.UP && !this.isAboveGround()) {
+        this.vcY = 6.75;
+      }
+
       this.world.camera_x = -this.x + 100;
     }, 1000 / 60);
 
     //Animation for moving
     setInterval(() => {
 
-      if (isRunning()) {
+      if (this.isAboveGround()) {
+        let i = this.currentImage % this.START_ANIMATION.length;
+        let path = this.FALLING_ANIMATION[i];
+        this.img = this.imgCache[path];
+        this.currentImage++;
+      } else if (isRunning()) {
         let i = this.currentImage % this.RUNNING_ANIMATION.length;
         let path = this.RUNNING_ANIMATION[i];
         this.img = this.imgCache[path];

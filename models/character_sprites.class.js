@@ -58,5 +58,30 @@ const CHARACTER_SPRITES = {
     './img/Character/lvl_1/Running/0_Dark_Oracle_Running_009.png',
     './img/Character/lvl_1/Running/0_Dark_Oracle_Running_010.png',
     './img/Character/lvl_1/Running/0_Dark_Oracle_Running_011.png',
+  ],
+  JUMPING_ANIMATION: [
+    './img/Character/lvl_1/Jump Start/0_Dark_Oracle_Jump Start_000.png',
+    './img/Character/lvl_1/Jump Start/0_Dark_Oracle_Jump Start_001.png',
+    './img/Character/lvl_1/Jump Start/0_Dark_Oracle_Jump Start_002.png',
+    './img/Character/lvl_1/Jump Start/0_Dark_Oracle_Jump Start_003.png',
+    './img/Character/lvl_1/Jump Start/0_Dark_Oracle_Jump Start_004.png',
+    './img/Character/lvl_1/Jump Start/0_Dark_Oracle_Jump Start_005.png'
+  ],
+  JUMPING_LOOP_ANIMATION: [
+    './img/Character/lvl_1/Jump Loop/0_Dark_Oracle_Jump Loop_000.png',
+    './img/Character/lvl_1/Jump Loop/0_Dark_Oracle_Jump Loop_001.png',
+    './img/Character/lvl_1/Jump Loop/0_Dark_Oracle_Jump Loop_002.png',
+    './img/Character/lvl_1/Jump Loop/0_Dark_Oracle_Jump Loop_003.png',
+    './img/Character/lvl_1/Jump Loop/0_Dark_Oracle_Jump Loop_004.png',
+    './img/Character/lvl_1/Jump Loop/0_Dark_Oracle_Jump Loop_005.png'
+  ],
+  FALLING_ANIMATION: [
+    './img/Character/lvl_1/Falling Down/0_Dark_Oracle_Falling Down_000.png',
+    './img/Character/lvl_1/Falling Down/0_Dark_Oracle_Falling Down_001.png',
+    './img/Character/lvl_1/Falling Down/0_Dark_Oracle_Falling Down_002.png',
+    './img/Character/lvl_1/Falling Down/0_Dark_Oracle_Falling Down_003.png',
+    './img/Character/lvl_1/Falling Down/0_Dark_Oracle_Falling Down_004.png',
+    './img/Character/lvl_1/Falling Down/0_Dark_Oracle_Falling Down_005.png'
   ]
+
 };
