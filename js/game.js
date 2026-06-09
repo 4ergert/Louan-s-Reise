@@ -29,6 +29,9 @@ window.addEventListener("keydown", (e) => {
     case "Control":
       keyboard.CTRL = true;
       break;
+    case "Shift":
+      keyboard.SHIFT = true;
+      break;
   }
 });
 
@@ -51,6 +54,9 @@ window.addEventListener("keyup", (e) => {
       break;
     case "Control":
       keyboard.CTRL = false;
+      break;
+    case "Shift":
+      keyboard.SHIFT = false;
       break;
   }
 });
