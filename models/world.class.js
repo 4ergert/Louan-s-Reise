@@ -13,6 +13,7 @@ class World {
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
+    this.checkCollisions();
   }
 
   setWorld() {
@@ -70,5 +71,21 @@ class World {
     this.ctx.translate(movableObject.x + movableObject.width / 2, 0);
     this.ctx.scale(-1, 1);
     this.ctx.translate(-movableObject.x - movableObject.width / 2, 0);
+  }
+
+  checkCollisions() {
+    setInterval(() => {
+      this.lvl.platformObjects.forEach(platform => {
+        if (this.character.isLandingOn(platform)) {
+          this.character.landOn(platform);
+        }
+      });
+
+      this.lvl.enemies.forEach(enemy => {
+        if (this.character.isColliding(enemy)) {
+          console.log("Collision detected!");
+        }
+      });
+    }, 1000 / 60);
   }
 }
