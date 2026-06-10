@@ -31,7 +31,7 @@ platformObjects.push(
   new PlatformObjects('img/Platformer/Autumn_Forest_2D_Platformer_Tileset_Platformer - Ground 02.png', 500, 350, 100, 100)
 );
 
-for (let index = 0; index < 10; index++) {
+for (let index = 0; index < 100; index++) {
   const x = index * 100 - 200;
 
   platformObjects.push(

@@ -41,4 +41,14 @@ class SkeletonWarriorLVL1 extends MovableObject {
       this.currentImage++;
     }, 100);
   }
+
+  getCollisionArea() {
+    return {
+      x: this.x + 30,
+      y: this.y + 40,
+      width: this.width - 60,
+      height: this.height - 65,
+      offsetY: 40,
+    };
+  }
 }

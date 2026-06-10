@@ -50,7 +50,6 @@ class Character extends MovableObject {
 
     //Animation 
     setInterval(() => {
-
       switch (true) {
         case this.isAboveGround() && this.vcY > 3:
           this.spriteAnimation(this.JUMPING, false); // Play the jumping animation once
@@ -90,5 +89,15 @@ class Character extends MovableObject {
     if (loop || this.currentImage < sprites.length - 1) {
       this.currentImage++;
     }
+  }
+
+  getCollisionArea() {
+    return {
+      x: this.x + 35,
+      y: this.y + 30,
+      width: this.width - 80,
+      height: this.height - 55,
+      offsetY: 30,
+    };
   }
 }
