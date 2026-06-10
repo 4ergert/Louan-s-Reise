@@ -9,7 +9,7 @@ function init() {
 }
 
 window.addEventListener("keydown", (e) => {
-  console.log(e.key);
+  // console.log(e.key);
   switch (e.key) {
     case "ArrowLeft":
       keyboard.LEFT = true;
@@ -22,6 +22,10 @@ window.addEventListener("keydown", (e) => {
       break;
     case "ArrowDown":
       keyboard.DOWN = true;
+      break;
+    case "d":
+    case "D":
+      keyboard.D = true;
       break;
     case " ":
       keyboard.SPACE = true;
@@ -51,6 +55,10 @@ window.addEventListener("keyup", (e) => {
       break;
     case " ":
       keyboard.SPACE = false;
+      break;
+    case "d":
+    case "D":
+      keyboard.D = false;
       break;
     case "Control":
       keyboard.CTRL = false;

@@ -82,6 +82,19 @@ const CHARACTER_SPRITES = {
     './img/Character/lvl_1/Falling Down/0_Dark_Oracle_Falling Down_003.png',
     './img/Character/lvl_1/Falling Down/0_Dark_Oracle_Falling Down_004.png',
     './img/Character/lvl_1/Falling Down/0_Dark_Oracle_Falling Down_005.png'
+  ],
+  SLASHING_ANIMATION: [
+    './img/Character/lvl_1/Run Slashing/0_Dark_Oracle_Run Slashing_000.png',
+    './img/Character/lvl_1/Run Slashing/0_Dark_Oracle_Run Slashing_001.png',
+    './img/Character/lvl_1/Run Slashing/0_Dark_Oracle_Run Slashing_002.png',
+    './img/Character/lvl_1/Run Slashing/0_Dark_Oracle_Run Slashing_003.png',
+    './img/Character/lvl_1/Run Slashing/0_Dark_Oracle_Run Slashing_004.png',
+    './img/Character/lvl_1/Run Slashing/0_Dark_Oracle_Run Slashing_005.png',
+    './img/Character/lvl_1/Run Slashing/0_Dark_Oracle_Run Slashing_006.png',
+    './img/Character/lvl_1/Run Slashing/0_Dark_Oracle_Run Slashing_007.png',
+    './img/Character/lvl_1/Run Slashing/0_Dark_Oracle_Run Slashing_008.png',
+    './img/Character/lvl_1/Run Slashing/0_Dark_Oracle_Run Slashing_009.png',
+    './img/Character/lvl_1/Run Slashing/0_Dark_Oracle_Run Slashing_010.png',
+    './img/Character/lvl_1/Run Slashing/0_Dark_Oracle_Run Slashing_011.png'
   ]
-
 };

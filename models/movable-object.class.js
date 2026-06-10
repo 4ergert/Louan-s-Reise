@@ -48,22 +48,21 @@ class MovableObject {
     ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
 
-  // drawFrame(ctx) {
-  //   if (this instanceof Character || this instanceof SkeletonWarriorLVL1 || this instanceof PlatformObjects) {
-  //     ctx.beginPath();
-  //     ctx.lineWidth = "1";
-  //     ctx.strokeStyle = "red";
-  //     if (this instanceof Character) {
-  //       ctx.rect(this.x + 35, this.y + 30, this.width - 80, this.height - 55);
-  //     } else if (this instanceof SkeletonWarriorLVL1) {
-  //       ctx.rect(this.x + 30, this.y + 40, this.width - 60, this.height - 65);
-  //     }
-  //     else if (this instanceof PlatformObjects) {
-  //       ctx.rect(this.x, this.y, this.width, this.height);
-  //     };
-  //     ctx.stroke();
-  //   }
-  // }
+  drawCollisionArea(ctx) {
+    let collisionArea = this.getCollisionArea();
+    if (this instanceof Character || this instanceof SkeletonWarriorLVL1 || this instanceof PlatformObjects) {
+      ctx.beginPath();
+      ctx.lineWidth = "2";
+      ctx.strokeStyle = "red";
+      ctx.rect(
+        collisionArea.x,
+        collisionArea.y,
+        collisionArea.width,
+        collisionArea.height
+      );
+      ctx.stroke();
+    }
+  }
 
   getCollisionArea() {
     return {

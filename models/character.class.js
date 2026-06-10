@@ -7,9 +7,12 @@ class Character extends MovableObject {
   JUMPING = CHARACTER_SPRITES.JUMPING_ANIMATION;
   FLYING = CHARACTER_SPRITES.JUMPING_LOOP_ANIMATION;
   FALLING = CHARACTER_SPRITES.FALLING_ANIMATION;
+  SLASHING = CHARACTER_SPRITES.SLASHING_ANIMATION;
   world;
   speed = 1;
   currentAnimation = null;
+  slashAnimationActive = false;
+  slashInputLocked = false;
 
   constructor() {
     super();
@@ -20,6 +23,7 @@ class Character extends MovableObject {
     this.loadImages(this.JUMPING);
     this.loadImages(this.FLYING);
     this.loadImages(this.FALLING);
+    this.loadImages(this.SLASHING);
 
     this.applyGravity();
     this.animation();
@@ -50,7 +54,12 @@ class Character extends MovableObject {
 
     //Animation 
     setInterval(() => {
+      this.updateSlashState();
+
       switch (true) {
+        case this.slashAnimationActive:
+          this.playSlashAnimation();
+          break;
         case this.isAboveGround() && this.vcY > 3:
           this.spriteAnimation(this.JUMPING, false); // Play the jumping animation once
           break;
@@ -66,12 +75,29 @@ class Character extends MovableObject {
           break;
         case isMoving():
           this.spriteAnimation(this.WALKING);
-          this.speed = 0.5;
+          this.speed = 1;
           break;
         default:
           this.spriteAnimation(this.IDLE);
       }
     }, 50);
+  }
+
+  updateSlashState() {
+    if (this.world.keyboard.D && !this.slashInputLocked) {
+      this.slashAnimationActive = true;
+      this.slashInputLocked = true;
+    }
+
+    if (!this.world.keyboard.D) this.slashInputLocked = false;
+  }
+
+  playSlashAnimation() {
+    this.spriteAnimation(this.SLASHING, false);
+
+    if (this.currentAnimation === this.SLASHING && this.currentImage >= this.SLASHING.length - 1) {
+      this.slashAnimationActive = false;
+    }
   }
 
   spriteAnimation(sprites, loop = true) {
@@ -81,22 +107,22 @@ class Character extends MovableObject {
     }
 
     let i = loop
+      // Loop through the animation frames if loop is true, otherwise play the animation once
       ? this.currentImage % sprites.length
+      // Play the animation once and stop at the last frame if loop is false
       : Math.min(this.currentImage, sprites.length - 1);
     let path = sprites[i];
     this.img = this.imgCache[path];
 
-    if (loop || this.currentImage < sprites.length - 1) {
-      this.currentImage++;
-    }
+    if (loop || this.currentImage < sprites.length - 1) this.currentImage++;
   }
 
   getCollisionArea() {
     return {
-      x: this.x + 35,
-      y: this.y + 30,
-      width: this.width - 80,
-      height: this.height - 55,
+      x: this.x + 45,
+      y: this.y + 35,
+      width: this.width - 90,
+      height: this.height - 60,
       offsetY: 30,
     };
   }

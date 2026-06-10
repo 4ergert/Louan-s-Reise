@@ -62,6 +62,7 @@ class World {
   addToMap(movableObject) {
     if (movableObject.imgDirectionChange) this.flipImage(movableObject);
     movableObject.draw(this.ctx);
+    movableObject.drawCollisionArea(this.ctx);
     if (movableObject.imgDirectionChange) this.ctx.restore();
   }
 

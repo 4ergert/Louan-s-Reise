@@ -28,7 +28,7 @@ class SkeletonWarriorLVL1 extends MovableObject {
     this.loadImage('./img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_000.png');
     this.loadImages(this.IDLE_ANIMATION);
 
-    this.x = 600 + Math.random() * 500;
+    this.x = 100 + Math.random() * 500;
 
     this.animation();
   }
@@ -44,10 +44,10 @@ class SkeletonWarriorLVL1 extends MovableObject {
 
   getCollisionArea() {
     return {
-      x: this.x + 30,
-      y: this.y + 40,
-      width: this.width - 60,
-      height: this.height - 65,
+      x: this.x + 50,
+      y: this.y + 45,
+      width: this.width - 100,
+      height: this.height - 70,
       offsetY: 40,
     };
   }
