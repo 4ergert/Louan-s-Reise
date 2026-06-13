@@ -89,12 +89,54 @@ class World {
         }
       });
 
+      let stompedEnemy = this.lvl.enemies.find(enemy =>
+        !enemy.isDying && !enemy.isDead &&
+        this.character.isColliding(enemy) && this.isStompingEnemy(enemy)
+      );
+
+      if (stompedEnemy) {
+        this.bounceOffEnemy(stompedEnemy);
+        this.handleEnemyDefeat(stompedEnemy);
+        return;
+      }
+
       this.lvl.enemies.forEach(enemy => {
+        if (enemy.isDying || enemy.isDead) return;
+
         if (this.character.isColliding(enemy) && !this.character.isHurt()) {
           this.character.startKnockback();
           this.character.hit();
         }
       });
     }, 1000 / 60);
+  }
+
+  // Check if the character is stomping on the enemy
+  isStompingEnemy(enemy) {
+    let characterArea = this.character.getCollisionArea();
+    let enemyArea = enemy.getCollisionArea();
+    let characterFeet = characterArea.y + characterArea.height;
+
+    return this.character.vcY < 0 && characterFeet <= enemyArea.y + 25;
+  }
+
+  bounceOffEnemy(enemy) {
+    let characterArea = this.character.getCollisionArea();
+    let enemyArea = enemy.getCollisionArea();
+
+    this.character.y = enemyArea.y - characterArea.height - characterArea.offsetY;
+    this.character.vcY = 5;
+  }
+
+  handleEnemyDefeat(enemy) {
+    let dyingDuration = enemy.die();
+
+    setTimeout(() => {
+      this.removeEnemy(enemy);
+    }, dyingDuration);
+  }
+
+  removeEnemy(enemyToRemove) {
+    this.lvl.enemies = this.lvl.enemies.filter(enemy => enemy !== enemyToRemove);
   }
 }

@@ -27,7 +27,7 @@ for (let index = 0; index < 5; index++) {
 
 const platformObjects = [];
 
-for (let index = 0; index < 50; index++) {
+for (let index = 0; index < 100; index++) {
   const x = index * 50 - 200;
 
   platformObjects.push(
@@ -37,13 +37,18 @@ for (let index = 0; index < 50; index++) {
 }
 
 
+const skeletonWarrior1Array = [];
+
+for (let i = 0; i < 33; i++) {
+  const skeletonWarrior = new SkeletonWarriorLVL1();
+  skeletonWarrior.x = 700 + Math.random() * 3000;
+  skeletonWarrior1Array.push(skeletonWarrior);
+}
+
+
 
 const lvl_1 = new LVL(
-  [
-    new SkeletonWarriorLVL1(),
-    new SkeletonWarriorLVL1(),
-    new SkeletonWarriorLVL1()
-  ],
+  skeletonWarrior1Array,
   platformObjects,
   [
     new EnvironmentObject('img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - House.png', -150, 200, 250, 200),

@@ -1,82 +1,49 @@
 class SkeletonWarriorLVL1 extends MovableObject {
-
   y = 280;
   speed = 0.4;
   moveDirection = -1;
   animationFrames = [];
+  isDying = false;
+  isDead = false;
+  animationInterval = null;
+  patrolInterval = null;
+  directionTimeout = null;
 
-  IDLE_ANIMATION = [
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_000.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_001.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_002.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_003.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_004.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_005.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_006.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_007.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_008.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_009.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_010.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_011.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_012.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_013.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_014.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_015.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_016.png',
-    './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_017.png',
-  ];
-  WALKING_ANIMATION = [
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_000.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_001.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_002.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_003.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_004.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_005.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_006.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_007.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_008.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_009.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_010.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_011.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_012.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_013.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_014.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_015.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_016.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_017.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_018.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_019.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_020.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_021.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_022.png',
-    './img/Enemies/Skeleton_Warrior_1/Walking/0_Skeleton_Warrior_Walking_023.png'
-  ];
-
+  IDLE = skeletonWarriorSprites.IDLE_ANIMATION;
+  WALKING = skeletonWarriorSprites.WALKING_ANIMATION;
+  DYING = skeletonWarriorSprites.DYING_ANIMATION;
 
   constructor() {
     super();
     this.loadImage('./img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_000.png');
-    this.loadImages(this.IDLE_ANIMATION);
-    this.loadImages(this.WALKING_ANIMATION);
-    this.animationFrames = this.WALKING_ANIMATION;
+    this.loadImages(this.IDLE);
+    this.loadImages(this.WALKING);
+    this.loadImages(this.DYING);
+    
+    this.animationFrames = this.WALKING;
 
-    this.x = 700 + Math.random() * 500;
+    this.x = 700 + Math.random() * 5000;
 
     this.animation();
     this.startPatrol();
   }
 
   animation() {
-    setInterval(() => {
-      let i = this.currentImage % this.animationFrames.length;
+    this.animationInterval = setInterval(() => {
+      let i = this.isDying
+        ? Math.min(this.currentImage, this.animationFrames.length - 1)
+        : this.currentImage % this.animationFrames.length;
       let path = this.animationFrames[i];
       this.img = this.imgCache[path];
-      this.currentImage++;
+
+      if (!this.isDying || this.currentImage < this.animationFrames.length - 1) {
+        this.currentImage++;
+      }
     }, 100);
   }
 
   startPatrol() {
-    setInterval(() => {
+    this.patrolInterval = setInterval(() => {
       this.x += this.moveDirection * this.speed;
       this.imgDirectionChange = this.moveDirection < 0;
     }, 1000 / 60);
@@ -87,10 +54,33 @@ class SkeletonWarriorLVL1 extends MovableObject {
   scheduleDirectionChange() {
     const nextChangeInMs = 2000 + Math.random() * 3000;
 
-    setTimeout(() => {
+    this.directionTimeout = setTimeout(() => {
+      if (this.isDying) return;
       this.moveDirection *= -1;
       this.scheduleDirectionChange();
     }, nextChangeInMs);
+  }
+
+  die() {
+    if (this.isDying || this.isDead) return this.DYING.length * 75;
+
+    this.isDying = true;
+    this.speed = 0;
+    this.moveDirection = 0;
+    this.animationFrames = this.DYING;
+    this.currentImage = 0;
+    this.imgDirectionChange = false;
+
+    clearInterval(this.patrolInterval);
+    clearTimeout(this.directionTimeout);
+
+    const dyingDuration = this.DYING.length *  75;
+
+    setTimeout(() => {
+      this.isDead = true;
+    }, dyingDuration);
+
+    return dyingDuration;
   }
 
   getCollisionArea() {
