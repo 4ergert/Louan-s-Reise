@@ -61,7 +61,7 @@ const lvl_1 = new LVL(
     new EnvironmentObject('img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 440, 333, 70, 70),
     new EnvironmentObject('img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Signpost 01.png', 530, 333, 70, 70),
     new EnvironmentObject('img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Tree 02.png', 200, 55, 350, 350),
-
+    new Coins(),
   ],
   backgroundObjects,
 );

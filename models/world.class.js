@@ -89,6 +89,8 @@ class World {
         }
       });
 
+      this.collectCoins();
+
       let stompedEnemy = this.lvl.enemies.find(enemy =>
         !enemy.isDying && !enemy.isDead &&
         this.character.isColliding(enemy) && this.isStompingEnemy(enemy)
@@ -109,6 +111,32 @@ class World {
         }
       });
     }, 1000 / 60);
+  }
+
+  collectCoins() {
+    let collectedCoins = this.lvl.environmentObjects.filter(object =>
+      object instanceof Coins && this.isCollidingWithCharacter(object)
+    );
+
+    if (collectedCoins.length === 0) return;
+
+    this.lvl.environmentObjects = this.lvl.environmentObjects.filter(object =>
+      !(object instanceof Coins && this.isCollidingWithCharacter(object))
+    );
+
+    this.coinsBar.addCoin(collectedCoins.length);
+  }
+
+  isCollidingWithCharacter(object) {
+    let characterArea = this.character.getCollisionArea();
+    let objectArea = object.getCollisionArea();
+
+    return (
+      characterArea.x + characterArea.width > objectArea.x &&
+      characterArea.x < objectArea.x + objectArea.width &&
+      characterArea.y + characterArea.height > objectArea.y &&
+      characterArea.y < objectArea.y + objectArea.height
+    );
   }
 
   // Check if the character is stomping on the enemy
@@ -132,8 +160,17 @@ class World {
     let dyingDuration = enemy.die();
 
     setTimeout(() => {
+      this.spawnCoinAt(enemy);
       this.removeEnemy(enemy);
     }, dyingDuration);
+  }
+
+  spawnCoinAt(enemy) {
+    let enemyArea = enemy.getCollisionArea();
+    let coinX = enemyArea.x + enemyArea.width / 2 - 15;
+    let coinY = enemyArea.y + enemyArea.height / 2 - 15;
+
+    this.lvl.environmentObjects.push(new Coins(coinX, coinY));
   }
 
   removeEnemy(enemyToRemove) {

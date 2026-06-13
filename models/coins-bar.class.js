@@ -24,4 +24,8 @@ class CoinsBar extends DrawableObject {
     ctx.strokeText(`${this.coins} Coins`, this.x + this.width + 12, this.y + this.height / 2 + 8);
     ctx.fillText(`${this.coins} Coins`, this.x + this.width + 12, this.y + this.height / 2 + 8);
   }
+
+  addCoin(amount = 1) {
+    this.coins += amount;
+  }
 }
