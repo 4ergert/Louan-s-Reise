@@ -136,7 +136,7 @@ class Character extends MovableObject {
 
   hit(duration = 333) {
     this.energy = Math.max(0, this.energy - 20);
-    this.world?.statusBar.setPercentage(this.energy);
+    this.world?.lifeBar.setPercentage(this.energy);
     this.hurtUntil = Date.now() + duration;
     this.isHurtState = true;
 

@@ -1,15 +1,15 @@
-class StatusBar extends DrawableObject {
-  img ='./img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Life.png';
+class LifeBar extends DrawableObject {
+  imgLife ='./img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Life.png';
   percentage = 100;
   maxSegments = 5;
 
   constructor() {
     super();
-    this.loadImage(this.img);
-    this.x = 20;
-    this.y = 20;
-    this.width = 50;
-    this.height = 50;
+    this.loadImage(this.imgLife);
+    this.x = 16;
+    this.y = 16;
+    this.width = 40;
+    this.height = 40;
   }
 
   draw(ctx) {
