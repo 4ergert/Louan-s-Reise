@@ -1,4 +1,4 @@
-const skeletonWarriorSprites = {
+const SKELETON_WARRIOR_1_SPRITES = {
   IDLE_ANIMATION: [
     './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_000.png',
     './img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_001.png',

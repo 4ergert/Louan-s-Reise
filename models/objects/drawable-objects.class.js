@@ -29,7 +29,7 @@ class DrawableObject {
     if (this instanceof Character 
       || this instanceof SkeletonWarriorLVL1 
       || this instanceof PlatformObjects 
-      || this instanceof AliaBoss
+      || this instanceof LVL_1_Boss
     ) {
       // ctx.beginPath();
       // ctx.lineWidth = "2";

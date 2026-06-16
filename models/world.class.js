@@ -1,4 +1,4 @@
-class World {
+class World extends BaseWorld {
   character = new Character();
   lifeBar = new LifeBar();
   coinsBar = new CoinsBar();
@@ -12,31 +12,9 @@ class World {
   throwInputLocked = false;
   bloodSplatterParticles = [];
   isPaused = false;
-  introSkipLocked = false;
-  openingIntroTriggered = false;
-  openingIntroCompleted = false;
-  openingIntroStartedAt = 0;
-  openingIntroTimeout = null;
-  openingIntroDuration = 6500;
-  openingIntroTypeSpeed = 45;
-  openingIntroLines = [
-    'Irgendwas stimmt hier nicht!',
-    'Meine Geschwister Alia und Liam',
-    'sind verschwunden.',
-    'Ich sollte sie suchen gehen.'
-  ];
-  bossIntroTriggered = false;
-  bossIntroStartedAt = 0;
-  bossIntroTimeout = null;
-  bossIntroDuration = 5000;
-  bossIntroTypeSpeed = 55;
-  bossIntroLines = [
-    'Arrrrr, ich bin Aliam,',
-    'der Skelett-König,',
-    'arrrrr!'
-  ];
 
   constructor(canvas, keyboard) {
+    super();
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
@@ -52,7 +30,7 @@ class World {
     this.assignWorldToAll(this.lvl.environmentObjects);
   }
 
-  get aliaBoss() {
+  get bossLVL1() {
     return this.lvl.enemies.find(enemy => enemy.isBoss);
   }
 
@@ -165,7 +143,7 @@ class World {
     let characterArea = this.character.getCollisionArea();
     let originX = characterArea.x + characterArea.width / 2;
     let originY = characterArea.y + characterArea.height / 3;
-    let direction = this.aliaBoss.x < this.character.x ? 1 : -1;
+    let direction = this.bossLVL1.x < this.character.x ? 1 : -1;
 
     for (let index = 0; index < 24; index++) {
       this.bloodSplatterParticles.push({
@@ -198,7 +176,7 @@ class World {
 
   updateBossIntro() {
     if (!this.openingIntroCompleted || this.bossIntroTriggered || this.character.isDead) return;
-    if (!this.aliaBoss) return;
+    if (!this.bossLVL1) return;
     if (!this.isBossFullyVisible() || !this.isCharacterNearBoss()) return;
 
     this.bossIntroTriggered = true;
@@ -211,160 +189,21 @@ class World {
     }, this.bossIntroDuration);
   }
 
-  handleIntroSkip() {
-    if (!this.keyboard.SPACE) {
-      this.introSkipLocked = false;
-      return;
-    }
-
-    if (this.introSkipLocked) return;
-    this.introSkipLocked = true;
-
-    if (this.isOpeningIntroActive()) {
-      this.skipIntroStep(this.openingIntroLines, 'opening');
-      return;
-    }
-
-    if (this.isBossIntroActive()) {
-      this.skipIntroStep(this.bossIntroLines, 'boss');
-    }
-  }
-
-  skipIntroStep(lines, introType) {
-    if (!this.isIntroTextFullyVisible(lines, this.getIntroStartedAt(introType), this.getIntroTypeSpeed(introType))) {
-      this.setIntroToFullText(lines, introType);
-      return;
-    }
-
-    if (introType === 'opening') this.finishOpeningIntro();
-    if (introType === 'boss') this.finishBossIntro();
-  }
-
-  getIntroStartedAt(introType) {
-    return introType === 'opening' ? this.openingIntroStartedAt : this.bossIntroStartedAt;
-  }
-
-  getIntroTypeSpeed(introType) {
-    return introType === 'opening' ? this.openingIntroTypeSpeed : this.bossIntroTypeSpeed;
-  }
-
-  setIntroToFullText(lines, introType) {
-    let fullCharCount = lines.join(' ').length;
-    let typeSpeed = this.getIntroTypeSpeed(introType);
-    let startedAt = Date.now() - fullCharCount * typeSpeed;
-
-    if (introType === 'opening') this.openingIntroStartedAt = startedAt;
-    if (introType === 'boss') this.bossIntroStartedAt = startedAt;
-  }
-
-  isIntroTextFullyVisible(lines, startedAt, typeSpeed) {
-    let elapsedTime = Date.now() - startedAt;
-    let visibleChars = Math.floor(elapsedTime / typeSpeed);
-    return visibleChars >= lines.join(' ').length;
-  }
-
-  finishOpeningIntro() {
-    if (this.openingIntroTimeout) clearTimeout(this.openingIntroTimeout);
-    this.openingIntroTimeout = null;
-    this.isPaused = false;
-    this.openingIntroCompleted = true;
-  }
-
-  finishBossIntro() {
-    if (this.bossIntroTimeout) clearTimeout(this.bossIntroTimeout);
-    this.bossIntroTimeout = null;
-    this.isPaused = false;
-  }
-
   isBossFullyVisible() {
-    let bossScreenX = this.aliaBoss.x + this.camera_x;
-    return bossScreenX >= 0 && bossScreenX + this.aliaBoss.width <= this.canvas.width + 100;
+    let bossScreenX = this.bossLVL1.x + this.camera_x;
+    return bossScreenX >= 0 && bossScreenX + this.bossLVL1.width <= this.canvas.width + 100;
   }
 
   isCharacterNearBoss() {
     let characterRightEdge = this.character.x + this.character.width;
-    return this.aliaBoss.x - characterRightEdge <= 400;
-  }
-
-  isBossIntroActive() {
-    return this.isPaused && this.bossIntroTriggered;
+    return this.bossLVL1.x - characterRightEdge <= 400;
   }
 
   shouldShowBossLifeBar() {
-    return this.bossIntroTriggered && !this.isBossIntroActive() && this.aliaBoss && !this.aliaBoss.isDead;
+    return this.bossIntroTriggered && !this.isBossIntroActive() && this.bossLVL1 && !this.bossLVL1.isDead;
   }
-
-  isOpeningIntroActive() {
-    return this.isPaused && this.openingIntroTriggered && !this.openingIntroCompleted;
-  }
-
-  resetKeyboard() {
-    Object.keys(this.keyboard).forEach(key => {
-      this.keyboard[key] = false;
-    });
-  }
-
-  drawBossIntroBubble() {
-    let bossScreenX = this.aliaBoss.x + this.camera_x;
-    let bubbleX = Math.max(20, Math.min(this.canvas.width - 300, bossScreenX + 50));
-    let bubbleY = 35;
-    let textLines = this.getVisibleIntroLines(this.bossIntroLines, this.bossIntroStartedAt, this.bossIntroTypeSpeed);
-
-    this.ctx.save();
-    this.ctx.fillStyle = '#fff8ea';
-    this.ctx.strokeStyle = '#3a2412';
-    this.ctx.lineWidth = 4;
-    this.ctx.fillRect(bubbleX, bubbleY, 333, 110);
-    this.ctx.strokeRect(bubbleX, bubbleY, 333, 110);
-
-    this.ctx.beginPath();
-    this.ctx.moveTo(bubbleX + 56, bubbleY + 110);
-    this.ctx.lineTo(bubbleX + 86, bubbleY + 110);
-    this.ctx.lineTo(bubbleX + 97, bubbleY + 138);
-    this.ctx.closePath();
-    this.ctx.fill();
-    this.ctx.stroke();
-
-    this.ctx.fillStyle = '#3a2412';
-    this.ctx.font = 'bold 20px Georgia';
-    this.ctx.textBaseline = 'top';
-    textLines.forEach((line, index) => {
-      this.ctx.fillText(line, bubbleX + 18, bubbleY + 16 + index * 28);
-    });
-    this.ctx.restore();
-  }
-
-  drawOpeningIntroBubble() {
-    let bubbleX = 180;
-    let bubbleY = 30;
-    let textLines = this.getVisibleIntroLines(this.openingIntroLines, this.openingIntroStartedAt, this.openingIntroTypeSpeed);
-
-    this.ctx.save();
-    this.ctx.fillStyle = '#fff8ea';
-    this.ctx.strokeStyle = '#3a2412';
-    this.ctx.lineWidth = 4;
-    this.ctx.fillRect(bubbleX, bubbleY, 380, 148);
-    this.ctx.strokeRect(bubbleX, bubbleY, 380, 148);
-
-    this.ctx.beginPath();
-    this.ctx.moveTo(bubbleX + 70, bubbleY + 148);
-    this.ctx.lineTo(bubbleX + 110, bubbleY + 148);
-    this.ctx.lineTo(bubbleX + 60, bubbleY + 180);
-    this.ctx.closePath();
-    this.ctx.fill();
-    this.ctx.stroke();
-
-    this.ctx.fillStyle = '#3a2412';
-    this.ctx.font = 'bold 20px Georgia';
-    this.ctx.textBaseline = 'top';
-    textLines.forEach((line, index) => {
-      this.ctx.fillText(line, bubbleX + 18, bubbleY + 16 + index * 28);
-    });
-    this.ctx.restore();
-  }
-
   drawBossLifeBar() {
-    let percentage = this.aliaBoss.energy / this.aliaBoss.maxEnergy;
+    let percentage = this.bossLVL1.energy / this.bossLVL1.maxEnergy;
     let barWidth = 220;
     let barHeight = 18;
     let x = this.canvas.width - barWidth - 18;
@@ -376,8 +215,8 @@ class World {
     this.ctx.lineWidth = 4;
     this.ctx.font = 'bold 18px Georgia';
     this.ctx.textAlign = 'right';
-    this.ctx.strokeText('AliaBoss', this.canvas.width - 18, y - 6);
-    this.ctx.fillText('AliaBoss', this.canvas.width - 18, y - 6);
+    this.ctx.strokeText('bossLVL1', this.canvas.width - 18, y - 6);
+    this.ctx.fillText('bossLVL1', this.canvas.width - 18, y - 6);
 
     this.ctx.fillStyle = '#2d2118';
     this.ctx.fillRect(x, y, barWidth, barHeight);
@@ -394,23 +233,6 @@ class World {
     if (percentage > 0.6) return '#b33a3a';
     if (percentage > 0.3) return '#d97b2b';
     return '#e2bf4f';
-  }
-
-  getVisibleIntroLines(lines, startedAt, typeSpeed) {
-    let elapsedTime = Date.now() - startedAt;
-    let visibleChars = Math.floor(elapsedTime / typeSpeed);
-    let fullText = lines.join(' ');
-    let visibleText = fullText.slice(0, visibleChars);
-    let visibleLines = [];
-    let currentIndex = 0;
-
-    lines.forEach(line => {
-      let lineText = visibleText.slice(currentIndex, currentIndex + line.length);
-      visibleLines.push(lineText);
-      currentIndex += line.length + 1;
-    });
-
-    return visibleLines;
   }
 
   addObjectsToMap(objects) {
@@ -474,16 +296,16 @@ class World {
   }
 
   updateBossAttackState() {
-    if (!this.aliaBoss) return;
+    if (!this.bossLVL1) return;
 
-    this.aliaBoss.setSlashingState(this.isCharacterWithinBossSlashRange());
+    this.bossLVL1.setSlashingState(this.isCharacterWithinBossSlashRange());
   }
 
   isCharacterWithinBossSlashRange() {
-    if (this.aliaBoss.isDead || this.aliaBoss.isDying) return false;
+    if (this.bossLVL1.isDead || this.bossLVL1.isDying) return false;
 
     let characterArea = this.character.getCollisionArea();
-    let bossArea = this.aliaBoss.getCollisionArea();
+    let bossArea = this.bossLVL1.getCollisionArea();
     let overlapsVertically =
       characterArea.y < bossArea.y + bossArea.height &&
       characterArea.y + characterArea.height > bossArea.y;
@@ -502,7 +324,7 @@ class World {
   }
 
   handleBossSlashHit() {
-    if (!this.aliaBoss || this.aliaBoss.isDead) return;
+    if (!this.bossLVL1 || this.bossLVL1.isDead) return;
     if (!this.isCharacterWithinBossSlashRange()) return;
 
     if (this.character.isDead) {
@@ -512,7 +334,7 @@ class World {
 
     if (this.character.isHurt()) return;
 
-    this.character.startKnockback(this.aliaBoss.x + this.aliaBoss.width / 2);
+    this.character.startKnockback(this.bossLVL1.x + this.bossLVL1.width / 2);
     this.character.hit();
     this.spawnBloodSplatter();
   }

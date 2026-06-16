@@ -11,9 +11,9 @@ class SkeletonWarriorLVL1 extends MovableObject {
   directionTimeout = null;
 
 
-  IDLE = skeletonWarriorSprites.IDLE_ANIMATION;
-  WALKING = skeletonWarriorSprites.WALKING_ANIMATION;
-  DYING = skeletonWarriorSprites.DYING_ANIMATION;
+  IDLE = SKELETON_WARRIOR_1_SPRITES.IDLE_ANIMATION;
+  WALKING = SKELETON_WARRIOR_1_SPRITES.WALKING_ANIMATION;
+  DYING = SKELETON_WARRIOR_1_SPRITES.DYING_ANIMATION;
 
   constructor() {
     super();

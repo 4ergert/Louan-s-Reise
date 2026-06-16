@@ -59,6 +59,7 @@ class Character extends MovableObject {
     //Movement
     setInterval(() => {
       if (this.world?.isPaused) return;
+      if (!this.world) return;
 
       this.updateSpawnOpacity();
 
@@ -100,6 +101,7 @@ class Character extends MovableObject {
     //Animation 
     setInterval(() => {
       if (this.world?.isPaused) return;
+      if (!this.world) return;
 
       this.updateSlashState();
 

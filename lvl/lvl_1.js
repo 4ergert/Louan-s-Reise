@@ -39,9 +39,9 @@ for (let index = 0; index < 100; index++) {
 
 const skeletonWarrior1Array = [];
 
-skeletonWarrior1Array.push(new AliaBoss());
+skeletonWarrior1Array.push(new LVL_1_Boss());
 
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 11; i++) {
   const skeletonWarrior = new SkeletonWarriorLVL1();
   skeletonWarrior.x = 500 + Math.random() * 3000;
   skeletonWarrior1Array.push(skeletonWarrior);
