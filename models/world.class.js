@@ -1,5 +1,5 @@
 import { createBloodSplatterParticles } from '../js/world-effects.js';
-import { drawBloodSplatter, drawGameOverOverlay } from '../js/world-renderer.js';
+import { drawBloodSplatter, drawBossLifeBar, drawGameOverOverlay } from '../js/world-renderer.js';
 import { WORLD_UI_CONFIG } from '../js/world-ui-config.js';
 import { Character } from './character/character.class.js';
 import { LifeBar } from './character/life-bar.class.js';
@@ -71,7 +71,7 @@ export class World extends WorldIntros {
     this.addObjectsToMap(this.thrownRooks);
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.lifeBar);
-    if (this.shouldShowBossLifeBar()) this.drawBossLifeBar();
+    if (this.shouldShowBossLifeBar()) drawBossLifeBar(this.ctx, this.camera_x, this.bossLVL1, this.canvas);
     this.addToMap(this.coinsBar);
     this.addToMap(this.throwableObjects);
     this.ctx.translate(this.camera_x, 0);
@@ -80,7 +80,7 @@ export class World extends WorldIntros {
     this.ctx.translate(-this.camera_x, 0);
 
     if (this.character.isDead) {
-      this.drawGameOverOverlay();
+      drawGameOverOverlay(this.ctx, this.canvas, this.gameOverOverlay);
     }
 
     if (this.isOpeningIntroActive()) {
@@ -111,10 +111,6 @@ export class World extends WorldIntros {
       this.addToMap(background);
       this.ctx.restore();
     });
-  }
-
-  drawGameOverOverlay() {
-    drawGameOverOverlay(this.ctx, this.canvas, this.gameOverOverlay);
   }
 
   drawBloodSplatter() {
@@ -178,39 +174,6 @@ export class World extends WorldIntros {
 
   shouldShowBossLifeBar() {
     return this.bossIntroTriggered && !this.isBossIntroActive() && this.bossLVL1 && !this.bossLVL1.isDead;
-  }
-
-  drawBossLifeBar() {
-    let percentage = this.bossLVL1.energy / this.bossLVL1.maxEnergy;
-    let barWidth = 220;
-    let barHeight = 18;
-    let x = this.canvas.width - barWidth - 18;
-    let y = 30;
-
-    this.ctx.save();
-    this.ctx.fillStyle = '#d9a441';
-    this.ctx.strokeStyle = '#100a07';
-    this.ctx.lineWidth = 4;
-    this.ctx.font = 'bold 18px Georgia';
-    this.ctx.textAlign = 'right';
-    this.ctx.strokeText('bossLVL1', this.canvas.width - 18, y - 6);
-    this.ctx.fillText('bossLVL1', this.canvas.width - 18, y - 6);
-
-    this.ctx.fillStyle = '#2d2118';
-    this.ctx.fillRect(x, y, barWidth, barHeight);
-    this.ctx.strokeStyle = '#100a07';
-    this.ctx.lineWidth = 3;
-    this.ctx.strokeRect(x, y, barWidth, barHeight);
-
-    this.ctx.fillStyle = this.getBossLifeBarColor(percentage);
-    this.ctx.fillRect(x, y, barWidth * percentage, barHeight);
-    this.ctx.restore();
-  }
-
-  getBossLifeBarColor(percentage) {
-    if (percentage > 0.6) return '#b33a3a';
-    if (percentage > 0.3) return '#d97b2b';
-    return '#e2bf4f';
   }
 
   addObjectsToMap(objects) {

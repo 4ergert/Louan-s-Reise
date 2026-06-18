@@ -35,3 +35,36 @@ export function drawBloodSplatter(ctx, cameraX, particles, now) {
 
   return activeParticles;
 }
+
+export function drawBossLifeBar(ctx, cameraX, boss, canvas) {
+  let percentage = boss.energy / boss.maxEnergy;
+  let barWidth = 220;
+  let barHeight = 18;
+  let x = canvas.width - barWidth - 18;
+  let y = 30;
+
+  ctx.save();
+  ctx.fillStyle = '#d9a441';
+  ctx.strokeStyle = '#100a07';
+  ctx.lineWidth = 4;
+  ctx.font = 'bold 18px Georgia';
+  ctx.textAlign = 'right';
+  ctx.strokeText('bossLVL1', canvas.width - 18, y - 6);
+  ctx.fillText('bossLVL1', canvas.width - 18, y - 6);
+
+  ctx.fillStyle = '#2d2118';
+  ctx.fillRect(x, y, barWidth, barHeight);
+  ctx.strokeStyle = '#100a07';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(x, y, barWidth, barHeight);
+
+  ctx.fillStyle = getBossLifeBarColor(percentage);
+  ctx.fillRect(x, y, barWidth * percentage, barHeight);
+  ctx.restore();
+}
+
+function getBossLifeBarColor(percentage) {
+  if (percentage > 0.6) return '#b33a3a';
+  if (percentage > 0.3) return '#d97b2b';
+  return '#e2bf4f';
+}
