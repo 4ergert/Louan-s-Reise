@@ -77,3 +77,25 @@ export function isColliding(otherObject) {
     ownCollisionArea.y < otherCollisionArea.y + otherCollisionArea.height
   );
 }
+
+export function isCharacterWithinBossSlashRange() {
+  if (this.bossLVL1.isDead || this.bossLVL1.isDying) return false;
+
+  let characterArea = this.character.getCollisionArea();
+  let bossArea = this.bossLVL1.getCollisionArea();
+  let overlapsVertically =
+    characterArea.y < bossArea.y + bossArea.height &&
+    characterArea.y + characterArea.height > bossArea.y;
+
+  if (!overlapsVertically) return false;
+
+  let characterRightEdge = characterArea.x + characterArea.width;
+  let bossRightEdge = bossArea.x + bossArea.width;
+  let horizontalGap = Math.max(
+    bossArea.x - characterRightEdge,
+    characterArea.x - bossRightEdge,
+    0
+  );
+
+  return horizontalGap <= 100;
+}

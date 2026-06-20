@@ -1,3 +1,40 @@
+/**
+ * @typedef {object} GameOverOverlay
+ * @property {string} background
+ * @property {string} font
+ * @property {number} lineWidth
+ * @property {string} strokeColor
+ * @property {string} fillColor
+ * @property {string} text
+ */
+
+/**
+ * @typedef {object} BloodParticle
+ * @property {number} x
+ * @property {number} y
+ * @property {number} vx
+ * @property {number} vy
+ * @property {number} gravity
+ * @property {number} radius
+ * @property {number} startedAt
+ * @property {number} duration
+ * @property {number} expiresAt
+ * @property {string} color
+ */
+
+/**
+ * @typedef {object} BossLifeSource
+ * @property {number} energy
+ * @property {number} maxEnergy
+ */
+
+/**
+ * Draws the full-screen game over overlay text and background.
+ * @param {CanvasRenderingContext2D} ctx - The drawing context.
+ * @param {HTMLCanvasElement} canvas - The canvas used for layout.
+ * @param {GameOverOverlay} overlay - Overlay color and text settings.
+ * @returns {void}
+ */
 export function drawGameOverOverlay(ctx, canvas, overlay) {
   ctx.save();
   ctx.fillStyle = overlay.background;
@@ -13,6 +50,14 @@ export function drawGameOverOverlay(ctx, canvas, overlay) {
   ctx.restore();
 }
 
+/**
+ * Updates and renders the currently active blood particles.
+ * @param {CanvasRenderingContext2D} ctx - The drawing context.
+ * @param {number} cameraX - Horizontal camera offset.
+ * @param {BloodParticle[]} particles - All tracked particles.
+ * @param {number} now - Current timestamp used for expiration.
+ * @returns {BloodParticle[]} The particles that are still active.
+ */
 export function drawBloodSplatter(ctx, cameraX, particles, now) {
   let activeParticles = particles.filter(particle => now < particle.expiresAt);
 
@@ -36,6 +81,14 @@ export function drawBloodSplatter(ctx, cameraX, particles, now) {
   return activeParticles;
 }
 
+/**
+ * Draws the boss life bar in the top-right corner of the canvas.
+ * @param {CanvasRenderingContext2D} ctx - The drawing context.
+ * @param {number} cameraX - Horizontal camera offset.
+ * @param {BossLifeSource} boss - The boss energy source.
+ * @param {HTMLCanvasElement} canvas - The canvas used for layout.
+ * @returns {void}
+ */
 export function drawBossLifeBar(ctx, cameraX, boss, canvas) {
   let percentage = boss.energy / boss.maxEnergy;
   let barWidth = 220;
@@ -63,6 +116,11 @@ export function drawBossLifeBar(ctx, cameraX, boss, canvas) {
   ctx.restore();
 }
 
+/**
+ * Returns the fill color for the boss life bar based on remaining health.
+ * @param {number} percentage - Remaining life as a value between 0 and 1.
+ * @returns {string} The hex color for the current life threshold.
+ */
 function getBossLifeBarColor(percentage) {
   if (percentage > 0.6) return '#b33a3a';
   if (percentage > 0.3) return '#d97b2b';

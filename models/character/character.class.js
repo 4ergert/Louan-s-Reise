@@ -57,51 +57,11 @@ export class Character extends MovableObject {
     const isRunning = () => this.world.keyboard.SHIFT && isMoving();
 
     //Movement
-    setInterval(() => {
-      if (this.world?.isPaused) return;
-      if (!this.world) return;
-
-      this.updateSpawnOpacity();
-
-      if (this.isSpawning()) {
-        this.world.camera_x = -this.x + 100;
-        return;
-      }
-
-      if (this.isDying || this.isDead) {
-        this.world.camera_x = -this.x + 100;
-        return;
-      }
-
-      if (this.isKnockedBack()) {
-        this.x += this.knockbackDirection * this.knockbackSpeed; 
-        if (this.isAboveGround()) {
-          this.vcY = 1; // Add a slight vertical movement for knockback
-          this.y -= 1; // Knockback effect with slight vertical movement
-        }
-      } else {
-        if (this.world.keyboard.RIGHT && this.isHurtState == false) {
-          this.x += this.speed;
-          this.imgDirectionChange = false;
-        }
-
-        if (this.world.keyboard.LEFT && this.x > 0 && this.isHurtState == false) {
-          this.x -= this.speed;
-          this.imgDirectionChange = true;
-        }
-      }
-
-      if (this.world.keyboard.UP && !this.isAboveGround()) {
-        this.vcY = 6.75;
-      }
-
-      this.world.camera_x = -this.x + 100;
-    }, 1000 / 60);
+    setInterval(() => this.charMovement(), 1000 / 60);
 
     //Animation 
     setInterval(() => {
       if (this.world?.isPaused) return;
-      if (!this.world) return;
 
       this.updateSlashState();
 
@@ -148,6 +108,73 @@ export class Character extends MovableObject {
     }, 50);
   }
 
+  charMovement() {
+    if (this.world?.isPaused) return;
+    this.updateSpawnOpacity();
+
+    if (this.shouldFreezeMovement()) {
+      this.freezeMovement();
+      return;
+    }
+
+    if (this.characterIsInKnockback()) this.knockback();
+    else {
+      if (this.allowsMoveRight()) this.moveRight();
+      if (this.allowsMoveLeft()) this.moveLeft();
+    }
+
+    if (this.allowsToJump()) this.vcY = 6.75;
+
+    this.freezeMovement();
+  }
+
+  updateSpawnOpacity() {
+    let elapsedTime = Date.now() - this.spawnStartedAt;
+    this.opacity = Math.min(1, elapsedTime / this.spawnDuration);
+  }
+
+  shouldFreezeMovement() {
+    return this.isSpawning() || this.isDying || this.isDead;
+  }
+
+  freezeMovement() {
+    this.world.camera_x = -this.x + 100;
+  }
+
+  characterIsInKnockback() {
+    return this.knockbackUntil > Date.now();
+  }
+
+  knockback() {
+    this.x += this.knockbackDirection * this.knockbackSpeed;
+    if (this.isAboveGround()) {
+      this.vcY = 1;
+      this.y -= 1;
+    }
+  }
+
+  allowsMoveRight() {
+    return this.world.keyboard.RIGHT && this.isHurtState == false;
+  }
+
+  moveRight() {
+    this.x += this.speed;
+    this.imgDirectionChange = false;
+  }
+
+  allowsMoveLeft() {
+    return this.world.keyboard.LEFT && this.isHurtState == false;
+  }
+
+  moveLeft() {
+    this.x -= this.speed;
+    this.imgDirectionChange = true;
+  }
+
+  allowsToJump() {
+    return this.world.keyboard.UP && !this.isAboveGround();
+  }
+
   updateSlashState() {
     if (this.isSpawning()) return;
 
@@ -159,14 +186,11 @@ export class Character extends MovableObject {
     if (!this.world.keyboard.D) this.slashInputLocked = false;
   }
 
-  updateSpawnOpacity() {
-    let elapsedTime = Date.now() - this.spawnStartedAt;
-    this.opacity = Math.min(1, elapsedTime / this.spawnDuration);
-  }
-
   isSpawning() {
     return this.opacity < 1;
   }
+
+
 
   draw(ctx) {
     ctx.save();
@@ -202,14 +226,7 @@ export class Character extends MovableObject {
     this.hurtUntil = Date.now() + duration;
     this.isHurtState = true;
 
-    setTimeout(() => {
-      this.isHurtState = false;
-    }, duration + 555); // Ensure the hurt state lasts slightly longer than the animation
-  }
-
-  // Knockback handling
-  isKnockedBack() {
-    return this.knockbackUntil > Date.now();
+    setTimeout(() => this.isHurtState = false, duration + 555); // Ensure the hurt state lasts slightly longer than the animation
   }
 
   startKnockback(sourceX = null, duration = 333, speed = 5) {

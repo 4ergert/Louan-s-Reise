@@ -8,7 +8,7 @@ import { Coins } from './lvl-1/coins.class.js';
 import { ThrowableObject } from './objects/throwable-objects.class.js';
 import { WorldIntros } from './world-intros.class.js';
 import { lvl_1 } from '../lvl/lvl_1.js';
-import { isCollidingWithCharacter, isColliding } from '../js/colliding-objects.js';
+import { isCollidingWithCharacter, isColliding, isCharacterWithinBossSlashRange } from '../js/colliding-objects.js';
 
 export class World extends WorldIntros {
   character = new Character();
@@ -48,6 +48,10 @@ export class World extends WorldIntros {
     return this.lvl.enemies.find(enemy => enemy.isBoss);
   }
 
+  isCharacterWithinBossSlashRange() {
+    return isCharacterWithinBossSlashRange.call(this);
+  }
+
   // Helper method to assign world reference to a drawable object and its children (if any)
   assignWorld(drawableObject) {
     if (drawableObject) drawableObject.world = this;
@@ -72,6 +76,7 @@ export class World extends WorldIntros {
     this.addObjectsToMap(this.lvl.environmentObjects);
     this.addObjectsToMap(this.lvl.enemies);
     this.addObjectsToMap(this.thrownRooks);
+
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.lifeBar);
     if (this.shouldShowBossLifeBar()) drawBossLifeBar(this.ctx, this.camera_x, this.bossLVL1, this.canvas);
@@ -243,28 +248,6 @@ export class World extends WorldIntros {
     if (!this.bossLVL1) return;
 
     this.bossLVL1.setSlashingState(this.isCharacterWithinBossSlashRange());
-  }
-
-  isCharacterWithinBossSlashRange() {
-    if (this.bossLVL1.isDead || this.bossLVL1.isDying) return false;
-
-    let characterArea = this.character.getCollisionArea();
-    let bossArea = this.bossLVL1.getCollisionArea();
-    let overlapsVertically =
-      characterArea.y < bossArea.y + bossArea.height &&
-      characterArea.y + characterArea.height > bossArea.y;
-
-    if (!overlapsVertically) return false;
-
-    let characterRightEdge = characterArea.x + characterArea.width;
-    let bossRightEdge = bossArea.x + bossArea.width;
-    let horizontalGap = Math.max(
-      bossArea.x - characterRightEdge,
-      characterArea.x - bossRightEdge,
-      0
-    );
-
-    return horizontalGap <= 100;
   }
 
   handleBossSlashHit() {
