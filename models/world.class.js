@@ -1,6 +1,5 @@
 import { createBloodSplatterParticles } from '../js/world-effects.js';
 import { drawBloodSplatter, drawBossLifeBar, drawGameOverOverlay } from '../js/world-renderer.js';
-import { WORLD_UI_CONFIG } from '../js/world-ui-config.js';
 import { Character } from './character/character.class.js';
 import { LifeBar } from './character/life-bar.class.js';
 import { CoinsBar } from './lvl-1/coins-bar.class.js';
@@ -24,7 +23,6 @@ export class World extends WorldIntros {
   throwInputLocked = false;
   bloodSplatterParticles = [];
   isPaused = false;
-  gameOverOverlay = WORLD_UI_CONFIG.gameOverOverlay;
 
   constructor(canvas, keyboard) {
     super();
@@ -88,7 +86,7 @@ export class World extends WorldIntros {
     this.ctx.translate(-this.camera_x, 0);
 
     if (this.character.isDead) {
-      drawGameOverOverlay(this.ctx, this.canvas, this.gameOverOverlay);
+      drawGameOverOverlay(this.ctx, this.canvas);
     }
 
     if (this.isOpeningIntroActive()) {
@@ -99,7 +97,7 @@ export class World extends WorldIntros {
       this.drawBossIntroBubble();
     }
 
-    // this.drawBloodSplatter();
+    this.drawBloodSplatter();
 
 
 

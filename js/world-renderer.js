@@ -32,21 +32,20 @@
  * Draws the full-screen game over overlay text and background.
  * @param {CanvasRenderingContext2D} ctx - The drawing context.
  * @param {HTMLCanvasElement} canvas - The canvas used for layout.
- * @param {GameOverOverlay} overlay - Overlay color and text settings.
  * @returns {void}
  */
-export function drawGameOverOverlay(ctx, canvas, overlay) {
+export function drawGameOverOverlay(ctx, canvas) {
   ctx.save();
-  ctx.fillStyle = overlay.background;
+  ctx.fillStyle = 'rgba(16, 10, 7, 0.68)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.font = overlay.font;
+  ctx.font = 'bold 56px Georgia';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.lineWidth = overlay.lineWidth;
-  ctx.strokeStyle = overlay.strokeColor;
-  ctx.fillStyle = overlay.fillColor;
-  ctx.strokeText(overlay.text, canvas.width / 2, canvas.height / 2);
-  ctx.fillText(overlay.text, canvas.width / 2, canvas.height / 2);
+  ctx.lineWidth = 6;
+  ctx.strokeStyle = '#100a07';
+  ctx.fillStyle = '#d9a441';
+  ctx.strokeText('GAME OVER', canvas.width / 2, canvas.height / 2);
+  ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2);
   ctx.restore();
 }
 
