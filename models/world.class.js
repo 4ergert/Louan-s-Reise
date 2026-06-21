@@ -9,6 +9,7 @@ import { WorldIntros } from './world-intros.class.js';
 import { lvl_1 } from '../lvl/lvl_1.js';
 import { isCollidingWithCharacter, isColliding, isCharacterWithinBossSlashRange } from '../js/colliding-objects.js';
 import { isSpawning } from './character/char-movements.js';
+import { startKnockback, startThrowingAnimation } from './character/char-animation-actions.js';
 
 export class World extends WorldIntros {
   character = new Character();
@@ -98,7 +99,7 @@ export class World extends WorldIntros {
       this.drawBossIntroBubble();
     }
 
-    this.drawBloodSplatter();
+    // this.drawBloodSplatter();
 
 
 
@@ -236,7 +237,7 @@ export class World extends WorldIntros {
         if (enemy.isBoss) return;
 
         if (this.character.isColliding(enemy) && !this.character.isHurt()) {
-          this.character.startKnockback(enemy.x + enemy.width / 2);
+          startKnockback(this.character, enemy.x + enemy.width / 2);
           this.character.hit();
         }
       });
@@ -260,7 +261,7 @@ export class World extends WorldIntros {
 
     if (this.character.isHurt()) return;
 
-    this.character.startKnockback(this.bossLVL1.x + this.bossLVL1.width / 2);
+    startKnockback(this.character, this.bossLVL1.x + this.bossLVL1.width / 2);
     this.character.hit();
     this.spawnBloodSplatter();
   }
@@ -295,7 +296,7 @@ export class World extends WorldIntros {
 
   handleThrowInput() {
     if (this.keyboard.X && !this.throwInputLocked && this.throwableObjects.rooks > 0) {
-      this.character.startThrowingAnimation();
+      startThrowingAnimation(this.character);
       this.throwRook();
       this.throwInputLocked = true;
     }

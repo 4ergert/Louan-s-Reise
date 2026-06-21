@@ -2,6 +2,7 @@ import { CHARACTER_SPRITES } from '../../js/sprites-path/character-sprites.js';
 import { MovableObject } from '../objects/movable-object.class.js';
 import { switchCharAnimation } from './switch-char-animation.js';
 import { charMovement } from './char-movements.js';
+import { die } from './char-animation-actions.js';
 
 export class Character extends MovableObject {
 
@@ -64,10 +65,8 @@ export class Character extends MovableObject {
    * @returns {void}
    */
   animation() {
-    // ./models/character/char-movements.js handles all movement logic, including input and knockback
-    setInterval(() => charMovement(this), 1000 / 60);
-    // ./models/character/switch-char-animation.js selects the correct animation based on the character's current state
-    setInterval(() => switchCharAnimation(this), 50);
+    setInterval(() => charMovement(this), 1000 / 60); // ./models/character/char-movements.js handles all movement logic, including input and knockback
+    setInterval(() => switchCharAnimation(this), 50); // ./models/character/switch-char-animation.js selects the correct animation based on the character's current state and actions
   }
 
   /**
@@ -98,17 +97,27 @@ export class Character extends MovableObject {
     };
   }
 
-  // Collision and damage handling
+  /**
+   * Checks whether the character is still inside its hurt state timer.
+   *
+   * @returns {boolean} True while the hurt state is active.
+   */
   isHurt() {
     return this.hurtUntil > Date.now();
   }
 
+  /**
+   * Applies damage to the character, updates the life bar, and triggers death or hurt state.
+   *
+   * @param {number} [duration=333] - How long the hurt state should remain active in milliseconds.
+   * @returns {void}
+   */
   hit(duration = 333) {
     this.energy = Math.max(0, this.energy - 20);
     this.world?.lifeBar.setPercentage(this.energy);
 
     if (this.energy === 0) {
-      this.die();
+      die(this);
       return;
     }
 
@@ -118,62 +127,13 @@ export class Character extends MovableObject {
     setTimeout(() => this.isHurtState = false, duration + 555); // Ensure the hurt state lasts slightly longer than the animation
   }
 
-  startKnockback(sourceX = null, duration = 333, speed = 5) {
-    this.knockbackUntil = Date.now() + duration;
-    this.knockbackSpeed = speed;
-    if (sourceX === null) {
-      this.knockbackDirection = this.imgDirectionChange ? 1 : -1;
-      return;
-    }
-
-    let characterCenterX = this.x + this.width / 2;
-    this.knockbackDirection = sourceX < characterCenterX ? 1 : -1;
-  }
-
-  startThrowingAnimation() {
-    if (this.isDying || this.isDead) return;
-
-    this.throwingAnimationActive = true;
-  }
-
-  die() {
-    if (this.isDying || this.isDead) return;
-
-    this.isDying = true;
-    this.isHurtState = false;
-    this.throwingAnimationActive = false;
-    this.slashAnimationActive = false;
-    this.knockbackUntil = 0;
-    this.currentAnimation = null;
-    this.currentImage = 0;
-  }
-
-  playThrowingAnimation() {
-    this.spriteAnimation(this.THROWING, false);
-
-    if (this.currentAnimation === this.THROWING && this.currentImage >= this.THROWING.length - 1) {
-      this.throwingAnimationActive = false;
-    }
-  }
-
-  // Slash attack handling
-  playSlashAnimation() {
-    this.spriteAnimation(this.SLASHING, false);
-
-    if (this.currentAnimation === this.SLASHING && this.currentImage >= this.SLASHING.length - 1) {
-      this.slashAnimationActive = false;
-    }
-  }
-
-  playDyingAnimation() {
-    this.spriteAnimation(this.DYING, false);
-
-    if (this.currentAnimation === this.DYING && this.currentImage >= this.DYING.length - 1) {
-      this.isDead = true;
-    }
-  }
-
-  // Override the spriteAnimation method to reset the animation when switching states
+  /**
+   * Plays a sprite sequence and resets the frame index when the active animation changes.
+   *
+   * @param {string[]} sprites - The sprite paths for the animation sequence.
+   * @param {boolean} [loop=true] - Whether the animation should loop continuously.
+   * @returns {void}
+   */
   spriteAnimation(sprites, loop = true) {
     if (this.currentAnimation !== sprites) {
       this.currentAnimation = sprites;
@@ -190,6 +150,4 @@ export class Character extends MovableObject {
 
     if (loop || this.currentImage < sprites.length - 1) this.currentImage++;
   }
-
-
 }
