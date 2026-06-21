@@ -1,5 +1,6 @@
 import { CHARACTER_SPRITES } from '../../js/sprites-path/character-sprites.js';
 import { MovableObject } from '../objects/movable-object.class.js';
+import { switchCharAnimation } from './switch-char-animation.js';
 
 export class Character extends MovableObject {
 
@@ -53,59 +54,11 @@ export class Character extends MovableObject {
   }
 
   animation() {
-    const isMoving = () => this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
-    const isRunning = () => this.world.keyboard.SHIFT && isMoving();
-
     //Movement
     setInterval(() => this.charMovement(), 1000 / 60);
 
     //Animation 
-    setInterval(() => {
-      if (this.world?.isPaused) return;
-
-      this.updateSlashState();
-
-      switch (true) {
-        case this.isSpawning():
-          this.spriteAnimation(this.IDLE);
-          break;
-        case this.isDying:
-          this.playDyingAnimation();
-          break;
-        case this.isHurt():
-          this.spriteAnimation(this.HURT);
-          break;
-        case this.throwingAnimationActive:
-          this.playThrowingAnimation();
-          break;
-        case this.slashAnimationActive:
-          this.playSlashAnimation();
-          break;
-        case this.isAboveGround() && this.vcY > 3:
-          this.spriteAnimation(this.JUMPING, false); // Play the jumping animation once
-          break;
-        case this.isAboveGround() && this.vcY < -1: // Falling down fast
-          this.spriteAnimation(this.FALLING);
-          break;
-        case this.isAboveGround():
-          this.spriteAnimation(this.FLYING); // Play the flying animation while in the air
-          break;
-        case isRunning():
-          if (!this.isHurtState) {
-            this.spriteAnimation(this.RUNNING);
-            this.speed = 4;
-          }
-          break;
-        case isMoving():
-          if (!this.isHurtState) {
-            this.spriteAnimation(this.WALKING);
-            this.speed = 2;
-          }
-          break;
-        default:
-          this.spriteAnimation(this.IDLE);
-      }
-    }, 50);
+    setInterval(() => switchCharAnimation(this), 50);
   }
 
   charMovement() {
@@ -175,6 +128,14 @@ export class Character extends MovableObject {
     return this.world.keyboard.UP && !this.isAboveGround();
   }
 
+  isMoving() {
+    return this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
+  }
+
+  isRunning() {
+    return this.world.keyboard.SHIFT && this.isMoving();
+  }
+
   updateSlashState() {
     if (this.isSpawning()) return;
 
@@ -190,7 +151,9 @@ export class Character extends MovableObject {
     return this.opacity < 1;
   }
 
-
+  switchCharAnimation() {
+    switchCharAnimation(this);
+  }
 
   draw(ctx) {
     ctx.save();
