@@ -1,7 +1,7 @@
 import { DrawableObject } from '../objects/drawable-objects.class.js';
 
 export class CoinsBar extends DrawableObject {
-  imgCoins = './img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 01.png';
+  imgCoins = './assets/img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 01.png';
   coins = 0;
 
   constructor() {
@@ -19,7 +19,7 @@ export class CoinsBar extends DrawableObject {
   }
 
   drawCoinsCount(ctx) {
-    ctx.font = '20px Cinzel Decorative';
+    ctx.font = '20px Uncial Antiqua';
     ctx.fillStyle = '#d9a441';
     ctx.strokeStyle = '#100a07';
     ctx.lineWidth = 5;

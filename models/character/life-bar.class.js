@@ -1,7 +1,7 @@
 import { DrawableObject } from '../objects/drawable-objects.class.js';
 
 export class LifeBar extends DrawableObject {
-  imgLife ='./img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Life.png';
+  imgLife ='./assets/img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Life.png';
   percentage = 100;
   maxSegments = 5;
 

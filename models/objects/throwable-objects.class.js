@@ -1,7 +1,7 @@
 import { DrawableObject } from './drawable-objects.class.js';
 
 export class ThrowableObject extends DrawableObject {
-  img = './img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Rock 02.png';
+  img = './assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Rock 02.png';
   throwable = true;
   rooks = 0;
   showCount = false;
@@ -69,7 +69,7 @@ export class ThrowableObject extends DrawableObject {
   }
 
     drawRookCount(ctx) {
-    ctx.font = '20px Cinzel Decorative';
+    ctx.font = '20px Uncial Antiqua';
     ctx.fillStyle = '#d9a441';
     ctx.strokeStyle = '#100a07';
     ctx.lineWidth = 5;

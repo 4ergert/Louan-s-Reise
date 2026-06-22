@@ -16,12 +16,12 @@ export class Coins extends DrawableObject {
   }
 
   IMAGES_COINS = [
-    './img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 01.png',
-    './img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 02.png',
-    './img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 03.png',
-    './img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 04.png',
-    './img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 05.png',
-    './img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 06.png'
+    './assets/img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 01.png',
+    './assets/img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 02.png',
+    './assets/img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 03.png',
+    './assets/img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 04.png',
+    './assets/img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 05.png',
+    './assets/img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 06.png'
   ];
 
   animation() {

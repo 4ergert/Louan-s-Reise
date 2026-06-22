@@ -2,9 +2,40 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  background-image: url('./assets/img/Background/Background.png');
+  background-size: cover;
+  background-position: center;
   font-family: "Cinzel Decorative", Georgia, serif;
 }
 
-canvas {
+h1 {
+  font-size: 48px;
+  font-family: "Uncial Antiqua", Georgia, serif;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+#startScreen {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#startScreen p {
+  font-family: "Cinzel Decorative", Georgia, serif;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+#gameCanvas {
   background-color: #000;
+  border: 3px solid #fff;
+}
+
+#startScreenCanvas {
+  background-color: transparent;
+  border: 3px solid #fff;
 }

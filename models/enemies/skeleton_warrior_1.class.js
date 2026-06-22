@@ -20,7 +20,7 @@ export class SkeletonWarriorLVL1 extends MovableObject {
 
   constructor() {
     super();
-    this.loadImage('./img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_000.png');
+    this.loadImage('./assets/img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_000.png');
     this.loadImages(this.IDLE);
     this.loadImages(this.WALKING);
     this.loadImages(this.DYING);
