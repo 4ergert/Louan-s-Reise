@@ -1,13 +1,38 @@
 import { Keyboard } from '../models/keyboard.class.js';
+import { StartScreen } from '../models/start-screen-class.js';
 import { World } from '../models/world.class.js';
 
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let startScreen;
+let isStartScreenVisible = true;
 
 function init() {
   canvas = document.getElementById("gameCanvas");
-  world = new World(canvas, keyboard);
+  const startScreenCanvas = document.getElementById("startScreenCanvas");
+
+  if (startScreenCanvas) {
+    startScreen = new StartScreen(startScreenCanvas);
+    startScreen.start();
+  }
+
+  if (canvas) {
+    world = new World(canvas, keyboard);
+  }
+}
+
+function showGameCanvas() {
+  if (!isStartScreenVisible) return;
+
+  const startScreenElement = document.getElementById("startScreen");
+  const startScreenCanvas = document.getElementById("startScreenCanvas");
+
+  startScreen?.stop();
+  startScreenElement?.style.setProperty("display", "none");
+  startScreenCanvas?.style.setProperty("display", "none");
+  canvas?.style.setProperty("display", "block");
+  isStartScreenVisible = false;
 }
 
 window.addEventListener("keydown", (e) => {
@@ -31,6 +56,7 @@ window.addEventListener("keydown", (e) => {
       break;
     case " ":
       keyboard.SPACE = true;
+      showGameCanvas();
       break;
     case "Control":
       keyboard.CTRL = true;

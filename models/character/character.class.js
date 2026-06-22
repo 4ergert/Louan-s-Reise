@@ -27,6 +27,7 @@ export class Character extends MovableObject {
   knockbackSpeed = 0;
   
   IDLE = CHARACTER_SPRITES.IDLE_ANIMATION;
+  IDLE_BLINKING = CHARACTER_SPRITES.IDLE_BLINKING_ANIMATION;
   WALKING = CHARACTER_SPRITES.WALKING_ANIMATION;
   RUNNING = CHARACTER_SPRITES.RUNNING_ANIMATION;
   JUMPING = CHARACTER_SPRITES.JUMPING_ANIMATION;
@@ -44,6 +45,7 @@ export class Character extends MovableObject {
     super();
     this.loadImage('./assets/img/Character/lvl_1/Idle/0_Dark_Oracle_Idle_000.png');
     this.loadImages(this.IDLE);
+    this.loadImages(this.IDLE_BLINKING);
     this.loadImages(this.WALKING);
     this.loadImages(this.RUNNING);
     this.loadImages(this.JUMPING);
