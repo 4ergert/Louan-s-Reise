@@ -139,7 +139,7 @@ export class WorldIntros {
     this.ctx.stroke();
 
     this.ctx.fillStyle = '#3a2412';
-    this.ctx.font = 'bold 20px Georgia';
+    this.ctx.font = 'bold 20px Cinzel Decorative';
     this.ctx.textBaseline = 'top';
     textLines.forEach((line, index) => {
       this.ctx.fillText(line, bubbleX + 18, bubbleY + 16 + index * 28);
@@ -168,7 +168,7 @@ export class WorldIntros {
     this.ctx.stroke();
 
     this.ctx.fillStyle = '#3a2412';
-    this.ctx.font = 'bold 20px Georgia';
+    this.ctx.font = 'bold 16px Cinzel Decorative';
     this.ctx.textBaseline = 'top';
     textLines.forEach((line, index) => {
       this.ctx.fillText(line, bubbleX + 18, bubbleY + 16 + index * 28);

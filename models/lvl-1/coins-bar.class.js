@@ -19,7 +19,7 @@ export class CoinsBar extends DrawableObject {
   }
 
   drawCoinsCount(ctx) {
-    ctx.font = '20px Arial';
+    ctx.font = '20px Cinzel Decorative';
     ctx.fillStyle = '#d9a441';
     ctx.strokeStyle = '#100a07';
     ctx.lineWidth = 5;

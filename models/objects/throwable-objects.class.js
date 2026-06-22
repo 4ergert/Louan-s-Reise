@@ -69,7 +69,7 @@ export class ThrowableObject extends DrawableObject {
   }
 
     drawRookCount(ctx) {
-    ctx.font = '20px Arial';
+    ctx.font = '20px Cinzel Decorative';
     ctx.fillStyle = '#d9a441';
     ctx.strokeStyle = '#100a07';
     ctx.lineWidth = 5;
