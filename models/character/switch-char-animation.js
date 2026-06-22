@@ -47,7 +47,7 @@ export function switchCharAnimation(character) {
     case isMoving(character):
       if (!character.isHurtState) {
         character.spriteAnimation(character.WALKING);
-        character.speed = 2;
+        character.speed = 1;
       }
       break;
     default:

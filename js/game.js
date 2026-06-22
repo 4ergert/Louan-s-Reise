@@ -17,10 +17,12 @@ function init() {
     startScreen = new StartScreen(startScreenCanvas);
     startScreen.start();
   }
+}
 
-  if (canvas) {
-    world = new World(canvas, keyboard);
-  }
+function initWorld() {
+  if (!canvas || world) return;
+
+  world = new World(canvas, keyboard);
 }
 
 function showGameCanvas() {
@@ -56,6 +58,7 @@ function fadeIntoGame() {
 
     overlay?.style.setProperty("opacity", "0");
     canvas?.style.setProperty("opacity", "1");
+    initWorld();
     isStartTransitionRunning = false;
   };
 

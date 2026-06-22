@@ -12,6 +12,8 @@ export class StartScreen {
 		this.animationId = 0;
 		this.characterWidth = 180;
 		this.characterHeight = 180;
+		this.isReady = false;
+		this.pendingStart = false;
 		this.isTransitioning = false;
 		this.transitionStartedAt = 0;
 		this.transitionDuration = 900;
@@ -21,14 +23,29 @@ export class StartScreen {
 	}
 
 	loadFrames() {
+		let loadedFrames = 0;
+
 		this.frames = this.framePaths.map((path) => {
 			const image = new Image();
+			image.onload = () => {
+				loadedFrames++;
+				if (loadedFrames === this.framePaths.length) {
+					this.isReady = true;
+					if (this.pendingStart) this.start();
+				}
+			};
 			image.src = path;
 			return image;
 		});
 	}
 
 	start() {
+		if (!this.isReady) {
+			this.pendingStart = true;
+			return;
+		}
+
+		this.pendingStart = false;
 		cancelAnimationFrame(this.animationId);
 		this.animationId = requestAnimationFrame(this.animate);
 	}

@@ -13,7 +13,7 @@ export class Character extends MovableObject {
   currentAnimation = null;
   energy = 100;
   opacity = 0;
-  spawnDuration = 800;
+  spawnDuration = 1200;
   spawnStartedAt = Date.now();
   throwingAnimationActive = false;
   slashAnimationActive = false;
