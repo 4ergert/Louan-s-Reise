@@ -1,4 +1,5 @@
 body {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,10 +12,19 @@ body {
   font-family: "Cinzel Decorative", Georgia, serif;
 }
 
+#transitionOverlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+
 h1 {
   font-size: 72px;
   font-family: "Uncial Antiqua", Georgia, serif;
-  color: white;
+  color: rgb(255, 202, 103);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
@@ -33,8 +43,9 @@ h1 {
 
 #gameCanvas {
   display: none;
+  opacity: 0;
   background-color: #000;
-  border: 3px solid #fff;
+  border: 3px solid #261c05;
 }
 
 #startScreenCanvas {

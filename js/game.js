@@ -7,6 +7,7 @@ let world;
 let keyboard = new Keyboard();
 let startScreen;
 let isStartScreenVisible = true;
+let isStartTransitionRunning = false;
 
 function init() {
   canvas = document.getElementById("gameCanvas");
@@ -32,7 +33,59 @@ function showGameCanvas() {
   startScreenElement?.style.setProperty("display", "none");
   startScreenCanvas?.style.setProperty("display", "none");
   canvas?.style.setProperty("display", "block");
+  canvas?.style.setProperty("opacity", "0");
   isStartScreenVisible = false;
+}
+
+function fadeIntoGame() {
+  const overlay = document.getElementById("transitionOverlay");
+  const startedAt = performance.now();
+  const duration = 700;
+
+  const revealGame = (timestamp) => {
+    const progress = Math.min((timestamp - startedAt) / duration, 1);
+    const easedProgress = 1 - Math.pow(1 - progress, 2);
+
+    canvas?.style.setProperty("opacity", `${easedProgress}`);
+    overlay?.style.setProperty("opacity", `${1 - easedProgress}`);
+
+    if (progress < 1) {
+      requestAnimationFrame(revealGame);
+      return;
+    }
+
+    overlay?.style.setProperty("opacity", "0");
+    canvas?.style.setProperty("opacity", "1");
+    isStartTransitionRunning = false;
+  };
+
+  requestAnimationFrame(revealGame);
+}
+
+function startGameTransition() {
+  if (!isStartScreenVisible || isStartTransitionRunning) return;
+
+  const overlay = document.getElementById("transitionOverlay");
+  const startedAt = performance.now();
+  const duration = 900;
+
+  isStartTransitionRunning = true;
+  startScreen?.beginTransition(() => {
+    showGameCanvas();
+    fadeIntoGame();
+  });
+
+  const fadeOverlay = (timestamp) => {
+    const progress = Math.min((timestamp - startedAt) / duration, 1);
+
+    overlay?.style.setProperty("opacity", `${progress}`);
+
+    if (progress < 1) {
+      requestAnimationFrame(fadeOverlay);
+    }
+  };
+
+  requestAnimationFrame(fadeOverlay);
 }
 
 window.addEventListener("keydown", (e) => {
@@ -56,17 +109,16 @@ window.addEventListener("keydown", (e) => {
       break;
     case " ":
       keyboard.SPACE = true;
-      showGameCanvas();
+      startGameTransition();
       break;
     case "Control":
       keyboard.CTRL = true;
       break;
-    case "Shift":
-      keyboard.SHIFT = true;
+    case "a":
+      keyboard.A = true;
       break;
-    case "x":
-    case "X":
-      keyboard.X = true;
+    case "f":
+      keyboard.F = true;
       break;
   }
 });
@@ -95,12 +147,11 @@ window.addEventListener("keyup", (e) => {
     case "Control":
       keyboard.CTRL = false;
       break;
-    case "Shift":
-      keyboard.SHIFT = false;
+    case "a":
+      keyboard.A = false;
       break;
-    case "x":
-    case "X":
-      keyboard.X = false;
+    case "f":
+      keyboard.F = false;
       break;
   }
 });

@@ -12,6 +12,10 @@ export class StartScreen {
 		this.animationId = 0;
 		this.characterWidth = 180;
 		this.characterHeight = 180;
+		this.isTransitioning = false;
+		this.transitionStartedAt = 0;
+		this.transitionDuration = 900;
+		this.onTransitionComplete = null;
 		this.loadFrames();
 		this.animate = this.animate.bind(this);
 	}
@@ -33,14 +37,40 @@ export class StartScreen {
 		cancelAnimationFrame(this.animationId);
 	}
 
+	beginTransition(onComplete) {
+		if (this.isTransitioning) return;
+		this.isTransitioning = true;
+		this.transitionStartedAt = 0;
+		this.onTransitionComplete = onComplete;
+	}
+
 	animate(timestamp) {
+		if (this.isTransitioning && !this.transitionStartedAt) {
+			this.transitionStartedAt = timestamp;
+		}
+
 		if (timestamp - this.lastFrameSwitch >= this.frameDelay) {
 			this.frameIndex = (this.frameIndex + 1) % this.frames.length;
 			this.lastFrameSwitch = timestamp;
 		}
 
 		this.drawScene(timestamp);
+
+		if (this.isTransitioning) {
+			const progress = this.getTransitionProgress(timestamp);
+			if (progress >= 1) {
+				this.isTransitioning = false;
+				this.onTransitionComplete?.();
+				return;
+			}
+		}
+
 		this.animationId = requestAnimationFrame(this.animate);
+	}
+
+	getTransitionProgress(timestamp) {
+		if (!this.isTransitioning || !this.transitionStartedAt) return 0;
+		return Math.min((timestamp - this.transitionStartedAt) / this.transitionDuration, 1);
 	}
 
 	drawScene(timestamp) {
@@ -48,8 +78,10 @@ export class StartScreen {
 		const characterX = -40;
 		const baseY = -20;
 		const breathingOffset = Math.sin(timestamp / 320) * 4;
-		const flicker = (Math.sin(timestamp / 85) + Math.sin(timestamp / 130)) * 0.5;
-		const emberPulse = (Math.sin(timestamp / 260) + 1) / 2;
+		const transitionProgress = this.getTransitionProgress(timestamp);
+		const flickerStrength = 1 + transitionProgress * 2.4;
+		const flicker = ((Math.sin(timestamp / 85) + Math.sin(timestamp / 130)) * 0.5) * flickerStrength;
+		const emberPulse = Math.min(((Math.sin(timestamp / 260) + 1) / 2) + transitionProgress * 0.45, 1.5);
 		const currentFrame = this.frames[this.frameIndex];
 
 		ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -110,6 +142,7 @@ export class StartScreen {
 		ctx.fillStyle = '#fff7de';
 		ctx.fillText('Druecke Leertaste,', 210, 50);
 		ctx.fillText('um Louans Reise zu beginnen.', 120, 100);
+
 		ctx.restore();
 	}
 }

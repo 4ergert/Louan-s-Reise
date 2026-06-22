@@ -295,13 +295,13 @@ export class World extends WorldIntros {
   }
 
   handleThrowInput() {
-    if (this.keyboard.X && !this.throwInputLocked && this.throwableObjects.rooks > 0) {
+    if (this.keyboard.F && !this.throwInputLocked && this.throwableObjects.rooks > 0) {
       startThrowingAnimation(this.character);
       this.throwRook();
       this.throwInputLocked = true;
     }
 
-    if (!this.keyboard.X) {
+    if (!this.keyboard.F) {
       this.throwInputLocked = false;
     }
   }

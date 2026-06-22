@@ -5,7 +5,7 @@ export class Keyboard {
   DOWN = false;
   SPACE = false;
   CTRL = false;
-  SHIFT = false;
+  A = false;
   D = false;
-  X = false;
+  F = false;
 }

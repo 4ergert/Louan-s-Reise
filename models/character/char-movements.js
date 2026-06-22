@@ -157,7 +157,7 @@ export function isMoving(character) {
  * @returns {boolean} True when sprint input and movement input are both active.
  */
 export function isRunning(character) {
-  return character.world.keyboard.SHIFT && isMoving(character);
+  return character.world.keyboard.A && isMoving(character);
 }
 
 /**
