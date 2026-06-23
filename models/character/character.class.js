@@ -1,4 +1,5 @@
 import { CHARACTER_SPRITES } from '../../js/sprites-path/character-sprites.js';
+import { createJumpEffortAudios, createRunningFootstepAudios, playRandomVariantSound } from '../../js/audio.js';
 import { MovableObject } from '../objects/movable-object.class.js';
 import { switchCharAnimation } from './switch-char-animation.js';
 import { charMovement } from './char-movements.js';
@@ -25,6 +26,12 @@ export class Character extends MovableObject {
   knockbackUntil = 0;
   knockbackDirection = 0;
   knockbackSpeed = 0;
+  runningFootstepAudios = createRunningFootstepAudios();
+  jumpEffortAudios = createJumpEffortAudios();
+  lastRunningFootstepIndex = -1;
+  lastRunningFootstepFrame = -1;
+  lastJumpEffortIndex = -1;
+  jumpEffortPlayed = false;
   
   IDLE = CHARACTER_SPRITES.IDLE_ANIMATION;
   IDLE_BLINKING = CHARACTER_SPRITES.IDLE_BLINKING_ANIMATION;
@@ -140,6 +147,8 @@ export class Character extends MovableObject {
     if (this.currentAnimation !== sprites) {
       this.currentAnimation = sprites;
       this.currentImage = 0;
+      this.lastRunningFootstepFrame = -1;
+      this.jumpEffortPlayed = false;
     }
 
     let i = loop
@@ -150,6 +159,27 @@ export class Character extends MovableObject {
     let path = sprites[i];
     this.img = this.imgCache[path];
 
+    this.playRunningFootstep(sprites, i);
+    this.playJumpEffort(sprites, i);
+
     if (loop || this.currentImage < sprites.length - 1) this.currentImage++;
+  }
+
+  playRunningFootstep(sprites, frameIndex) {
+    if (sprites !== this.RUNNING) return;
+    if (![2, 8].includes(frameIndex)) return;
+    if (this.lastRunningFootstepFrame === frameIndex) return;
+
+    this.lastRunningFootstepIndex = playRandomVariantSound(this.runningFootstepAudios, this.lastRunningFootstepIndex);
+    this.lastRunningFootstepFrame = frameIndex;
+  }
+
+  playJumpEffort(sprites, frameIndex) {
+    if (sprites !== this.JUMPING) return;
+    if (frameIndex !== 0) return;
+    if (this.jumpEffortPlayed) return;
+
+    this.lastJumpEffortIndex = playRandomVariantSound(this.jumpEffortAudios, this.lastJumpEffortIndex);
+    this.jumpEffortPlayed = true;
   }
 }

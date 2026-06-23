@@ -1,4 +1,5 @@
 import { Keyboard } from '../models/keyboard.class.js';
+import { createGameBackgroundAudio, playBackgroundAudio } from './audio.js';
 import { StartScreen } from '../models/start-screen-class.js';
 import { World } from '../models/world.class.js';
 
@@ -6,6 +7,7 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 let startScreen;
+let gameBackgroundAudio = createGameBackgroundAudio();
 let isStartScreenVisible = true;
 let isStartTransitionRunning = false;
 
@@ -61,6 +63,7 @@ function fadeIntoGame() {
     overlay?.style.setProperty("opacity", "0");
     canvas?.style.setProperty("opacity", "1");
     initWorld();
+    playBackgroundAudio(gameBackgroundAudio);
     isStartTransitionRunning = false;
   };
 
@@ -93,7 +96,21 @@ function startGameTransition() {
   requestAnimationFrame(fadeOverlay);
 }
 
+function resumeStartScreenAudio() {
+  if (!isStartScreenVisible || isStartTransitionRunning) return;
+
+  startScreen?.playBackgroundAudio();
+}
+
+window.addEventListener("pointerdown", () => {
+  resumeStartScreenAudio();
+});
+
 window.addEventListener("keydown", (e) => {
+  if (e.key !== " ") {
+    resumeStartScreenAudio();
+  }
+
   // console.log(e.key);
   switch (e.key) {
     case "ArrowLeft":

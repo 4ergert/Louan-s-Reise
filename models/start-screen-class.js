@@ -1,4 +1,5 @@
 import { CHARACTER_SPRITES } from '../js/sprites-path/character-sprites.js';
+import { createStartScreenAudio, playBackgroundAudio, stopBackgroundAudio } from '../js/audio.js';
 
 export class StartScreen {
 	constructor(canvas) {
@@ -18,6 +19,7 @@ export class StartScreen {
 		this.transitionStartedAt = 0;
 		this.transitionDuration = 900;
 		this.onTransitionComplete = null;
+		this.backgroundAudio = createStartScreenAudio();
 		this.loadFrames();
 		this.animate = this.animate.bind(this);
 	}
@@ -46,12 +48,22 @@ export class StartScreen {
 		}
 
 		this.pendingStart = false;
+		this.playBackgroundAudio();
 		cancelAnimationFrame(this.animationId);
 		this.animationId = requestAnimationFrame(this.animate);
 	}
 
 	stop() {
 		cancelAnimationFrame(this.animationId);
+		this.stopBackgroundAudio();
+	}
+
+	playBackgroundAudio() {
+		playBackgroundAudio(this.backgroundAudio);
+	}
+
+	stopBackgroundAudio() {
+		stopBackgroundAudio(this.backgroundAudio);
 	}
 
 	beginTransition(onComplete) {

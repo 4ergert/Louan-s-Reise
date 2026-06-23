@@ -8,6 +8,7 @@ import { ThrowableObject } from './objects/throwable-objects.class.js';
 import { WorldIntros } from './world-intros.class.js';
 import { lvl_1 } from '../lvl/lvl_1.js';
 import { isCollidingWithCharacter, isColliding, isCharacterWithinBossSlashRange } from '../js/colliding-objects.js';
+import { createCoinPickupAudio, playSoundEffect } from '../js/audio.js';
 import { isSpawning } from './character/char-movements.js';
 import { startKnockback, startThrowingAnimation } from './character/char-animation-actions.js';
 
@@ -25,6 +26,7 @@ export class World extends WorldIntros {
   throwInputLocked = false;
   bloodSplatterParticles = [];
   isPaused = false;
+  coinPickupAudio = createCoinPickupAudio();
 
   constructor(canvas, keyboard) {
     super();
@@ -278,6 +280,7 @@ export class World extends WorldIntros {
     );
 
     this.coinsBar.addCoin(collectedCoins.length);
+    playSoundEffect(this.coinPickupAudio);
   }
 
   collectRooks() {
