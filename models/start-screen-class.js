@@ -26,6 +26,7 @@ export class StartScreen {
 
 	loadFrames() {
 		let loadedFrames = 0;
+    
 
 		this.frames = this.framePaths.map((path) => {
 			const image = new Image();

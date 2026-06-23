@@ -18,11 +18,12 @@
   <script type="module" src="./js/game.js"></script>
 </head>
 
-<body>
+<body class="intro-mode">
 
   <div id="transitionOverlay"></div>
 
   <h1>Louan der Krieger</h1>
+  <p id="introPrompt">Druecke eine beliebige Taste</p>
 
   <section id="startScreen">
     <p>
@@ -33,6 +34,10 @@
   </section>
 
   <canvas id="startScreenCanvas" width="720" height="170"></canvas>
+
+  <section id="startScreenControls" aria-label="Steuerung">
+    <p><strong>Steuerung:</strong> Pfeiltaste links = laufen links, Pfeiltaste rechts = laufen rechts, Pfeiltaste oben = springen, A = rennen, F = schmeißen</p>
+  </section>
 
   <section id="startScreenMeta" aria-label="Rechtliche Hinweise und Credits">
     <div id="startScreenActions">
@@ -61,7 +66,7 @@
       </details>
     </div>
 
-    <p id="startScreenCopyright">&copy; 2026 Julian</p>
+    <p id="startScreenCopyright">&copy; 2026 Julian Aergert</p>
   </section>
 
   <canvas id="gameCanvas" width="720" height="480"></canvas>

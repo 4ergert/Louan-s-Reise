@@ -8,17 +8,34 @@ let world;
 let keyboard = new Keyboard();
 let startScreen;
 let gameBackgroundAudio = createGameBackgroundAudio();
+let isIntroVisible = true;
 let isStartScreenVisible = true;
 let isStartTransitionRunning = false;
+const introTransitionDuration = 700;
 
 function init() {
   canvas = document.getElementById("gameCanvas");
+}
+
+function showStartScreen() {
+  if (!isIntroVisible) return;
+
+  const body = document.body;
   const startScreenCanvas = document.getElementById("startScreenCanvas");
 
-  if (startScreenCanvas) {
-    startScreen = new StartScreen(startScreenCanvas);
-    startScreen.start();
-  }
+  isIntroVisible = false;
+
+  body?.classList.add("intro-transition");
+
+  window.setTimeout(() => {
+    body?.classList.remove("intro-mode", "intro-transition");
+
+    if (startScreenCanvas && !startScreen) {
+      startScreen = new StartScreen(startScreenCanvas);
+    }
+
+    startScreen?.start();
+  }, introTransitionDuration);
 }
 
 function initWorld() {
@@ -30,29 +47,42 @@ function initWorld() {
 function showGameCanvas() {
   if (!isStartScreenVisible) return;
 
+  const body = document.body;
   const startScreenElement = document.getElementById("startScreen");
   const startScreenCanvas = document.getElementById("startScreenCanvas");
+  const startScreenControls = document.getElementById("startScreenControls");
   const startScreenMeta = document.getElementById("startScreenMeta");
 
   startScreen?.stop();
+  body?.classList.add("game-transitioning");
   startScreenElement?.style.setProperty("display", "none");
   startScreenCanvas?.style.setProperty("display", "none");
+  startScreenControls?.style.setProperty("display", "none");
   startScreenMeta?.style.setProperty("display", "none");
   canvas?.style.setProperty("display", "block");
   canvas?.style.setProperty("opacity", "0");
+  canvas?.style.setProperty("width", "0px");
+  canvas?.style.setProperty("height", "0px");
   isStartScreenVisible = false;
 }
 
 function fadeIntoGame() {
+  const body = document.body;
   const overlay = document.getElementById("transitionOverlay");
   const startedAt = performance.now();
   const duration = 700;
+  const targetWidth = canvas?.width ?? 720;
+  const targetHeight = canvas?.height ?? 480;
+
+  initWorld();
 
   const revealGame = (timestamp) => {
     const progress = Math.min((timestamp - startedAt) / duration, 1);
     const easedProgress = 1 - Math.pow(1 - progress, 2);
 
     canvas?.style.setProperty("opacity", `${easedProgress}`);
+    canvas?.style.setProperty("width", `${targetWidth * easedProgress}px`);
+    canvas?.style.setProperty("height", `${targetHeight * easedProgress}px`);
     overlay?.style.setProperty("opacity", `${1 - easedProgress}`);
 
     if (progress < 1) {
@@ -62,7 +92,9 @@ function fadeIntoGame() {
 
     overlay?.style.setProperty("opacity", "0");
     canvas?.style.setProperty("opacity", "1");
-    initWorld();
+    canvas?.style.setProperty("width", `${targetWidth}px`);
+    canvas?.style.setProperty("height", `${targetHeight}px`);
+    body?.classList.remove("game-transitioning");
     playBackgroundAudio(gameBackgroundAudio);
     isStartTransitionRunning = false;
   };
@@ -96,19 +128,10 @@ function startGameTransition() {
   requestAnimationFrame(fadeOverlay);
 }
 
-function resumeStartScreenAudio() {
-  if (!isStartScreenVisible || isStartTransitionRunning) return;
-
-  startScreen?.playBackgroundAudio();
-}
-
-window.addEventListener("pointerdown", () => {
-  resumeStartScreenAudio();
-});
-
 window.addEventListener("keydown", (e) => {
-  if (e.key !== " ") {
-    resumeStartScreenAudio();
+  if (isIntroVisible) {
+    showStartScreen();
+    return;
   }
 
   // console.log(e.key);
@@ -178,4 +201,4 @@ window.addEventListener("keyup", (e) => {
   }
 });
 
-init();
+window.addEventListener("load", init);

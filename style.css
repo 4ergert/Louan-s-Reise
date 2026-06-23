@@ -3,13 +3,16 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
   height: 100vh;
   margin: 0;
   background-image: url('./assets/img/Background/Background.png');
   background-size: cover;
   background-position: center;
   font-family: "Cinzel Decorative", Georgia, serif;
+}
+
+body.intro-mode {
+  justify-content: center;
 }
 
 #transitionOverlay {
@@ -27,6 +30,59 @@ h1 {
   font-family: "Uncial Antiqua", Georgia, serif;
   color: rgb(255, 202, 103);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+body.intro-mode h1 {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+body.intro-mode h1,
+body.intro-mode #introPrompt {
+  transition: top 0.7s ease, opacity 0.7s ease, transform 0.7s ease;
+}
+
+#introPrompt {
+  display: none;
+}
+
+body.intro-mode #introPrompt {
+  display: block;
+  position: fixed;
+  top: calc(50% + 64px);
+  left: 50%;
+  margin: 0;
+  text-align: center;
+  font-size: 22px;
+  color: rgba(255, 243, 210, 0.92);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  transform: translateX(-50%);
+}
+
+body.intro-transition h1 {
+  top: 90px;
+  transform: translateX(-50%);
+}
+
+body.intro-transition #introPrompt {
+  top: 150px;
+  opacity: 0;
+}
+
+body.intro-mode #startScreen,
+body.intro-mode #startScreenCanvas,
+body.intro-mode #startScreenMeta {
+  display: none;
+}
+
+body.intro-transition #startScreen,
+body.intro-transition #startScreenCanvas,
+body.intro-transition #startScreenMeta {
+  display: none;
 }
 
 #startScreen {
@@ -50,9 +106,43 @@ h1 {
   border: 3px solid #261c05;
 }
 
+body.game-transitioning #gameCanvas {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  z-index: 20;
+}
+
 #startScreenCanvas {
   margin-top: 100px;
   background-color: transparent;
+}
+
+#startScreenControls {
+  width: min(90vw, 720px);
+  margin-top: 50px;
+  text-align: center;
+}
+
+#startScreenControls p {
+  margin: 0;
+  padding: 14px 18px;
+  border: 1px solid rgba(255, 215, 149, 0.35);
+  border-radius: 18px;
+  background: rgba(17, 11, 6, 0.58);
+  color: rgba(255, 243, 210, 0.94);
+  font-size: 16px;
+  line-height: 1.5;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+body.intro-mode #startScreenControls,
+body.intro-transition #startScreenControls {
+  display: none;
 }
 
 #startScreenMeta {
