@@ -77,6 +77,16 @@ const worldSettings = {
   ]
 };
 
+const bossMusicTriggerSignpost = new EnvironmentObject(
+  'assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Signpost 04.png',
+  3700,
+  333,
+  70,
+  70
+);
+
+bossMusicTriggerSignpost.startsBossMusic = true;
+
 
 
 export const lvl_1 = new LVL(
@@ -89,7 +99,7 @@ export const lvl_1 = new LVL(
     new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 140, 333, 70, 70),
     new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 200, 333, 70, 70),
     new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 260, 333, 70, 70),
-    new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 320, 333, 70, 70),
+    bossMusicTriggerSignpost,
     new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 380, 333, 70, 70),
     new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 440, 333, 70, 70),
     new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Signpost 01.png', 530, 333, 70, 70),

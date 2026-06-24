@@ -98,14 +98,18 @@ body.intro-transition #startScreenMeta {
   margin-bottom: 100  px;
 }
 
-#gameCanvas {
+#gameCanvasShell {
   display: none;
   opacity: 0;
+  position: relative;
+}
+
+#gameCanvas {
   background-color: #000;
   border: 3px solid #261c05;
 }
 
-body.game-transitioning #gameCanvas {
+body.game-transitioning #gameCanvasShell {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -113,6 +117,46 @@ body.game-transitioning #gameCanvas {
   transform: translate(-50%, -50%);
   transform-origin: center center;
   z-index: 20;
+}
+
+#gameCanvasOverlay {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 25;
+  pointer-events: none;
+}
+
+.gameCanvasButton {
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 215, 149, 0.3);
+  border-radius: 12px;
+  background: rgba(17, 11, 6, 0.52);
+  color: rgba(255, 243, 210, 0.86);
+  font-size: 22px;
+  line-height: 1;
+  font-family: inherit;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.gameCanvasButton:hover,
+.gameCanvasButton:focus-visible {
+  background: rgba(62, 46, 11, 0.78);
+  border-color: rgba(255, 215, 149, 0.6);
+  color: rgba(255, 243, 210, 0.96);
+  outline: none;
+}
+
+.gameCanvasButton[data-muted="true"] {
+  background: rgba(74, 20, 20, 0.48);
+  border-color: rgba(255, 165, 149, 0.4);
+  color: rgba(255, 228, 228, 0.8);
 }
 
 #startScreenCanvas {
@@ -301,6 +345,60 @@ body.intro-mode #startScreenActions {
 
 .metaDialogBody p + p {
   margin-top: 10px;
+}
+
+.metaDialogFooter {
+  margin-top: 18px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.dialogSecondaryButton {
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 215, 149, 0.3);
+  border-radius: 12px;
+  background: rgba(17, 11, 6, 0.42);
+  color: rgba(255, 243, 210, 0.88);
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.dialogSecondaryButton:hover,
+.dialogSecondaryButton:focus-visible {
+  background: rgba(62, 46, 11, 0.72);
+  border-color: rgba(255, 215, 149, 0.62);
+  outline: none;
+}
+
+.gameMenuDialog {
+  width: min(92vw, 420px);
+}
+
+.gameMenuActions {
+  display: grid;
+  gap: 10px;
+}
+
+.dialogActionButton {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 215, 149, 0.38);
+  border-radius: 14px;
+  background: rgba(38, 28, 5, 0.54);
+  color: rgba(255, 243, 210, 0.92);
+  font-size: 15px;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+.dialogActionButton:hover,
+.dialogActionButton:focus-visible {
+  background: rgba(62, 46, 11, 0.8);
+  border-color: rgba(255, 215, 149, 0.72);
+  outline: none;
 }
 
 #startScreenCopyright {

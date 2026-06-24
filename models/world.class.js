@@ -1,14 +1,15 @@
 import { createBloodSplatterParticles } from '../js/world-effects.js';
 import { drawBloodSplatter, drawBossLifeBar, drawGameOverOverlay } from '../js/world-renderer.js';
+import { createBoneBreakAudios, createBossMusicAudio, createCoinPickupAudio, createGameOverAudio, playBackgroundAudio, playRandomVariantSound, playSoundEffect, stopBackgroundAudio } from '../js/audio.js';
 import { Character } from './character/character.class.js';
 import { LifeBar } from './character/life-bar.class.js';
 import { CoinsBar } from './lvl-1/coins-bar.class.js';
 import { Coins } from './lvl-1/coins.class.js';
 import { ThrowableObject } from './objects/throwable-objects.class.js';
 import { WorldIntros } from './world-intros.class.js';
+import { SkeletonWarriorLVL1 } from './enemies/skeleton_warrior_1.class.js';
 import { lvl_1 } from '../lvl/lvl_1.js';
 import { isCollidingWithCharacter, isColliding, isCharacterWithinBossSlashRange } from '../js/colliding-objects.js';
-import { createCoinPickupAudio, playSoundEffect } from '../js/audio.js';
 import { isSpawning } from './character/char-movements.js';
 import { startKnockback, startThrowingAnimation } from './character/char-animation-actions.js';
 
@@ -27,12 +28,20 @@ export class World extends WorldIntros {
   bloodSplatterParticles = [];
   isPaused = false;
   coinPickupAudio = createCoinPickupAudio();
+  boneBreakAudios = createBoneBreakAudios();
+  bossMusicAudio = createBossMusicAudio();
+  gameOverAudio = createGameOverAudio();
+  lastBoneBreakAudioIndex = -1;
+  backgroundMusicAudio = null;
+  bossMusicTriggered = false;
+  gameOverAudioPlayed = false;
 
-  constructor(canvas, keyboard) {
+  constructor(canvas, keyboard, backgroundMusicAudio = null) {
     super();
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
+    this.backgroundMusicAudio = backgroundMusicAudio;
     this.applyLevelWorldSettings();
     this.draw();
     this.setWorld();
@@ -90,6 +99,7 @@ export class World extends WorldIntros {
     this.ctx.translate(-this.camera_x, 0);
 
     if (this.character.isDead) {
+      this.playGameOverAudio();
       drawGameOverOverlay(this.ctx, this.canvas);
     }
 
@@ -218,6 +228,12 @@ export class World extends WorldIntros {
 
       this.collectCoins();
       this.collectRooks();
+      this.checkBossMusicTrigger();
+
+      if (this.character.isDying || this.character.isDead) {
+        return;
+      }
+
       this.handleThrowInput();
       this.updateThrownRooks();
       this.updateBossAttackState();
@@ -244,6 +260,32 @@ export class World extends WorldIntros {
         }
       });
     }, 1000 / 60);
+  }
+
+  checkBossMusicTrigger() {
+    if (this.bossMusicTriggered) return;
+
+    const triggerObject = this.lvl.environmentObjects.find((object) => object.startsBossMusic);
+
+    if (!triggerObject) return;
+
+    const characterFrontEdge = this.character.x + this.character.width;
+    const triggerX = triggerObject.x + triggerObject.width;
+
+    if (characterFrontEdge < triggerX) return;
+
+    this.bossMusicTriggered = true;
+    stopBackgroundAudio(this.backgroundMusicAudio);
+    playBackgroundAudio(this.bossMusicAudio);
+  }
+
+  playGameOverAudio() {
+    if (this.gameOverAudioPlayed) return;
+
+    this.gameOverAudioPlayed = true;
+    stopBackgroundAudio(this.backgroundMusicAudio);
+    stopBackgroundAudio(this.bossMusicAudio);
+    playSoundEffect(this.gameOverAudio);
   }
 
   updateBossAttackState() {
@@ -366,12 +408,19 @@ export class World extends WorldIntros {
   }
 
   handleEnemyDefeat(enemy) {
+    this.playEnemyDefeatSound(enemy);
     let dyingDuration = enemy.die();
 
     setTimeout(() => {
       if (!enemy.isBoss) this.spawnCoinAt(enemy);
       this.removeEnemy(enemy);
     }, dyingDuration);
+  }
+
+  playEnemyDefeatSound(enemy) {
+    if (!(enemy instanceof SkeletonWarriorLVL1)) return;
+
+    this.lastBoneBreakAudioIndex = playRandomVariantSound(this.boneBreakAudios, this.lastBoneBreakAudioIndex);
   }
 
   spawnCoinAt(enemy) {

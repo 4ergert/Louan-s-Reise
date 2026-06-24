@@ -153,7 +153,7 @@ export class StartScreen {
 		ctx.shadowOffsetX = 1 + flicker * 1.5;
 		ctx.shadowOffsetY = 3 + emberPulse * 2;
 		ctx.fillStyle = 'rgba(160, 32, 0, 0.6)';
-		ctx.fillText('Druecke Leertaste,', 212, 54);
+		ctx.fillText('Drücke Leertaste,', 212, 54);
 		ctx.fillText('um Louans Reise zu beginnen.', 122, 104);
 
 		ctx.shadowColor = `rgba(255, 170, 40, ${0.55 + emberPulse * 0.25})`;
@@ -161,7 +161,7 @@ export class StartScreen {
 		ctx.shadowOffsetX = flicker * 2;
 		ctx.shadowOffsetY = 0;
 		ctx.fillStyle = lineOneGradient;
-		ctx.fillText('Druecke Leertaste,', 210, 50);
+		ctx.fillText('Drücke Leertaste,', 210, 50);
 		ctx.fillStyle = lineTwoGradient;
 		ctx.fillText('um Louans Reise zu beginnen.', 120, 100);
 
@@ -170,7 +170,7 @@ export class StartScreen {
 		ctx.shadowOffsetX = 0;
 		ctx.shadowOffsetY = 0;
 		ctx.fillStyle = '#fff7de';
-		ctx.fillText('Druecke Leertaste,', 210, 50);
+		ctx.fillText('Drücke Leertaste,', 210, 50);
 		ctx.fillText('um Louans Reise zu beginnen.', 120, 100);
 
 		ctx.restore();

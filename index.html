@@ -62,6 +62,9 @@
         <p>Verantwortliche Angaben bitte vor der Veroeffentlichung vervollstaendigen.</p>
         <p>Empfohlen: Name, Anschrift und Kontaktmoeglichkeit.</p>
       </div>
+      <div class="metaDialogFooter">
+        <button type="button" class="dialogSecondaryButton backToMenuButton" data-return-dialog-target="gameMenuDialog" hidden>Zurueck zum Menue</button>
+      </div>
     </div>
   </dialog>
 
@@ -76,6 +79,9 @@
       <div class="metaDialogBody">
         <p>Datenschutzhinweise bitte vor der Veroeffentlichung ergaenzen.</p>
         <p>Relevant bei externen Diensten, Fonts, Analytics oder Formularen.</p>
+      </div>
+      <div class="metaDialogFooter">
+        <button type="button" class="dialogSecondaryButton backToMenuButton" data-return-dialog-target="gameMenuDialog" hidden>Zurueck zum Menue</button>
       </div>
     </div>
   </dialog>
@@ -92,10 +98,76 @@
         <p>Spielkonzept und Umsetzung: Julian</p>
         <p>Asset-, Audio- und Font-Lizenzen hier gesammelt auffuehren.</p>
       </div>
+      <div class="metaDialogFooter">
+        <button type="button" class="dialogSecondaryButton backToMenuButton" data-return-dialog-target="gameMenuDialog" hidden>Zurueck zum Menue</button>
+      </div>
     </div>
   </dialog>
 
-  <canvas id="gameCanvas" width="720" height="480"></canvas>
+  <dialog id="settingsDialog" class="metaDialog" aria-labelledby="settingsTitle">
+    <div class="metaDialogContent">
+      <div class="metaDialogHeader">
+        <h2 id="settingsTitle">Einstellungen</h2>
+        <form method="dialog">
+          <button type="submit" class="metaDialogClose" aria-label="Dialog schliessen">X</button>
+        </form>
+      </div>
+      <div class="metaDialogBody">
+        <p>Weitere Einstellungen koennen hier spaeter ergaenzt werden.</p>
+        <p>Die Musik kannst du bereits ueber das Notensymbol ein- und ausschalten.</p>
+      </div>
+      <div class="metaDialogFooter">
+        <button type="button" class="dialogSecondaryButton backToMenuButton" data-return-dialog-target="gameMenuDialog" hidden>Zurueck zum Menue</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="instructionsDialog" class="metaDialog" aria-labelledby="instructionsTitle">
+    <div class="metaDialogContent">
+      <div class="metaDialogHeader">
+        <h2 id="instructionsTitle">Bedienungsanleitung</h2>
+        <form method="dialog">
+          <button type="submit" class="metaDialogClose" aria-label="Dialog schliessen">X</button>
+        </form>
+      </div>
+      <div class="metaDialogBody">
+        <p>Pfeiltaste links = laufen links</p>
+        <p>Pfeiltaste rechts = laufen rechts</p>
+        <p>Pfeiltaste oben = springen</p>
+        <p>A = rennen</p>
+        <p>F = schmeißen</p>
+      </div>
+      <div class="metaDialogFooter">
+        <button type="button" class="dialogSecondaryButton backToMenuButton" data-return-dialog-target="gameMenuDialog" hidden>Zurueck zum Menue</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="gameMenuDialog" class="metaDialog gameMenuDialog" aria-labelledby="gameMenuTitle">
+    <div class="metaDialogContent">
+      <div class="metaDialogHeader">
+        <h2 id="gameMenuTitle">Menue</h2>
+        <form method="dialog">
+          <button type="submit" class="metaDialogClose" aria-label="Dialog schliessen">X</button>
+        </form>
+      </div>
+      <div class="metaDialogBody gameMenuActions">
+        <button type="button" class="dialogActionButton" data-dialog-target="settingsDialog">Einstellungen</button>
+        <button type="button" class="dialogActionButton" data-dialog-target="instructionsDialog">Bedienungsanleitung</button>
+        <button type="button" class="dialogActionButton" data-dialog-target="impressumDialog">Impressum</button>
+        <button type="button" class="dialogActionButton" data-dialog-target="datenschutzDialog">Datenschutz</button>
+        <button type="button" class="dialogActionButton" data-dialog-target="creditsDialog">Credits</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div id="gameCanvasShell">
+    <div id="gameCanvasOverlay" aria-label="Spielmenue und Audio">
+      <button type="button" id="gameMenuButton" class="gameCanvasButton" aria-label="Menue">☰</button>
+      <button type="button" id="gameMusicToggleButton" class="gameCanvasButton" data-music-toggle aria-pressed="false" aria-label="Musik stummschalten">♪</button>
+    </div>
+    <canvas id="gameCanvas" width="720" height="480"></canvas>
+  </div>
 
 </body>
 
