@@ -107,6 +107,9 @@ export class LVL_1_Boss extends MovableObject {
       this.skeletonThrowTriggered = true;
       this.thrownSkeletonCount++;
       this.world?.spawnSkeletonWarriorFromBoss?.();
+      if (this.thrownSkeletonCount % 3 === 0) {
+        this.world?.spawnBossSwordBoomerang?.();
+      }
     }
 
     if (isSingleRunAnimation && this.currentImage >= images.length - 1) {

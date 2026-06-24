@@ -6,6 +6,7 @@ import { LifeBar } from './character/life-bar.class.js';
 import { CoinsBar } from './lvl-1/coins-bar.class.js';
 import { Coins } from './lvl-1/coins.class.js';
 import { ThrowableObject } from './objects/throwable-objects.class.js';
+import { BossSwordObject } from './objects/boss-sword-object.class.js';
 import { WorldIntros } from './world-intros.class.js';
 import { SkeletonWarriorLVL1 } from './enemies/skeleton_warrior_1.class.js';
 import { lvl_1 } from '../lvl/lvl_1.js';
@@ -19,6 +20,7 @@ export class World extends WorldIntros {
   coinsBar = new CoinsBar();
   throwableObjects = new ThrowableObject(16, 111, true);
   thrownRooks = [];
+  bossThrownSwords = [];
   lvl = lvl_1;
   canvas;
   ctx;
@@ -89,6 +91,7 @@ export class World extends WorldIntros {
     this.addObjectsToMap(this.lvl.environmentObjects);
     this.addObjectsToMap(this.lvl.enemies);
     this.addObjectsToMap(this.thrownRooks);
+    this.addObjectsToMap(this.bossThrownSwords);
 
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.lifeBar);
@@ -167,6 +170,20 @@ export class World extends WorldIntros {
     this.assignWorld(skeletonWarrior);
     skeletonWarrior.launchFromBoss(spawnDirection, spawnX, spawnY);
     this.lvl.enemies.push(skeletonWarrior);
+  }
+
+  spawnBossSwordBoomerang() {
+    if (!this.bossLVL1 || this.bossLVL1.isDying || this.bossLVL1.isDead) return;
+
+    const throwDirection = this.character.x < this.bossLVL1.x ? -1 : 1;
+    const swordWidth = 240;
+    const swordHandCenterX = this.bossLVL1.x + (throwDirection < 0 ? 120 : 380);
+    const swordX = swordHandCenterX - swordWidth / 2;
+    const swordY = this.bossLVL1.y + 190;
+    const sword = new BossSwordObject(swordX, swordY, throwDirection);
+
+    this.assignWorld(sword);
+    this.bossThrownSwords.push(sword);
   }
 
   updateOpeningIntro() {
@@ -260,6 +277,7 @@ export class World extends WorldIntros {
 
       this.handleThrowInput();
       this.updateThrownRooks();
+      this.updateBossThrownSwords();
       this.updateBossAttackState();
 
       let stompedEnemy = this.lvl.enemies.find(enemy =>
@@ -400,6 +418,12 @@ export class World extends WorldIntros {
     this.thrownRooks = this.thrownRooks.filter(rook => !rook.hasHitTarget && !rook.isOffscreen(this.camera_x, this.canvas.width));
   }
 
+  updateBossThrownSwords() {
+    this.bossThrownSwords.forEach((sword) => sword.updateFlight());
+    this.handleBossSwordHits();
+    this.bossThrownSwords = this.bossThrownSwords.filter((sword) => !sword.hasReturned());
+  }
+
   handleThrownRookHits() {
     this.thrownRooks.forEach(rook => {
       let hitEnemy = this.lvl.enemies.find(enemy =>
@@ -418,6 +442,18 @@ export class World extends WorldIntros {
       }
 
       this.handleEnemyDefeat(hitEnemy);
+    });
+  }
+
+  handleBossSwordHits() {
+    this.bossThrownSwords.forEach((sword) => {
+      if (sword.hasHitCharacter) return;
+      if (this.character.isDead || this.character.isHurt()) return;
+      if (!sword.isColliding(this.character)) return;
+
+      sword.hasHitCharacter = true;
+      startKnockback(this.character, sword.x + sword.width / 2);
+      this.character.hit();
     });
   }
 
