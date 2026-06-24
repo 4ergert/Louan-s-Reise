@@ -6,7 +6,7 @@ export class LVL_1_Boss extends MovableObject {
   width = 500;
   y = -10;
   x = 4400;
-  speed = 0.15;
+  speed = 0.3;
   imgDirectionChange = true;
   isBoss = true;
   maxEnergy = 5;
@@ -19,11 +19,14 @@ export class LVL_1_Boss extends MovableObject {
   isThrowingAnimationActive = false;
   slashHitTriggered = false;
   skeletonThrowTriggered = false;
+  thrownSkeletonCount = 0;
   dyingAnimationSpeed = 100;
   animationFrames = [];
   hurtTimeout = null;
   skeletonThrowInterval = null;
+  movementInterval = null;
 
+  IDLE = LVL_1_BOSS_SPRITES.IDLE_ANIMATION;
   WALKING = LVL_1_BOSS_SPRITES.WALKING_ANIMATION;
   HURT = LVL_1_BOSS_SPRITES.HURT_ANIMATION;
   DYING = LVL_1_BOSS_SPRITES.DYING_ANIMATION;
@@ -31,15 +34,37 @@ export class LVL_1_Boss extends MovableObject {
   THROWING = LVL_1_BOSS_SPRITES.THROWING_ANIMATION;
 
   constructor() {
-    super().loadImage(this.WALKING[0]);
-    this.loadImages(this.WALKING);
+    super().loadImage(this.IDLE[0]);
+    this.loadImages(this.IDLE);
     this.loadImages(this.HURT);
     this.loadImages(this.DYING);
     this.loadImages(this.SLASHING);
     this.loadImages(this.THROWING);
-    this.animationFrames = this.WALKING;
+    this.loadImages(this.WALKING);
+    this.animationFrames = this.IDLE;
     this.animate();
+    this.startWalkingLoop();
     this.startSkeletonThrowLoop();
+  }
+
+  getDefaultAnimation() {
+    return this.canWalkLeft() ? this.WALKING : this.IDLE;
+  }
+
+  startWalkingLoop() {
+    this.movementInterval = setInterval(() => {
+      if (!this.canWalkLeft()) return;
+
+      this.x -= this.speed;
+    }, 1000 / 60);
+  }
+
+  canWalkLeft() {
+    if (!this.world || this.world.isPaused) return false;
+    if (!this.world.bossIntroTriggered || this.world.isBossIntroActive?.()) return false;
+    if (this.isDead || this.isDying || this.isHurt) return false;
+    if (this.thrownSkeletonCount < 3) return false;
+    return !this.isThrowingAnimationActive;
   }
 
   startSkeletonThrowLoop() {
@@ -80,6 +105,7 @@ export class LVL_1_Boss extends MovableObject {
 
     if (this.isThrowingAnimationActive && !this.skeletonThrowTriggered && i >= 4) {
       this.skeletonThrowTriggered = true;
+      this.thrownSkeletonCount++;
       this.world?.spawnSkeletonWarriorFromBoss?.();
     }
 
@@ -133,7 +159,7 @@ export class LVL_1_Boss extends MovableObject {
     this.isSlashing = shouldKeepSlashing;
     this.isSlashAnimationActive = shouldKeepSlashing;
     this.slashHitTriggered = false;
-    this.animationFrames = shouldKeepSlashing ? this.SLASHING : this.WALKING;
+    this.animationFrames = shouldKeepSlashing ? this.SLASHING : this.getDefaultAnimation();
     this.currentImage = 0;
     if (this.hurtTimeout) clearTimeout(this.hurtTimeout);
     this.hurtTimeout = null;
@@ -157,7 +183,7 @@ export class LVL_1_Boss extends MovableObject {
 
     this.isSlashing = false;
     this.slashHitTriggered = false;
-    this.animationFrames = this.WALKING;
+    this.animationFrames = this.getDefaultAnimation();
     this.currentImage = 0;
   }
 
@@ -168,7 +194,7 @@ export class LVL_1_Boss extends MovableObject {
     this.isSlashAnimationActive = shouldKeepSlashing;
     this.isSlashing = shouldKeepSlashing;
     this.slashHitTriggered = false;
-    this.animationFrames = shouldKeepSlashing ? this.SLASHING : this.WALKING;
+    this.animationFrames = shouldKeepSlashing ? this.SLASHING : this.getDefaultAnimation();
     this.currentImage = 0;
   }
 
@@ -177,7 +203,7 @@ export class LVL_1_Boss extends MovableObject {
 
     this.isThrowingAnimationActive = false;
     this.skeletonThrowTriggered = false;
-    this.animationFrames = this.WALKING;
+    this.animationFrames = this.getDefaultAnimation();
     this.currentImage = 0;
   }
 
@@ -191,11 +217,13 @@ export class LVL_1_Boss extends MovableObject {
     this.isThrowingAnimationActive = false;
     this.slashHitTriggered = false;
     this.skeletonThrowTriggered = false;
+    this.thrownSkeletonCount = 0;
     this.animationFrames = this.DYING;
     this.currentImage = 0;
     if (this.hurtTimeout) clearTimeout(this.hurtTimeout);
     this.hurtTimeout = null;
     if (this.skeletonThrowInterval) clearInterval(this.skeletonThrowInterval);
+    if (this.movementInterval) clearInterval(this.movementInterval);
 
     const dyingDuration = this.DYING.length * this.dyingAnimationSpeed + 50;
     setTimeout(() => {

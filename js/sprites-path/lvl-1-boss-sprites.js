@@ -1,5 +1,5 @@
 export const LVL_1_BOSS_SPRITES = {
-  WALKING_ANIMATION: [
+  IDLE_ANIMATION: [
     'assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Idle Blinking/0_Skeleton_Warrior_Idle Blinking_000.png',
     'assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Idle Blinking/0_Skeleton_Warrior_Idle Blinking_001.png',
     'assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Idle Blinking/0_Skeleton_Warrior_Idle Blinking_002.png',
@@ -76,5 +76,31 @@ export const LVL_1_BOSS_SPRITES = {
     './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Throwing/0_Skeleton_Warrior_Throwing_008.png',
     './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Throwing/0_Skeleton_Warrior_Throwing_009.png',
     './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Throwing/0_Skeleton_Warrior_Throwing_010.png'
+  ],
+  WALKING_ANIMATION: [
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_000.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_001.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_002.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_003.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_004.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_005.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_006.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_007.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_008.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_009.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_010.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_011.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_012.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_013.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_014.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_015.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_016.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_017.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_018.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_019.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_020.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_021.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_022.png',
+    './assets/img/Enemies/Skeleton_Warrior_3/PNG/PNG Sequences/Walking/0_Skeleton_Warrior_Walking_023.png'
   ]
 };
