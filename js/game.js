@@ -1,5 +1,5 @@
 import { Keyboard } from '../models/keyboard.class.js';
-import { createGameBackgroundAudio, playBackgroundAudio } from './audio.js';
+import { createGameBackgroundAudio, getMusicMuted, playBackgroundAudio, setMusicMuted } from './audio.js';
 import { StartScreen } from '../models/start-screen-class.js';
 import { World } from '../models/world.class.js';
 
@@ -15,6 +15,47 @@ const introTransitionDuration = 700;
 
 function init() {
   canvas = document.getElementById("gameCanvas");
+  initStartScreenDialogs();
+  initMusicToggle();
+}
+
+function initMusicToggle() {
+  const musicToggleButton = document.getElementById("musicToggleButton");
+
+  if (!(musicToggleButton instanceof HTMLButtonElement)) return;
+
+  const renderButtonState = () => {
+    const isMuted = getMusicMuted();
+    musicToggleButton.textContent = isMuted ? "✕" : "♪";
+    musicToggleButton.setAttribute("aria-pressed", `${isMuted}`);
+    musicToggleButton.setAttribute("aria-label", isMuted ? "Musik einschalten" : "Musik stummschalten");
+    musicToggleButton.dataset.muted = `${isMuted}`;
+  };
+
+  renderButtonState();
+  musicToggleButton.addEventListener("click", () => {
+    setMusicMuted(!getMusicMuted());
+    renderButtonState();
+  });
+}
+
+function initStartScreenDialogs() {
+  const dialogButtons = document.querySelectorAll("[data-dialog-target]");
+
+  dialogButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const dialogId = button.getAttribute("data-dialog-target");
+      const dialog = dialogId ? document.getElementById(dialogId) : null;
+
+      if (!(dialog instanceof HTMLDialogElement) || dialog.open) return;
+
+      dialog.showModal();
+    });
+  });
+}
+
+function isMetaDialogOpen() {
+  return Array.from(document.querySelectorAll(".metaDialog")).some((dialog) => dialog.open);
 }
 
 function showStartScreen() {
@@ -129,6 +170,10 @@ function startGameTransition() {
 }
 
 window.addEventListener("keydown", (e) => {
+  if (isMetaDialogOpen()) {
+    return;
+  }
+
   if (isIntroVisible) {
     showStartScreen();
     return;

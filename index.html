@@ -23,7 +23,7 @@
   <div id="transitionOverlay"></div>
 
   <h1>Louan der Krieger</h1>
-  <p id="introPrompt">Druecke eine beliebige Taste</p>
+  <p id="introPrompt">Drücke eine beliebige Taste</p>
 
   <section id="startScreen">
     <p>
@@ -36,38 +36,64 @@
   <canvas id="startScreenCanvas" width="720" height="170"></canvas>
 
   <section id="startScreenControls" aria-label="Steuerung">
+    <button type="button" id="musicToggleButton" aria-pressed="false" aria-label="Musik stummschalten">♪</button>
     <p><strong>Steuerung:</strong> Pfeiltaste links = laufen links, Pfeiltaste rechts = laufen rechts, Pfeiltaste oben = springen, A = rennen, F = schmeißen</p>
   </section>
 
   <section id="startScreenMeta" aria-label="Rechtliche Hinweise und Credits">
     <div id="startScreenActions">
-      <details class="startScreenDetail">
-        <summary>Impressum</summary>
-        <div class="startScreenPanel">
-          <p>Verantwortliche Angaben bitte vor der Veroeffentlichung vervollstaendigen.</p>
-          <p>Empfohlen: Name, Anschrift und Kontaktmoeglichkeit.</p>
-        </div>
-      </details>
-
-      <details class="startScreenDetail">
-        <summary>Datenschutz</summary>
-        <div class="startScreenPanel">
-          <p>Datenschutzhinweise bitte vor der Veroeffentlichung ergaenzen.</p>
-          <p>Relevant bei externen Diensten, Fonts, Analytics oder Formularen.</p>
-        </div>
-      </details>
-
-      <details class="startScreenDetail">
-        <summary>Credits</summary>
-        <div class="startScreenPanel">
-          <p>Spielkonzept und Umsetzung: Julian</p>
-          <p>Asset-, Audio- und Font-Lizenzen hier gesammelt auffuehren.</p>
-        </div>
-      </details>
+      <button type="button" class="startScreenActionButton" data-dialog-target="impressumDialog">Impressum</button>
+      <button type="button" class="startScreenActionButton" data-dialog-target="datenschutzDialog">Datenschutz</button>
+      <button type="button" class="startScreenActionButton" data-dialog-target="creditsDialog">Credits</button>
     </div>
 
     <p id="startScreenCopyright">&copy; 2026 Julian Aergert</p>
   </section>
+
+  <dialog id="impressumDialog" class="metaDialog" aria-labelledby="impressumTitle">
+    <div class="metaDialogContent">
+      <div class="metaDialogHeader">
+        <h2 id="impressumTitle">Impressum</h2>
+        <form method="dialog">
+          <button type="submit" class="metaDialogClose" aria-label="Dialog schliessen">X</button>
+        </form>
+      </div>
+      <div class="metaDialogBody">
+        <p>Verantwortliche Angaben bitte vor der Veroeffentlichung vervollstaendigen.</p>
+        <p>Empfohlen: Name, Anschrift und Kontaktmoeglichkeit.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="datenschutzDialog" class="metaDialog" aria-labelledby="datenschutzTitle">
+    <div class="metaDialogContent">
+      <div class="metaDialogHeader">
+        <h2 id="datenschutzTitle">Datenschutz</h2>
+        <form method="dialog">
+          <button type="submit" class="metaDialogClose" aria-label="Dialog schliessen">X</button>
+        </form>
+      </div>
+      <div class="metaDialogBody">
+        <p>Datenschutzhinweise bitte vor der Veroeffentlichung ergaenzen.</p>
+        <p>Relevant bei externen Diensten, Fonts, Analytics oder Formularen.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="creditsDialog" class="metaDialog" aria-labelledby="creditsTitle">
+    <div class="metaDialogContent">
+      <div class="metaDialogHeader">
+        <h2 id="creditsTitle">Credits</h2>
+        <form method="dialog">
+          <button type="submit" class="metaDialogClose" aria-label="Dialog schliessen">X</button>
+        </form>
+      </div>
+      <div class="metaDialogBody">
+        <p>Spielkonzept und Umsetzung: Julian</p>
+        <p>Asset-, Audio- und Font-Lizenzen hier gesammelt auffuehren.</p>
+      </div>
+    </div>
+  </dialog>
 
   <canvas id="gameCanvas" width="720" height="480"></canvas>
 

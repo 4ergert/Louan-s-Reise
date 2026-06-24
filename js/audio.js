@@ -1,3 +1,14 @@
+const managedAudios = new Set();
+const audioCategories = new WeakMap();
+let isMusicMuted = false;
+
+function registerManagedAudio(audio, category) {
+	audioCategories.set(audio, category);
+	audio.muted = category === 'music' ? isMusicMuted : audio.muted;
+	managedAudios.add(audio);
+	return audio;
+}
+
 function createLoopingAudio(src, volume = 0.35) {
 	const audio = new Audio(src);
 	audio.loop = true;
@@ -7,7 +18,7 @@ function createLoopingAudio(src, volume = 0.35) {
 		audio.currentTime = 0;
 		audio.play().catch(() => {});
 	});
-	return audio;
+	return registerManagedAudio(audio, 'music');
 }
 
 export function createStartScreenAudio() {
@@ -22,7 +33,7 @@ export function createCoinPickupAudio() {
 	const audio = new Audio('assets/audio/Fantasy Sound Library/Mp3/Pickup_Gold_00.mp3');
 	audio.volume = 0.45;
 	audio.preload = 'auto';
-	return audio;
+	return registerManagedAudio(audio, 'effect');
 }
 
 export function createRunningFootstepAudios() {
@@ -30,7 +41,7 @@ export function createRunningFootstepAudios() {
 		const audio = new Audio(`assets/audio/Footstep_Dirt_${variant}.wav`);
 		audio.volume = 0.22;
 		audio.preload = 'auto';
-		return audio;
+		return registerManagedAudio(audio, 'effect');
 	});
 }
 
@@ -39,8 +50,21 @@ export function createJumpEffortAudios() {
 		const audio = new Audio(`assets/audio/${variant}._effort_grunt_male.wav`);
 		audio.volume = 0.28;
 		audio.preload = 'auto';
-		return audio;
+		return registerManagedAudio(audio, 'effect');
 	});
+}
+
+export function setMusicMuted(nextMuted) {
+	isMusicMuted = nextMuted;
+	managedAudios.forEach((audio) => {
+		if (audioCategories.get(audio) === 'music') {
+			audio.muted = isMusicMuted;
+		}
+	});
+}
+
+export function getMusicMuted() {
+	return isMusicMuted;
 }
 
 export function playBackgroundAudio(audio) {
