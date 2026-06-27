@@ -12,15 +12,72 @@ let isIntroVisible = true;
 let isStartScreenVisible = true;
 let isStartTransitionRunning = false;
 let isGameMenuPauseActive = false;
+const baseCanvasWidth = 720;
+const baseCanvasHeight = 480;
 const introTransitionDuration = 700;
 const gameMenuDialogIds = ["gameMenuDialog", "settingsDialog", "instructionsDialog", "impressumDialog", "datenschutzDialog", "creditsDialog"];
 
 function init() {
   canvas = document.getElementById("gameCanvas");
+  syncGameCanvasSize();
   initDialogBackdropClose();
   initGameMenu();
   initStartScreenDialogs();
   initMusicToggle();
+  initGameCanvasResizeHandling();
+}
+
+function getGameCanvasShell() {
+  return document.getElementById("gameCanvasShell");
+}
+
+async function toggleGameCanvasFullscreen() {
+  const gameCanvasShell = getGameCanvasShell();
+
+  if (!document.fullscreenEnabled || !(gameCanvasShell instanceof HTMLElement) || !isGameCanvasVisible()) return;
+
+  if (document.fullscreenElement === gameCanvasShell) {
+    await document.exitFullscreen().catch(() => { });
+    return;
+  }
+
+  await gameCanvasShell.requestFullscreen().catch(() => { });
+}
+
+function isGameCanvasFullscreen() {
+  return document.fullscreenElement === getGameCanvasShell();
+}
+
+function getFullscreenCanvasDimensions() {
+  const scale = Math.min(window.innerWidth / baseCanvasWidth, window.innerHeight / baseCanvasHeight);
+
+  return {
+    width: Math.floor(baseCanvasWidth * scale),
+    height: Math.floor(baseCanvasHeight * scale),
+  };
+}
+
+function syncGameCanvasSize() {
+  if (!(canvas instanceof HTMLCanvasElement)) return;
+
+  const nextWidth = baseCanvasWidth;
+  const nextHeight = baseCanvasHeight;
+  const fullscreenDimensions = getFullscreenCanvasDimensions();
+  const styleWidth = isGameCanvasFullscreen() ? fullscreenDimensions.width : nextWidth;
+  const styleHeight = isGameCanvasFullscreen() ? fullscreenDimensions.height : nextHeight;
+
+  canvas.width = nextWidth;
+  canvas.height = nextHeight;
+
+  if (isStartTransitionRunning) return;
+
+  canvas.style.setProperty("width", `${styleWidth}px`);
+  canvas.style.setProperty("height", `${styleHeight}px`);
+}
+
+function initGameCanvasResizeHandling() {
+  document.addEventListener("fullscreenchange", syncGameCanvasSize);
+  window.addEventListener("resize", syncGameCanvasSize);
 }
 
 function initDialogBackdropClose() {
@@ -251,8 +308,8 @@ function fadeIntoGame() {
   const gameCanvasShell = document.getElementById("gameCanvasShell");
   const startedAt = performance.now();
   const duration = 700;
-  const targetWidth = canvas?.width ?? 720;
-  const targetHeight = canvas?.height ?? 480;
+  const targetWidth = baseCanvasWidth;
+  const targetHeight = baseCanvasHeight;
 
   initWorld();
 
@@ -272,11 +329,10 @@ function fadeIntoGame() {
 
     overlay?.style.setProperty("opacity", "0");
     gameCanvasShell?.style.setProperty("opacity", "1");
-    canvas?.style.setProperty("width", `${targetWidth}px`);
-    canvas?.style.setProperty("height", `${targetHeight}px`);
+    isStartTransitionRunning = false;
+    syncGameCanvasSize();
     body?.classList.remove("game-transitioning");
     playBackgroundAudio(gameBackgroundAudio);
-    isStartTransitionRunning = false;
   };
 
   requestAnimationFrame(revealGame);
@@ -309,6 +365,12 @@ function startGameTransition() {
 }
 
 window.addEventListener("keydown", (e) => {
+  if (e.key === "F11") {
+    e.preventDefault();
+    toggleGameCanvasFullscreen();
+    return;
+  }
+
   if (isMetaDialogOpen()) {
     return;
   }

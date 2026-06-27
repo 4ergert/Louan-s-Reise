@@ -104,9 +104,28 @@ body.intro-transition #startScreenMeta {
   position: relative;
 }
 
+#gameCanvasShell:fullscreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+}
+
 #gameCanvas {
   background-color: #000;
   border: 3px solid #261c05;
+}
+
+#gameCanvasShell:fullscreen #gameCanvas {
+  display: block;
+  width: auto;
+  height: auto;
+  margin: auto;
+  max-width: 100vw;
+  max-height: 100vh;
+  border-width: 0;
 }
 
 body.game-transitioning #gameCanvasShell {
@@ -128,6 +147,11 @@ body.game-transitioning #gameCanvasShell {
   gap: 10px;
   z-index: 25;
   pointer-events: none;
+}
+
+#gameCanvasShell:fullscreen #gameCanvasOverlay {
+  top: 20px;
+  right: 20px;
 }
 
 .gameCanvasButton {
