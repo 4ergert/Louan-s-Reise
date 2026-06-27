@@ -22,8 +22,10 @@ export class SkeletonWarriorLVL1 extends MovableObject {
   WALKING = SKELETON_WARRIOR_1_SPRITES.WALKING_ANIMATION;
   DYING = SKELETON_WARRIOR_1_SPRITES.DYING_ANIMATION;
 
-  constructor() {
+  constructor(x, y) {
     super();
+    this.x = x;
+    this.y = y;
     this.loadImage('./assets/img/Enemies/Skeleton_Warrior_1/Idle/0_Skeleton_Warrior_Idle_000.png');
     this.loadImages(this.IDLE);
     this.loadImages(this.WALKING);
@@ -60,6 +62,12 @@ export class SkeletonWarriorLVL1 extends MovableObject {
       if (this.isThrownByBoss && this.vcY <= 0 && this.isStandingOnPlatform()) {
         this.isThrownByBoss = false;
         this.speed = this.defaultSpeed;
+      }
+
+      if (this.shouldReverseAtBlockedPlatform()) {
+        this.moveDirection *= -1;
+        this.imgDirectionChange = this.moveDirection < 0;
+        return;
       }
 
       this.x += this.moveDirection * this.speed;
@@ -120,5 +128,45 @@ export class SkeletonWarriorLVL1 extends MovableObject {
       height: this.height - 70,
       offsetY: 40,
     };
+  }
+
+  shouldReverseAtBlockedPlatform() {
+    let nextPlatform = this.getNextPlatform();
+
+    return this.isBlockedPlatform(nextPlatform);
+  }
+
+  getNextPlatform() {
+    let nextCollisionArea = this.getNextCollisionArea();
+    let nextFeet = nextCollisionArea.y + nextCollisionArea.height;
+    let landingTolerance = Math.max(20, Math.abs(this.vcY) + 5);
+
+    return (this.world?.lvl?.platformObjects ?? []).find((platform) => {
+      let platformArea = platform.getCollisionArea();
+
+      return (
+        nextCollisionArea.x + nextCollisionArea.width > platformArea.x &&
+        nextCollisionArea.x < platformArea.x + platformArea.width &&
+        nextCollisionArea.y < platformArea.y &&
+        nextFeet >= platformArea.y &&
+        nextFeet <= platformArea.y + landingTolerance
+      );
+    }) ?? null;
+  }
+
+  getNextCollisionArea() {
+    let collisionArea = this.getCollisionArea();
+
+    return {
+      ...collisionArea,
+      x: collisionArea.x + this.moveDirection * this.speed,
+    };
+  }
+
+  isBlockedPlatform(platform) {
+    if (!platform?.imgPath) return false;
+
+    return platform.imgPath.includes('Ground 10.png')
+      || platform.imgPath.includes('Ground 12.png');
   }
 }

@@ -261,7 +261,7 @@ export class World extends WorldIntros {
     setInterval(() => {
       if (this.isPaused) return;
 
-      this.lvl.platformObjects.forEach(platform => {
+      this.getStandableObjects().forEach(platform => {
         if (this.character.isLandingOn(platform)) {
           this.character.landOn(platform);
         }
@@ -280,6 +280,9 @@ export class World extends WorldIntros {
           }
         });
       });
+
+      this.unlockTouchedObjects();
+      this.blockCharacterBySolidObjects();
 
       this.collectCoins();
       this.collectRooks();
@@ -317,6 +320,55 @@ export class World extends WorldIntros {
         }
       });
     }, 1000 / 60);
+  }
+
+  getStandableObjects() {
+    return [
+      ...(this.lvl.platformObjects ?? []),
+      ...(this.lvl.solidObjects ?? []),
+    ];
+  }
+
+  blockCharacterBySolidObjects() {
+    (this.lvl.solidObjects ?? []).forEach((solidObject) => {
+      if (!this.character.isColliding(solidObject)) return;
+      if (this.character.isLandingOn(solidObject)) return;
+      if (this.shouldIgnoreSolidCollisionFromBelow(solidObject)) return;
+
+      let characterArea = this.character.getCollisionArea();
+      let solidArea = solidObject.getCollisionArea();
+      let characterOffsetX = characterArea.x - this.character.x;
+      let solidCenterX = solidArea.x + solidArea.width / 2;
+      let characterCenterX = characterArea.x + characterArea.width / 2;
+
+      if (characterCenterX < solidCenterX) {
+        this.character.x = solidArea.x - characterArea.width - characterOffsetX;
+        return;
+      }
+
+      this.character.x = solidArea.x + solidArea.width - characterOffsetX;
+    });
+  }
+
+  shouldIgnoreSolidCollisionFromBelow(solidObject) {
+    if (!solidObject.ignoreCollisionFromBelow) return false;
+
+    let characterArea = this.character.getCollisionArea();
+    let solidArea = solidObject.getCollisionArea();
+    let characterCenterY = characterArea.y + characterArea.height / 2;
+    let solidCenterY = solidArea.y + solidArea.height / 2;
+
+    return characterCenterY >= solidCenterY;
+  }
+
+  unlockTouchedObjects() {
+    (this.lvl.solidObjects ?? []).forEach((solidObject) => {
+      if (!solidObject.unlockImagePath || solidObject.isUnlocked) return;
+      if (!this.character.isColliding(solidObject)) return;
+      if (this.shouldIgnoreSolidCollisionFromBelow(solidObject)) return;
+
+      solidObject.unlock();
+    });
   }
 
   checkBossMusicTrigger() {

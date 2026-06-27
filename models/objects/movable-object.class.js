@@ -33,9 +33,18 @@ export class MovableObject extends DrawableObject {
   }
 
   isStandingOnPlatform() {
-    if (!this.world?.lvl?.platformObjects)
-      return false;
-    return this.world.lvl.platformObjects.some(platform => this.isLandingOn(platform));
+    let standableObjects = this.getStandableObjects();
+
+    return standableObjects.some(platform => this.isLandingOn(platform));
+  }
+
+  getStandableObjects() {
+    if (!this.world?.lvl) return [];
+
+    return [
+      ...(this.world.lvl.platformObjects ?? []),
+      ...(this.world.lvl.solidObjects ?? []),
+    ];
   }
 
   isLandingOn(platform) {
