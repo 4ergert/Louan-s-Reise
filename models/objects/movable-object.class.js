@@ -18,12 +18,22 @@ export class MovableObject extends DrawableObject {
     }, 1000 / 60);
   }
 
+  getCollisionArea() {
+    return {
+      x: this.x + 45,
+      y: this.y + 35,
+      width: this.width - 90,
+      height: this.height - 60,
+      offsetY: 30,
+    };
+  }
+
   isAboveGround() {
     return this.y < 379 && !this.isStandingOnPlatform();
   }
 
   isStandingOnPlatform() {
-    if (!this.world?.lvl?.platformObjects) 
+    if (!this.world?.lvl?.platformObjects)
       return false;
     return this.world.lvl.platformObjects.some(platform => this.isLandingOn(platform));
   }

@@ -2,6 +2,7 @@ import { createBloodSplatterParticles } from '../js/world-effects.js';
 import { drawBloodSplatter, drawBossLifeBar, drawGameOverOverlay } from '../js/world-renderer.js';
 import { createBoneBreakAudios, createBossMusicAudio, createCoinPickupAudio, createEvilLaughAudio, createGameOverAudio, createRookPickupAudio, createThrowingAudio, playBackgroundAudio, playRandomVariantSound, playSoundEffect, stopBackgroundAudio } from '../js/audio.js';
 import { Character } from './character/character.class.js';
+import { Alia } from './Alia/alia.class.js';
 import { LifeBar } from './character/life-bar.class.js';
 import { CoinsBar } from './lvl-1/coins-bar.class.js';
 import { Coins } from './lvl-1/coins.class.js';
@@ -16,6 +17,7 @@ import { startKnockback, startThrowingAnimation } from './character/char-animati
 
 export class World extends WorldIntros {
   character = new Character();
+  alia = null;
   lifeBar = new LifeBar();
   coinsBar = new CoinsBar();
   throwableObjects = new ThrowableObject(16, 111, true);
@@ -102,6 +104,7 @@ export class World extends WorldIntros {
     this.addToMap(this.throwableObjects);
     this.ctx.translate(this.camera_x, 0);
     this.addToMap(this.character);
+    if (this.alia) this.addToMap(this.alia);
 
     this.ctx.translate(-this.camera_x, 0);
 
@@ -505,6 +508,18 @@ export class World extends WorldIntros {
   }
 
   removeEnemy(enemyToRemove) {
+    if (enemyToRemove.isBoss && !this.alia) {
+      this.spawnAliaAtBoss(enemyToRemove);
+    }
+
     this.lvl.enemies = this.lvl.enemies.filter(enemy => enemy !== enemyToRemove);
+  }
+
+  spawnAliaAtBoss(boss) {
+    let aliaX = boss.x + boss.width / 2 - 130;
+    let aliaY = boss.y + boss.height - 260;
+
+    this.alia = new Alia(aliaX, aliaY);
+    this.assignWorld(this.alia);
   }
 }

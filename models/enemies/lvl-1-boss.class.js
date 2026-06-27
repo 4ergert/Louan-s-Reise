@@ -61,6 +61,7 @@ export class LVL_1_Boss extends MovableObject {
 
   canWalkLeft() {
     if (!this.world || this.world.isPaused) return false;
+    if (this.world.character?.isDying || this.world.character?.isDead) return false;
     if (!this.world.bossIntroTriggered || this.world.isBossIntroActive?.()) return false;
     if (this.isDead || this.isDying || this.isHurt) return false;
     if (this.thrownSkeletonCount < 1) return false;
