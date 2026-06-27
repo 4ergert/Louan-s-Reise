@@ -33,12 +33,12 @@
     </p>
   </section>
 
-  <canvas id="startScreenCanvas" width="720" height="170"></canvas>
-
   <section id="startScreenControls" aria-label="Steuerung">
     <button type="button" id="musicToggleButton" aria-pressed="false" aria-label="Musik stummschalten">♪</button>
-    <p><strong>Steuerung:</strong> Pfeiltaste links = laufen links, Pfeiltaste rechts = laufen rechts, Pfeiltaste oben = springen, A = rennen, F = schmeißen</p>
+    <button type="button" id="startScreenInstructionsButton" data-dialog-target="instructionsDialog">Steuerung</button>
   </section>
+
+  <canvas id="startScreenCanvas" width="720" height="170"></canvas>
 
   <section id="startScreenMeta" aria-label="Rechtliche Hinweise und Credits">
     <div id="startScreenActions">
