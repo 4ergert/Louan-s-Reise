@@ -17,10 +17,11 @@ export class EnvironmentObject extends MovableObject {
   }
 
   unlock() {
-    if (!this.unlockImagePath || this.isUnlocked) return;
+    if (!this.unlockImagePath || this.isUnlocked) return false;
 
     this.isUnlocked = true;
     this.setImage(this.unlockImagePath);
+    return true;
   }
 
   getCollisionArea() {

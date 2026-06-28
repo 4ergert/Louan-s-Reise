@@ -8,6 +8,8 @@ import { CoinsBar } from './lvl-1/coins-bar.class.js';
 import { Coins } from './lvl-1/coins.class.js';
 import { ThrowableObject } from './objects/throwable-objects.class.js';
 import { BossSwordObject } from './objects/boss-sword-object.class.js';
+import { EnvironmentObject } from './objects/environment-objects.class.js';
+import { MushroomObject } from './objects/mushroom-object.class.js';
 import { WorldIntros } from './world-intros.class.js';
 import { SkeletonWarriorLVL1 } from './enemies/skeleton_warrior_1.class.js';
 import { lvl_1 } from '../lvl/lvl_1.js';
@@ -279,12 +281,23 @@ export class World extends WorldIntros {
             enemy.landOn(platform);
           }
         });
+
+        this.lvl.environmentObjects.forEach((object) => {
+          if (!object.affectedByPlatforms) return;
+          if (!object.isLandingOn(platform)) return;
+
+          object.landOn(platform);
+          object.speedX = 0;
+          object.isCollectible = true;
+        });
       });
 
+      this.updateChestRewards();
       this.unlockTouchedObjects();
       this.blockCharacterBySolidObjects();
 
       this.collectCoins();
+      this.collectChestRewards();
       this.collectRooks();
       this.checkBossMusicTrigger();
       this.checkAliaIntroTrigger();
@@ -335,19 +348,54 @@ export class World extends WorldIntros {
       if (this.character.isLandingOn(solidObject)) return;
       if (this.shouldIgnoreSolidCollisionFromBelow(solidObject)) return;
 
-      let characterArea = this.character.getCollisionArea();
-      let solidArea = solidObject.getCollisionArea();
-      let characterOffsetX = characterArea.x - this.character.x;
-      let solidCenterX = solidArea.x + solidArea.width / 2;
-      let characterCenterX = characterArea.x + characterArea.width / 2;
-
-      if (characterCenterX < solidCenterX) {
-        this.character.x = solidArea.x - characterArea.width - characterOffsetX;
-        return;
-      }
-
-      this.character.x = solidArea.x + solidArea.width - characterOffsetX;
+      this.resolveCharacterSolidCollision(solidObject);
     });
+  }
+
+  resolveCharacterSolidCollision(solidObject) {
+    let characterArea = this.character.getCollisionArea();
+    let solidArea = solidObject.getCollisionArea();
+    let overlaps = this.getCharacterSolidOverlaps(characterArea, solidArea);
+
+    if (Math.min(overlaps.top, overlaps.bottom) < Math.min(overlaps.left, overlaps.right)) {
+      this.resolveCharacterVerticalSolidCollision(solidArea, characterArea, overlaps);
+      return;
+    }
+
+    this.resolveCharacterHorizontalSolidCollision(solidArea, characterArea, overlaps);
+  }
+
+  getCharacterSolidOverlaps(characterArea, solidArea) {
+    return {
+      left: characterArea.x + characterArea.width - solidArea.x,
+      right: solidArea.x + solidArea.width - characterArea.x,
+      top: characterArea.y + characterArea.height - solidArea.y,
+      bottom: solidArea.y + solidArea.height - characterArea.y,
+    };
+  }
+
+  resolveCharacterVerticalSolidCollision(solidArea, characterArea, overlaps) {
+    let characterOffsetY = characterArea.y - this.character.y;
+
+    if (overlaps.top < overlaps.bottom) {
+      this.character.y = solidArea.y - characterArea.height - characterOffsetY;
+      this.character.vcY = 0;
+      return;
+    }
+
+    this.character.y = solidArea.y + solidArea.height - characterOffsetY;
+    if (this.character.vcY > 0) this.character.vcY = 0;
+  }
+
+  resolveCharacterHorizontalSolidCollision(solidArea, characterArea, overlaps) {
+    let characterOffsetX = characterArea.x - this.character.x;
+
+    if (overlaps.left < overlaps.right) {
+      this.character.x = solidArea.x - characterArea.width - characterOffsetX;
+      return;
+    }
+
+    this.character.x = solidArea.x + solidArea.width - characterOffsetX;
   }
 
   shouldIgnoreSolidCollisionFromBelow(solidObject) {
@@ -367,8 +415,46 @@ export class World extends WorldIntros {
       if (!this.character.isColliding(solidObject)) return;
       if (this.shouldIgnoreSolidCollisionFromBelow(solidObject)) return;
 
-      solidObject.unlock();
+      if (solidObject.unlock()) this.spawnUnlockReward(solidObject);
     });
+  }
+
+  spawnUnlockReward(solidObject) {
+    let rewardWidth = solidObject.rewardWidth ?? 60;
+    let rewardHeight = solidObject.rewardHeight ?? 60;
+    let rewardX = solidObject.x + solidObject.width + (solidObject.rewardOffsetX ?? 10);
+    let rewardY = solidObject.y + (solidObject.rewardOffsetY ?? solidObject.height / 2 - rewardHeight / 2);
+    let reward = new MushroomObject(rewardX, rewardY, rewardWidth, rewardHeight);
+
+    this.assignWorld(reward);
+    reward.applyGravity();
+    reward.vcY = solidObject.rewardLaunchSpeed ?? reward.launchSpeed;
+    reward.speedX = solidObject.rewardSpeedX ?? reward.speedX;
+    this.lvl.environmentObjects.push(reward);
+  }
+
+  updateChestRewards() {
+    this.lvl.environmentObjects.forEach((object) => {
+      if (!(object instanceof MushroomObject)) return;
+      if (object.isCollectible) return;
+
+      object.x += object.speedX ?? 0;
+    });
+  }
+
+  collectChestRewards() {
+    let collectedRewards = this.lvl.environmentObjects.filter((object) =>
+      object instanceof MushroomObject && object.isCollectible && isCollidingWithCharacter(this.character, object)
+    );
+
+    if (collectedRewards.length === 0) return;
+
+    this.lvl.environmentObjects = this.lvl.environmentObjects.filter((object) =>
+      !(object instanceof MushroomObject && object.isCollectible && isCollidingWithCharacter(this.character, object))
+    );
+
+    this.character.energy = Math.min(100, this.character.energy + collectedRewards.length * 20);
+    this.lifeBar.setPercentage(this.character.energy);
   }
 
   checkBossMusicTrigger() {

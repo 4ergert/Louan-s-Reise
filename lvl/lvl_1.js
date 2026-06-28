@@ -128,6 +128,8 @@ const treasureChest = new EnvironmentObject(
 
 treasureChest.unlockImagePath = './assets/img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Unlocked Golden Treasure Box.png';
 treasureChest.ignoreCollisionFromBelow = true;
+treasureChest.rewardOffsetX = 8;
+treasureChest.rewardOffsetY = 18;
 
 const collectabeObjects = [treasureChest]
 
