@@ -641,7 +641,7 @@ export class World extends WorldIntros {
     let dyingDuration = enemy.die();
 
     setTimeout(() => {
-      if (!enemy.isBoss) this.spawnCoinAt(enemy);
+      if (!enemy.isBoss) this.spawnThrowableObjectAt(enemy);
       this.removeEnemy(enemy);
     }, dyingDuration);
   }
@@ -652,14 +652,15 @@ export class World extends WorldIntros {
     this.lastBoneBreakAudioIndex = playRandomVariantSound(this.boneBreakAudios, this.lastBoneBreakAudioIndex);
   }
 
-  spawnCoinAt(enemy) {
+  spawnThrowableObjectAt(enemy) {
     let enemyArea = enemy.getCollisionArea();
-    let coinX = enemyArea.x + enemyArea.width / 2 - 15;
-    let coinY = enemyArea.y + enemyArea.height / 2 - 15;
+    let rook = new ThrowableObject();
 
-    let coin = new Coins(coinX, coinY);
-    this.assignWorld(coin);
-    this.lvl.environmentObjects.push(coin);
+    rook.x = enemyArea.x + enemyArea.width / 2 - rook.width / 2;
+    rook.y = enemyArea.y + enemyArea.height / 2 - rook.height / 2;
+    rook.baseY = rook.y;
+    this.assignWorld(rook);
+    this.lvl.environmentObjects.push(rook);
   }
 
   removeEnemy(enemyToRemove) {

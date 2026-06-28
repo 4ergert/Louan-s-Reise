@@ -1,7 +1,7 @@
 import { DrawableObject } from './drawable-objects.class.js';
 
 export class ThrowableObject extends DrawableObject {
-  img = './assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Rock 02.png';
+  img = './assets/img/Enemies/Skeleton_Warrior_3/PNG/Vector Parts/Left Arm.png';
   throwable = true;
   rooks = 0;
   showCount = false;
@@ -14,8 +14,8 @@ export class ThrowableObject extends DrawableObject {
   constructor(x = 16, y = 111, showCount = false) {
     super();
     this.loadImage(this.img);
-    this.width = 40;
-    this.height = 40;
+    this.width = 45;
+    this.height = 45;
     this.x = x;
     this.y = y;
     this.baseY = y;

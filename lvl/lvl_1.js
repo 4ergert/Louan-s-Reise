@@ -73,12 +73,12 @@ for (let i = 0; i < 0; i++) {
   skeletonWarrior1Array.push(skeletonWarrior);
 }
 
-const rookObjects = [];
+const throwableObjects = [];
 
-for (let i = 0; i < 10; i++) {
-  const rookX = 650 + Math.random() * 2600;
-  rookObjects.push(new ThrowableObject(rookX, 360));
-}
+// for (let i = 0; i < 10; i++) {
+//   const posX = 650 + Math.random() * 2600;
+//   throwableObjects.push(new ThrowableObject(posX, 360));
+// }
 
 
 const worldSettings = {
@@ -131,11 +131,11 @@ treasureChest.ignoreCollisionFromBelow = true;
 treasureChest.rewardOffsetX = 8;
 treasureChest.rewardOffsetY = 18;
 
-const collectabeObjects = [treasureChest]
+const collectableObjects = [treasureChest]
 
 const blockingObjects = [
   ...solidObjects,
-  ...collectabeObjects,
+  ...collectableObjects,
 ];
 
 
@@ -145,7 +145,7 @@ export const lvl_1 = new LVL(
   blockingObjects,
   [
     ...blockingObjects,
-    ...rookObjects,
+    ...throwableObjects,
     new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - House.png', -150, 200, 250, 200),
     new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 80, 333, 70, 70),
     new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 140, 333, 70, 70),
