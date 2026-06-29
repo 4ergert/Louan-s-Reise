@@ -45,6 +45,8 @@ export class World extends WorldIntros {
   bossMusicTriggered = false;
   bossIntroLaughPlayed = false;
   gameOverAudioPlayed = false;
+  gameOverStartedAt = 0;
+  gameOverRetryDelay = 3000;
 
   constructor(canvas, keyboard, backgroundMusicAudio = null) {
     super();
@@ -111,8 +113,9 @@ export class World extends WorldIntros {
     this.ctx.translate(-this.camera_x, 0);
 
     if (this.character.isDead) {
+      if (!this.gameOverStartedAt) this.gameOverStartedAt = Date.now();
       this.playGameOverAudio();
-      drawGameOverOverlay(this.ctx, this.canvas);
+      drawGameOverOverlay(this.ctx, this.canvas, this.isGameOverRetryReady());
     }
 
     if (this.isOpeningIntroActive()) {
@@ -347,8 +350,8 @@ export class World extends WorldIntros {
   }
 
   handleCharacterFallDeath() {
-    if (!this.isCharacterInDeathFallZone()) return;
     if (this.character.isDead) return;
+    if (!this.character.shouldKeepFallingIntoAbyss()) return;
     if (this.character.y < this.getCharacterFallDeathY()) return;
 
     die(this.character);
@@ -518,11 +521,37 @@ export class World extends WorldIntros {
     playSoundEffect(this.gameOverAudio);
   }
 
+  isGameOverRetryReady() {
+    return this.gameOverStartedAt > 0 && Date.now() - this.gameOverStartedAt >= this.gameOverRetryDelay;
+  }
+
   onBossIntroFinished() {
+    this.removeObjectsBeforeBossArena();
+
     if (this.bossIntroLaughPlayed) return;
 
     this.bossIntroLaughPlayed = true;
     playSoundEffect(this.evilLaughAudio);
+  }
+
+  removeObjectsBeforeBossArena() {
+    let bossArenaStartX = this.lvl.worldSettings?.bossArenaStartX;
+
+    if (typeof bossArenaStartX !== 'number') return;
+
+    this.lvl.platformObjects = this.filterObjectsBeforeX(this.lvl.platformObjects, bossArenaStartX);
+    this.lvl.solidObjects = this.filterObjectsBeforeX(this.lvl.solidObjects, bossArenaStartX);
+    this.lvl.environmentObjects = this.filterObjectsBeforeX(this.lvl.environmentObjects, bossArenaStartX);
+    this.lvl.enemies = this.filterObjectsBeforeX(this.lvl.enemies, bossArenaStartX, enemy => enemy.isBoss);
+  }
+
+  filterObjectsBeforeX(objects, minX, keepObject = () => false) {
+    return (objects ?? []).filter((object) => {
+      if (keepObject(object)) return true;
+      if (typeof object?.x !== 'number') return true;
+
+      return object.x >= minX;
+    });
   }
 
   updateBossAttackState() {

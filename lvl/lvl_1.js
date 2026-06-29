@@ -103,6 +103,7 @@ const coins = [
 
 
 const worldSettings = {
+  bossArenaStartX: 3500,
   fallDeathStartX: 3300,
   openingIntroLines: [
     'Irgendwas stimmt hier nicht!',
@@ -118,7 +119,7 @@ const worldSettings = {
   aliaIntroLines: [
     'Danke, Bruder Louan.',
     'Du hast mich gerettet.',
-    'Jetzt muessen wir nur noch',
+    'Jetzt müssen wir nur noch',
     'unseren Bruder Liam finden.'
   ]
 };
@@ -169,21 +170,22 @@ export const lvl_1 = new LVL(
     ...blockingObjects,
     ...coins,
     ...throwableObjects,
-    new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - House.png', -150, 200, 250, 200),
-    new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 80, 333, 70, 70),
-    new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 140, 333, 70, 70),
-    new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 200, 333, 70, 70),
-    new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 260, 333, 70, 70),
+    new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - House.png', -150, 200, 250, 200),
+    new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 80, 333, 70, 70),
+    new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 140, 333, 70, 70),
+    new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 200, 333, 70, 70),
+    new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 260, 333, 70, 70),
     bossMusicTriggerSignpost,
-    new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 380, 333, 70, 70),
-    new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 440, 333, 70, 70),
-    new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Signpost 01.png', 530, 333, 70, 70),
-    new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Tree 02.png', 200, 55, 350, 350),
-    new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Signpost 04.png', 3700, 333, 70, 70),
-    new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Tree 01.png', 1100, 55, 350, 350),
-    new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Bush 01.png', 900, 304, 100, 100),
-    new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Bush 01.png', 1800, 304, 100, 100),
-    new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Tree 02.png', 2700, 55, 350, 350),
+    new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 380, 333, 70, 70),
+    new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 440, 333, 70, 70),
+    new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Signpost 01.png', 530, 333, 70, 70),
+    new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Tree 02.png', 200, 55, 350, 350),
+    new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Signpost 04.png', 3700, 333, 70, 70),
+    new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Tree 01.png', 1100, 55, 350, 350),
+    new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Bush 01.png', 900, 304, 100, 100),
+    new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Bush 01.png', 1800, 304, 100, 100),
+    new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Tree 02.png', 2700, 55, 350, 350),
+    new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Signpost 06.png', 3250, 333, 70, 70),
   ],
   backgroundObjects,
   worldSettings,

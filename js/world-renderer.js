@@ -32,9 +32,10 @@
  * Draws the full-screen game over overlay text and background.
  * @param {CanvasRenderingContext2D} ctx - The drawing context.
  * @param {HTMLCanvasElement} canvas - The canvas used for layout.
+ * @param {boolean} showRetryPrompt - Whether the retry prompt should be visible.
  * @returns {void}
  */
-export function drawGameOverOverlay(ctx, canvas) {
+export function drawGameOverOverlay(ctx, canvas, showRetryPrompt = false) {
   ctx.save();
   ctx.fillStyle = 'rgba(16, 10, 7, 0.68)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -46,6 +47,17 @@ export function drawGameOverOverlay(ctx, canvas) {
   ctx.fillStyle = '#d9a441';
   ctx.strokeText('GAME OVER', canvas.width / 2, canvas.height / 2);
   ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2);
+
+  if (showRetryPrompt) {
+    ctx.font = 'bold 28px Georgia';
+    ctx.strokeText('Try again', canvas.width / 2, canvas.height / 2 + 72);
+    ctx.fillText('Try again', canvas.width / 2, canvas.height / 2 + 72);
+
+    ctx.font = '24px Georgia';
+    ctx.strokeText('press any key', canvas.width / 2, canvas.height / 2 + 116);
+    ctx.fillText('press any key', canvas.width / 2, canvas.height / 2 + 116);
+  }
+
   ctx.restore();
 }
 
@@ -101,8 +113,8 @@ export function drawBossLifeBar(ctx, cameraX, boss, canvas) {
   ctx.lineWidth = 4;
   ctx.font = 'bold 18px Georgia';
   ctx.textAlign = 'right';
-  ctx.strokeText('bossLVL1', canvas.width - 18, y - 6);
-  ctx.fillText('bossLVL1', canvas.width - 18, y - 6);
+  ctx.strokeText('Skeleton King', canvas.width - 18, y - 6);
+  ctx.fillText('Skeleton King', canvas.width - 18, y - 6);
 
   ctx.fillStyle = '#2d2118';
   ctx.fillRect(x, y, barWidth, barHeight);

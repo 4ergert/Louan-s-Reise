@@ -98,8 +98,12 @@ export class Character extends MovableObject {
   }
 
   shouldKeepFallingIntoAbyss() {
-    if (!this.world?.isCharacterInDeathFallZone()) return false;
     if (this.isStandingOnPlatform()) return false;
+    if (!this.world) return false;
+
+    if (!this.hasStandableObjectBelow()) return true;
+
+    if (!this.world.isCharacterInDeathFallZone()) return false;
 
     let deathY = this.world.getCharacterFallDeathY();
 
@@ -108,6 +112,20 @@ export class Character extends MovableObject {
     }
 
     return this.y < deathY;
+  }
+
+  hasStandableObjectBelow() {
+    let ownCollisionArea = this.getCollisionArea();
+    let feet = ownCollisionArea.y + ownCollisionArea.height;
+
+    return this.getStandableObjects().some((platform) => {
+      let platformArea = platform.getCollisionArea();
+      let overlapsHorizontally =
+        ownCollisionArea.x + ownCollisionArea.width > platformArea.x &&
+        ownCollisionArea.x < platformArea.x + platformArea.width;
+
+      return overlapsHorizontally && platformArea.y >= feet;
+    });
   }
 
   /**

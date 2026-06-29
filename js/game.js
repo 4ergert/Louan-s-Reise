@@ -279,6 +279,10 @@ function initWorld() {
   world = new World(canvas, keyboard, gameBackgroundAudio);
 }
 
+function restartGame() {
+  window.location.reload();
+}
+
 function showGameCanvas() {
   if (!isStartScreenVisible) return;
 
@@ -372,6 +376,11 @@ window.addEventListener("keydown", (e) => {
   }
 
   if (isMetaDialogOpen()) {
+    return;
+  }
+
+  if (world?.character?.isDead && world.isGameOverRetryReady?.()) {
+    restartGame();
     return;
   }
 
