@@ -328,7 +328,6 @@ window.addEventListener("keydown", (e) => {
     return;
   }
 
-  // console.log(e.key);
   switch (e.key) {
     case "ArrowLeft":
       keyboard.LEFT = true;

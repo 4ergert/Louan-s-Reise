@@ -106,7 +106,7 @@ export function knockback(character) {
  * @returns {boolean} True when right movement is allowed.
  */
 export function allowsMoveRight(character) {
-  return (character.world.keyboard.RIGHT || character.world.endingEscortActive) && character.isHurtState == false;
+  return (character.world.keyboard.RIGHT || character.world.endingEscortActive) && !character.isHurtState;
 }
 
 /**
@@ -125,7 +125,7 @@ export function moveRight(character) {
  * @returns {boolean} True when left movement is allowed.
  */
 export function allowsMoveLeft(character) {
-  return character.world.keyboard.LEFT && character.isHurtState == false;
+  return character.world.keyboard.LEFT && !character.isHurtState;
 }
 
 /**

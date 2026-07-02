@@ -1,5 +1,8 @@
 import { DrawableObject } from './drawable-objects.class.js';
 
+/**
+ * Collectible coin object with a looping sprite animation.
+ */
 export class Coins extends DrawableObject {
   x = 0;
   y = 0;
@@ -8,6 +11,12 @@ export class Coins extends DrawableObject {
   animationElapsed = 0;
   animationIntervalMs = 100;
 
+  /**
+   * Creates a coin at the given world position and preloads its animation frames.
+   *
+   * @param {number} [x=0] - Horizontal world position.
+   * @param {number} [y=0] - Vertical world position.
+   */
   constructor(x = 0, y = 0) {
     super();
     this.x = x;
@@ -25,6 +34,11 @@ export class Coins extends DrawableObject {
     './assets/img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 06.png'
   ];
 
+  /**
+   * Advances the coin's looping animation while the world is running.
+   *
+   * @returns {void}
+   */
   updateStep() {
     if (this.isWorldPaused()) return;
 

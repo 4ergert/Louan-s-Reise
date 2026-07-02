@@ -167,7 +167,7 @@ export class WorldIntros {
   }
 
   resetKeyboard() {
-    Object.keys(this.keyboard).forEach(key => {
+    Object.keys(this.keyboard).forEach((key) => {
       this.keyboard[key] = false;
     });
   }
@@ -186,7 +186,7 @@ export class WorldIntros {
     let visibleLines = [];
     let currentIndex = 0;
 
-    lines.forEach(line => {
+    lines.forEach((line) => {
       let lineText = visibleText.slice(currentIndex, currentIndex + line.length);
       visibleLines.push(lineText);
       currentIndex += line.length + 1;
