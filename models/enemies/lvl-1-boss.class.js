@@ -23,8 +23,8 @@ export class LVL_1_Boss extends MovableObject {
   dyingAnimationSpeed = 100;
   animationFrames = [];
   hurtTimeout = null;
-  skeletonThrowInterval = null;
-  movementInterval = null;
+  animationElapsed = 0;
+  skeletonThrowElapsed = 0;
 
   IDLE = LVL_1_BOSS_SPRITES.IDLE_ANIMATION;
   WALKING = LVL_1_BOSS_SPRITES.WALKING_ANIMATION;
@@ -42,25 +42,28 @@ export class LVL_1_Boss extends MovableObject {
     this.loadImages(this.THROWING);
     this.loadImages(this.WALKING);
     this.animationFrames = this.IDLE;
-    this.animate();
-    this.startWalkingLoop();
-    this.startSkeletonThrowLoop();
   }
 
   getDefaultAnimation() {
     return this.canWalkLeft() ? this.WALKING : this.IDLE;
   }
 
-  startWalkingLoop() {
-    this.movementInterval = setInterval(() => {
-      if (!this.canWalkLeft()) return;
+  updateStep() {
+    if (this.isWorldPaused()) return;
 
-      this.x -= this.speed;
-    }, 1000 / 60);
+    this.updateMovementStep();
+    this.updateAnimationStep();
+    this.updateSkeletonThrowStep();
+  }
+
+  updateMovementStep() {
+    if (!this.canWalkLeft()) return;
+
+    this.x -= this.speed;
   }
 
   canWalkLeft() {
-    if (!this.world || this.world.isPaused) return false;
+    if (!this.world || this.isWorldPaused()) return false;
     if (this.world.character?.isDying || this.world.character?.isDead) return false;
     if (!this.world.bossIntroTriggered || this.world.isBossIntroActive?.()) return false;
     if (this.isDead || this.isDying || this.isHurt) return false;
@@ -68,16 +71,17 @@ export class LVL_1_Boss extends MovableObject {
     return !this.isThrowingAnimationActive;
   }
 
-  startSkeletonThrowLoop() {
-    this.skeletonThrowInterval = setInterval(() => {
-      if (!this.canStartSkeletonThrow()) return;
+  updateSkeletonThrowStep() {
+    this.skeletonThrowElapsed += this.world?.updateStepMs ?? 0;
 
-      this.startSkeletonThrowAnimation();
-    }, 5000);
+    if (this.skeletonThrowElapsed < 5000) return;
+
+    this.skeletonThrowElapsed -= 5000;
+    if (this.canStartSkeletonThrow()) this.startSkeletonThrowAnimation();
   }
 
   canStartSkeletonThrow() {
-    if (!this.world || this.world.isPaused) return false;
+    if (!this.world || this.isWorldPaused()) return false;
     if (this.world.character?.isDying || this.world.character?.isDead) return false;
     if (this.isDying || this.isDead || this.isHurt) return false;
     if (this.isSlashing || this.isSlashAnimationActive || this.isThrowingAnimationActive) return false;
@@ -96,11 +100,7 @@ export class LVL_1_Boss extends MovableObject {
 
   playAnimation(images) {
     let isSingleRunAnimation = this.isDying || this.isHurt || this.isSlashAnimationActive || this.isThrowingAnimationActive;
-    let i = isSingleRunAnimation
-      ? Math.min(this.currentImage, images.length - 1)
-      : this.currentImage % images.length;
-    let path = images[i];
-    this.img = this.imgCache[path];
+    let i = this.showAnimationFrame(images, !isSingleRunAnimation);
 
     if (this.isSlashAnimationActive && !this.slashHitTriggered && i >= 4) {
       this.slashHitTriggered = true;
@@ -129,17 +129,12 @@ export class LVL_1_Boss extends MovableObject {
       return;
     }
 
-    if (!isSingleRunAnimation || this.currentImage < images.length - 1) {
-      this.currentImage++;
-    }
   }
 
-  animate() {
-    setInterval(() => {
-      if (this.world?.isPaused) return;
+  updateAnimationStep() {
+    if (!this.shouldAdvanceTimedStep('animationElapsed', this.dyingAnimationSpeed)) return;
 
-      this.playAnimation(this.animationFrames);
-    }, this.dyingAnimationSpeed);
+    this.playAnimation(this.animationFrames);
   }
 
   hit() {
@@ -249,9 +244,6 @@ export class LVL_1_Boss extends MovableObject {
     this.currentImage = 0;
     if (this.hurtTimeout) clearTimeout(this.hurtTimeout);
     this.hurtTimeout = null;
-    if (this.skeletonThrowInterval) clearInterval(this.skeletonThrowInterval);
-    if (this.movementInterval) clearInterval(this.movementInterval);
-
     const dyingDuration = this.DYING.length * this.dyingAnimationSpeed + 50;
     setTimeout(() => {
       this.isDead = true;

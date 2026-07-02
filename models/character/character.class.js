@@ -32,6 +32,8 @@ export class Character extends MovableObject {
   lastRunningFootstepFrame = -1;
   lastJumpEffortIndex = -1;
   jumpEffortPlayed = false;
+  animationElapsed = 0;
+  animationIntervalMs = 50;
   
   IDLE = CHARACTER_SPRITES.IDLE_ANIMATION;
   IDLE_BLINKING = CHARACTER_SPRITES.IDLE_BLINKING_ANIMATION;
@@ -64,7 +66,6 @@ export class Character extends MovableObject {
     this.loadImages(this.DYING);
 
     this.applyGravity();
-    this.animation();
   }
 
   /**
@@ -73,9 +74,16 @@ export class Character extends MovableObject {
    *
    * @returns {void}
    */
-  animation() {
-    setInterval(() => charMovement(this), 1000 / 60); // ./models/character/char-movements.js handles all movement logic, including input and knockback
-    setInterval(() => switchCharAnimation(this), 50); // ./models/character/switch-char-animation.js selects the correct animation based on the character's current state and actions
+  updateStep() {
+    super.updateStep();
+    charMovement(this);
+    this.updateAnimationStep();
+  }
+
+  updateAnimationStep() {
+    if (!this.shouldAdvanceTimedStep('animationElapsed', this.animationIntervalMs)) return;
+
+    switchCharAnimation(this);
   }
 
   /**
@@ -181,25 +189,15 @@ export class Character extends MovableObject {
    * @returns {void}
    */
   spriteAnimation(sprites, loop = true) {
-    if (this.currentAnimation !== sprites) {
-      this.currentAnimation = sprites;
-      this.currentImage = 0;
+    this.resetAnimationSequence(sprites, () => {
       this.lastRunningFootstepFrame = -1;
       this.jumpEffortPlayed = false;
-    }
+    });
 
-    let i = loop
-      // Loop through the animation frames if loop is true, otherwise play the animation once
-      ? this.currentImage % sprites.length
-      // Play the animation once and stop at the last frame if loop is false
-      : Math.min(this.currentImage, sprites.length - 1);
-    let path = sprites[i];
-    this.img = this.imgCache[path];
+    let i = this.showAnimationFrame(sprites, loop);
 
     this.playRunningFootstep(sprites, i);
     this.playJumpEffort(sprites, i);
-
-    if (loop || this.currentImage < sprites.length - 1) this.currentImage++;
   }
 
   playRunningFootstep(sprites, frameIndex) {

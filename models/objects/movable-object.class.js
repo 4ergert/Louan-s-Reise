@@ -5,17 +5,23 @@ export class MovableObject extends DrawableObject {
   imgDirectionChange = false;
   vcY = 0;
   acY = 0.25;
+  gravityEnabled = false;
 
   applyGravity() {
-    setInterval(() => {
-      if (!this.world) return;
-      if (this.world?.isPaused) return;
+    this.gravityEnabled = true;
+  }
 
-      if (this.isAboveGround() || this.vcY > 0) {
-        this.y -= this.vcY;
-        this.vcY -= this.acY;
-      }
-    }, 1000 / 60);
+  updateStep() {
+    this.updateGravity();
+  }
+
+  updateGravity() {
+    if (!this.gravityEnabled || !this.world || this.isWorldPaused()) return;
+
+    if (this.isAboveGround() || this.vcY > 0) {
+      this.y -= this.vcY;
+      this.vcY -= this.acY;
+    }
   }
 
   getCollisionArea() {
@@ -39,12 +45,9 @@ export class MovableObject extends DrawableObject {
   }
 
   getStandableObjects() {
-    if (!this.world?.lvl) return [];
+    if (!this.world?.getStandableObjects) return [];
 
-    return [
-      ...(this.world.lvl.platformObjects ?? []),
-      ...(this.world.lvl.solidObjects ?? []),
-    ];
+    return this.world.getStandableObjects();
   }
 
   isLandingOn(platform) {

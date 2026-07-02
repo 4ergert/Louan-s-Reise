@@ -27,6 +27,46 @@ export class DrawableObject {
     ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
 
+  updateStep() {
+  }
+
+  isWorldPaused() {
+    return Boolean(this.world?.isPaused);
+  }
+
+  shouldAdvanceTimedStep(elapsedKey, intervalMs) {
+    this[elapsedKey] = (this[elapsedKey] ?? 0) + (this.world?.updateStepMs ?? 0);
+
+    if (this[elapsedKey] < intervalMs) return false;
+
+    this[elapsedKey] -= intervalMs;
+    return true;
+  }
+
+  resetAnimationSequence(nextAnimation, onReset = null) {
+    if (this.currentAnimation === nextAnimation) return false;
+
+    this.currentAnimation = nextAnimation;
+    this.currentImage = 0;
+    onReset?.();
+    return true;
+  }
+
+  showAnimationFrame(frames, loop = true) {
+    let frameIndex = loop
+      ? this.currentImage % frames.length
+      : Math.min(this.currentImage, frames.length - 1);
+    let path = frames[frameIndex];
+
+    this.img = this.imgCache[path];
+
+    if (loop || this.currentImage < frames.length - 1) {
+      this.currentImage++;
+    }
+
+    return frameIndex;
+  }
+
   drawCollisionArea(ctx) {
     if (!this.showCollisionArea) return;
 

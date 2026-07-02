@@ -34,6 +34,11 @@ export class World extends WorldIntros {
   bloodSplatterParticles = [];
   flyingCoinPickups = [];
   flyingBonePickups = [];
+  standableObjectsCache = [];
+  updateStepMs = 1000 / 60;
+  frameRequestId = 0;
+  lastFrameTime = 0;
+  accumulatedTime = 0;
   isPaused = false;
   coinPickupAudio = createCoinPickupAudio();
   bonePickupAudio = createThrowableObjectPickupAudio();
@@ -62,10 +67,10 @@ export class World extends WorldIntros {
     this.keyboard = keyboard;
     this.backgroundMusicAudio = backgroundMusicAudio;
     this.lvl = lvl;
+    this.refreshStandableObjectsCache();
     this.applyLevelWorldSettings();
-    this.draw();
     this.setWorld();
-    this.checkCollisions();
+    this.startLoop();
   }
 
   setWorld() {
@@ -93,10 +98,53 @@ export class World extends WorldIntros {
     drawableObjects.forEach(drawableObject => this.assignWorld(drawableObject));
   }
 
-  draw() {
+  startLoop() {
+    this.frameRequestId = requestAnimationFrame((timestamp) => this.runFrame(timestamp));
+  }
+
+  runFrame(timestamp) {
+    if (!this.lastFrameTime) this.lastFrameTime = timestamp;
+
+    const delta = Math.min(timestamp - this.lastFrameTime, 100);
+    this.lastFrameTime = timestamp;
+    this.accumulatedTime += delta;
+    this.updateFrameState();
+
+    while (this.accumulatedTime >= this.updateStepMs) {
+      this.updateStep();
+      this.accumulatedTime -= this.updateStepMs;
+    }
+
+    this.draw();
+    this.frameRequestId = requestAnimationFrame((nextTimestamp) => this.runFrame(nextTimestamp));
+  }
+
+  updateFrameState() {
     this.updateOpeningIntro();
     this.updateBossIntro();
     this.handleIntroSkip();
+  }
+
+  updateStep() {
+    this.updateObjects();
+    this.updateCollisions();
+  }
+
+  updateObjects() {
+    this.character.updateStep();
+    this.alia?.updateStep();
+    this.throwableObjects.updateStep();
+    this.updateObjectGroup(this.lvl.enemies);
+    this.updateObjectGroup(this.lvl.environmentObjects);
+    this.updateObjectGroup(this.thrownBones);
+    this.updateObjectGroup(this.bossThrownSwords);
+  }
+
+  updateObjectGroup(objects) {
+    objects.forEach((object) => object.updateStep?.());
+  }
+
+  draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.drawBackgrounds();
@@ -150,13 +198,6 @@ export class World extends WorldIntros {
     }
 
     this.drawBloodSplatter();
-
-
-
-    let self = this;
-    requestAnimationFrame(function () {
-      self.draw();
-    });
   }
 
   // Draw backgrounds with parallax effect
@@ -336,8 +377,28 @@ export class World extends WorldIntros {
 
   addObjectsToMap(objects) {
     objects.forEach(object => {
+      if (!this.isWorldObjectVisible(object)) return;
+
       this.addToMap(object);
     });
+  }
+
+  isWorldObjectVisible(object) {
+    return this.isHorizontallyVisible(object.x, object.width) && this.isVerticallyVisible(object.y, object.height);
+  }
+
+  isHorizontallyVisible(x, width, buffer = 160) {
+    const viewportLeft = -this.camera_x - buffer;
+    const viewportRight = -this.camera_x + this.canvas.width + buffer;
+
+    return x + width >= viewportLeft && x <= viewportRight;
+  }
+
+  isVerticallyVisible(y, height, buffer = 160) {
+    const viewportTop = -buffer;
+    const viewportBottom = this.canvas.height + buffer;
+
+    return y + height >= viewportTop && y <= viewportBottom;
   }
 
   addToMap(movableObject) {
@@ -354,84 +415,71 @@ export class World extends WorldIntros {
     this.ctx.translate(-movableObject.x - movableObject.width / 2, 0);
   }
 
-  checkCollisions() {
-    setInterval(() => {
-      if (this.isPaused) return;
+  updateCollisions() {
+    if (this.isPaused) return;
 
-      this.updateEndingEscort();
+    this.updateEndingEscort();
+    const standableObjects = this.getStandableObjects();
 
-      this.getStandableObjects().forEach(platform => {
-        if (this.character.isLandingOn(platform)) {
-          this.character.landOn(platform);
-        }
+    this.landOnNearbyPlatforms(this.character, standableObjects);
+    this.landOnNearbyPlatforms(this.alia, standableObjects, (alia) => {
+      alia.hasLanded = true;
+    });
 
-        if (this.alia?.isLandingOn(platform)) {
-          this.alia.landOn(platform);
-          this.alia.hasLanded = true;
-        }
+    this.lvl.enemies.forEach((enemy) => {
+      if (enemy.isBoss || enemy.isDying || enemy.isDead) return;
 
-        this.lvl.enemies.forEach(enemy => {
-          if (enemy.isBoss || enemy.isDying || enemy.isDead) return;
-          if (typeof enemy.isLandingOn !== "function" || typeof enemy.landOn !== "function") return;
+      this.landOnNearbyPlatforms(enemy, standableObjects);
+    });
 
-          if (enemy.isLandingOn(platform)) {
-            enemy.landOn(platform);
-          }
-        });
+    this.lvl.environmentObjects.forEach((object) => {
+      if (!object.affectedByPlatforms) return;
 
-        this.lvl.environmentObjects.forEach((object) => {
-          if (!object.affectedByPlatforms) return;
-          if (!object.isLandingOn(platform)) return;
-
-          object.landOn(platform);
-          object.speedX = 0;
-          object.isCollectible = true;
-        });
+      this.landOnNearbyPlatforms(object, standableObjects, (affectedObject) => {
+        affectedObject.speedX = 0;
+        affectedObject.isCollectible = true;
       });
+    });
 
-      this.updateChestRewards();
-      this.unlockTouchedObjects();
-      this.blockCharacterBySolidObjects();
+    this.updateChestRewards();
+    this.unlockTouchedObjects();
+    this.blockCharacterBySolidObjects();
+    this.collectCoins();
+    this.collectChestRewards();
+    this.collectBones();
+    this.checkBossMusicTrigger();
+    this.checkAliaIntroTrigger();
+    this.handleCharacterFallDeath();
+    this.handleEnemyFallDeath();
 
-      this.collectCoins();
-      this.collectChestRewards();
-      this.collectBones();
-      this.checkBossMusicTrigger();
-      this.checkAliaIntroTrigger();
-      this.handleCharacterFallDeath();
-      this.handleEnemyFallDeath();
+    if (this.character.isDying || this.character.isDead) return;
 
-      if (this.character.isDying || this.character.isDead) {
-        return;
+    this.handleThrowInput();
+    this.updateThrownBones();
+    this.updateBossThrownSwords();
+    this.updateBossAttackState();
+
+    let stompedEnemy = this.lvl.enemies.find(enemy =>
+      !enemy.isBoss &&
+      !enemy.isDying && !enemy.isDead &&
+      this.character.isColliding(enemy) && this.isStompingEnemy(enemy)
+    );
+
+    if (stompedEnemy) {
+      this.bounceOffEnemy(stompedEnemy);
+      this.handleEnemyDefeat(stompedEnemy);
+      return;
+    }
+
+    this.lvl.enemies.forEach(enemy => {
+      if (enemy.isDying || enemy.isDead) return;
+      if (enemy.isBoss) return;
+
+      if (this.character.isColliding(enemy) && !this.character.isHurt()) {
+        startKnockback(this.character, enemy.x + enemy.width / 2);
+        this.character.hit();
       }
-
-      this.handleThrowInput();
-      this.updateThrownBones();
-      this.updateBossThrownSwords();
-      this.updateBossAttackState();
-
-      let stompedEnemy = this.lvl.enemies.find(enemy =>
-        !enemy.isBoss &&
-        !enemy.isDying && !enemy.isDead &&
-        this.character.isColliding(enemy) && this.isStompingEnemy(enemy)
-      );
-
-      if (stompedEnemy) {
-        this.bounceOffEnemy(stompedEnemy);
-        this.handleEnemyDefeat(stompedEnemy);
-        return;
-      }
-
-      this.lvl.enemies.forEach(enemy => {
-        if (enemy.isDying || enemy.isDead) return;
-        if (enemy.isBoss) return;
-
-        if (this.character.isColliding(enemy) && !this.character.isHurt()) {
-          startKnockback(this.character, enemy.x + enemy.width / 2);
-          this.character.hit();
-        }
-      });
-    }, 1000 / 60);
+    });
   }
 
   getCharacterFallDeathY() {
@@ -471,10 +519,40 @@ export class World extends WorldIntros {
   }
 
   getStandableObjects() {
-    return [
+    return this.standableObjectsCache;
+  }
+
+  refreshStandableObjectsCache() {
+    this.standableObjectsCache = [
       ...(this.lvl.platformObjects ?? []),
       ...(this.lvl.solidObjects ?? []),
     ];
+  }
+
+  getNearbyStandableObjects(target, standableObjects, margin = 120) {
+    if (!target) return [];
+
+    let collisionArea = target.getCollisionArea?.() ?? target;
+    let minX = collisionArea.x - margin;
+    let maxX = collisionArea.x + collisionArea.width + margin;
+
+    return standableObjects.filter((platform) => {
+      let platformArea = platform.getCollisionArea();
+
+      return platformArea.x + platformArea.width >= minX && platformArea.x <= maxX;
+    });
+  }
+
+  landOnNearbyPlatforms(target, standableObjects, onLand = null) {
+    if (!target) return;
+    if (typeof target.isLandingOn !== 'function' || typeof target.landOn !== 'function') return;
+
+    this.getNearbyStandableObjects(target, standableObjects).forEach((platform) => {
+      if (!target.isLandingOn(platform)) return;
+
+      target.landOn(platform);
+      onLand?.(target, platform);
+    });
   }
 
   blockCharacterBySolidObjects() {
@@ -683,6 +761,7 @@ export class World extends WorldIntros {
     this.lvl.solidObjects = this.filterObjectsBeforeX(this.lvl.solidObjects, bossArenaStartX);
     this.lvl.environmentObjects = this.filterObjectsBeforeX(this.lvl.environmentObjects, bossArenaStartX);
     this.lvl.enemies = this.filterObjectsBeforeX(this.lvl.enemies, bossArenaStartX, enemy => enemy.isBoss);
+    this.refreshStandableObjectsCache();
   }
 
   filterObjectsBeforeX(objects, minX, keepObject = () => false) {
@@ -772,13 +851,11 @@ export class World extends WorldIntros {
   }
 
   updateThrownBones() {
-    this.thrownBones.forEach(bone => bone.updateThrow());
     this.handleThrownBoneHits();
     this.thrownBones = this.thrownBones.filter(bone => !bone.hasHitTarget && !bone.isOffscreen(this.camera_x, this.canvas.width));
   }
 
   updateBossThrownSwords() {
-    this.bossThrownSwords.forEach((sword) => sword.updateFlight());
     this.handleBossSwordHits();
     this.bossThrownSwords = this.bossThrownSwords.filter((sword) => !sword.hasReturned());
   }

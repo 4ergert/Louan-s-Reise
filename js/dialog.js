@@ -35,6 +35,7 @@ export function createDialogController({ gameMenuDialogIds, getWorld, isGameCanv
     dialogs.forEach((dialog) => {
       if (!(dialog instanceof HTMLDialogElement)) return;
       registerBackdropClose(dialog);
+      registerCloseFocusReset(dialog);
     });
   }
 
@@ -51,6 +52,40 @@ export function createDialogController({ gameMenuDialogIds, getWorld, isGameCanv
       dialog.close();
       syncGameMenuPauseState();
     });
+  }
+
+  /**
+   * Clears restored trigger focus for start-screen dialogs so Space does not reopen them.
+   *
+   * @param {HTMLDialogElement} dialog - The dialog that may restore focus to its opener.
+   * @returns {void}
+   */
+  function registerCloseFocusReset(dialog) {
+    dialog.addEventListener("close", () => {
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(resetStartScreenDialogFocus);
+      });
+    });
+  }
+
+  /**
+   * Removes focus from the last active trigger while the game canvas is still hidden.
+   *
+   * @returns {void}
+   */
+  function resetStartScreenDialogFocus() {
+    if (isGameCanvasVisible()) return;
+
+    const startScreen = document.getElementById("startScreen");
+
+    if (startScreen instanceof HTMLElement) {
+      startScreen.setAttribute("tabindex", "-1");
+      startScreen.focus({ preventScroll: true });
+    }
+
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
   }
 
   /**
@@ -90,7 +125,7 @@ export function createDialogController({ gameMenuDialogIds, getWorld, isGameCanv
    * @returns {void}
    */
   function activateGameMenuPause(world) {
-    if (world.isPaused) return;
+    if (!world || world.isPaused) return;
 
     isGameMenuPauseActive = true;
     world.isPaused = true;
@@ -104,6 +139,11 @@ export function createDialogController({ gameMenuDialogIds, getWorld, isGameCanv
    * @returns {void}
    */
   function deactivateGameMenuPause(world) {
+    if (!world) {
+      isGameMenuPauseActive = false;
+      return;
+    }
+
     isGameMenuPauseActive = false;
     world.isPaused = false;
     world.resetKeyboard?.();
@@ -121,9 +161,7 @@ export function createDialogController({ gameMenuDialogIds, getWorld, isGameCanv
       if (!(dialog instanceof HTMLDialogElement)) return;
 
       dialog.addEventListener("close", syncGameMenuPauseState);
-      dialog.addEventListener("cancel", () => {
-        window.setTimeout(syncGameMenuPauseState, 0);
-      });
+      dialog.addEventListener("cancel", () => window.setTimeout(syncGameMenuPauseState, 0));
     });
   }
 
@@ -202,9 +240,7 @@ export function createDialogController({ gameMenuDialogIds, getWorld, isGameCanv
 
     if (!(gameMenuButton instanceof HTMLButtonElement)) return;
 
-    gameMenuButton.addEventListener("click", () => {
-      openDialogById("gameMenuDialog");
-    });
+    gameMenuButton.addEventListener("click", () => openDialogById("gameMenuDialog"));
   }
 
   /**
@@ -242,9 +278,7 @@ export function createDialogController({ gameMenuDialogIds, getWorld, isGameCanv
     const dialogId = button.getAttribute("data-dialog-target");
     const cameFromGameMenu = Boolean(button.closest("#gameMenuDialog"));
 
-    if (cameFromGameMenu) {
-      closeDialogById("gameMenuDialog", { skipPauseSync: true });
-    }
+    if (cameFromGameMenu) closeDialogById("gameMenuDialog", { skipPauseSync: true });
 
     openDialogByIdWithOptions(dialogId, { fromGameMenu: cameFromGameMenu });
   }
@@ -271,9 +305,7 @@ export function createDialogController({ gameMenuDialogIds, getWorld, isGameCanv
     const dialogId = button.getAttribute("data-return-dialog-target");
     const currentDialog = button.closest("dialog");
 
-    if (currentDialog instanceof HTMLDialogElement && currentDialog.id) {
-      closeDialogById(currentDialog.id);
-    }
+    if (currentDialog instanceof HTMLDialogElement && currentDialog.id) closeDialogById(currentDialog.id);
 
     openDialogById(dialogId);
   }

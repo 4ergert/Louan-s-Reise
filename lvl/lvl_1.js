@@ -80,6 +80,7 @@ const skeletonWarrior1Array = [];
 skeletonWarrior1Array.push(new SkeletonWarriorLVL1(1000, 280));
 skeletonWarrior1Array.push(new SkeletonWarriorLVL1(1500, 280));
 skeletonWarrior1Array.push(new SkeletonWarriorLVL1(2400, 100));
+skeletonWarrior1Array.push(new SkeletonWarriorLVL1(3000, 280));
 skeletonWarrior1Array.push(new LVL_1_Boss());
 
 for (let i = 0; i < 0; i++) {

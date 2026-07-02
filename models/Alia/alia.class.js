@@ -8,6 +8,8 @@ export class Alia extends MovableObject {
   maxDistanceToCharacter = 100;
   followTolerance = 8;
   hasLanded = false;
+  animationElapsed = 0;
+  animationIntervalMs = 100;
 
   IDLE = ALIA_SPRITES.IDLE_ANIMATION;
   WALK = ALIA_SPRITES.WALK_ANIMATION;
@@ -23,23 +25,24 @@ export class Alia extends MovableObject {
     this.loadImages(this.RUN);
 
     this.applyGravity();
-    this.animate();
   }
 
-  animate() {
-    setInterval(() => {
-      this.followCharacter();
-    }, 1000 / 60);
+  updateStep() {
+    super.updateStep();
+    this.followCharacter();
+    this.updateAnimationStep();
+  }
 
-    setInterval(() => {
-      this.lookAtCharacter();
-      this.playAnimation(this.isRunningToCharacter() ? this.RUN : this.IDLE);
-    }, 100);
+  updateAnimationStep() {
+    if (!this.shouldAdvanceTimedStep('animationElapsed', this.animationIntervalMs)) return;
+
+    this.lookAtCharacter();
+    this.playAnimation(this.isRunningToCharacter() ? this.RUN : this.IDLE);
   }
 
   followCharacter() {
     if (!this.world?.character) return;
-    if (this.world.isPaused) return;
+    if (this.isWorldPaused()) return;
 
     let xDistance = this.world.character.x - this.x;
 
@@ -69,15 +72,7 @@ export class Alia extends MovableObject {
   }
 
   playAnimation(images) {
-    if (this.currentAnimation !== images) {
-      this.currentAnimation = images;
-      this.currentImage = 0;
-    }
-
-    let frameIndex = this.currentImage % images.length;
-    let path = images[frameIndex];
-
-    this.img = this.imgCache[path];
-    this.currentImage++;
+    this.resetAnimationSequence(images);
+    this.showAnimationFrame(images);
   }
 }

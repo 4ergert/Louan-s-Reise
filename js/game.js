@@ -267,12 +267,20 @@ function startGameTransition() {
   const overlay = document.getElementById("transitionOverlay");
   const startedAt = performance.now();
   const duration = 900;
+  const completeTransition = () => {
+    if (!isStartScreenVisible) return;
 
-  isStartTransitionRunning = true;
-  startScreen?.beginTransition(() => {
     showGameCanvas();
     fadeIntoGame();
-  });
+  };
+
+  isStartTransitionRunning = true;
+
+  if (!startScreen?.isReady) {
+    completeTransition();
+  } else {
+    startScreen.beginTransition(completeTransition);
+  }
 
   const fadeOverlay = (timestamp) => {
     const progress = Math.min((timestamp - startedAt) / duration, 1);
@@ -313,6 +321,13 @@ window.addEventListener("keydown", (e) => {
     return;
   }
 
+  if (isStartScreenVisible && e.key === " ") {
+    e.preventDefault();
+    keyboard.SPACE = true;
+    startGameTransition();
+    return;
+  }
+
   // console.log(e.key);
   switch (e.key) {
     case "ArrowLeft":
@@ -333,7 +348,6 @@ window.addEventListener("keydown", (e) => {
       break;
     case " ":
       keyboard.SPACE = true;
-      startGameTransition();
       break;
     case "Control":
       keyboard.CTRL = true;

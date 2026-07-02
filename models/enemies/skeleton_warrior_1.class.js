@@ -13,9 +13,8 @@ export class SkeletonWarriorLVL1 extends MovableObject {
   isDead = false;
   isThrownByBoss = false;
   dyingAnimationSpeed = 50;
-  animationInterval = null;
-  patrolInterval = null;
-  directionTimeout = null;
+  animationElapsed = 0;
+  directionChangeRemainingMs = 0;
 
 
   IDLE = SKELETON_WARRIOR_1_SPRITES.IDLE_ANIMATION;
@@ -34,57 +33,54 @@ export class SkeletonWarriorLVL1 extends MovableObject {
     this.animationFrames = this.WALKING;
 
     this.applyGravity();
-    this.animation();
-    this.startPatrol();
+    this.resetDirectionTimer();
   }
 
-  animation() {
-    this.animationInterval = setInterval(() => {
-      if (this.world?.isPaused) return;
+  updateStep() {
+    super.updateStep();
+    if (this.isWorldPaused()) return;
 
-      let i = this.isDying
-        ? Math.min(this.currentImage, this.animationFrames.length - 1)
-        : this.currentImage % this.animationFrames.length;
-      let path = this.animationFrames[i];
-      this.img = this.imgCache[path];
-
-      if (!this.isDying || this.currentImage < this.animationFrames.length - 1) {
-        this.currentImage++;
-      }
-    }, this.dyingAnimationSpeed);
+    this.updatePatrolStep();
+    this.updateAnimationStep();
+    this.updateDirectionTimer();
   }
 
-  startPatrol() {
-    this.patrolInterval = setInterval(() => {
-      if (!this.world) return;
-      if (this.world?.isPaused) return;
+  updateAnimationStep() {
+    if (!this.shouldAdvanceTimedStep('animationElapsed', this.dyingAnimationSpeed)) return;
 
-      if (this.isThrownByBoss && this.vcY <= 0 && this.isStandingOnPlatform()) {
-        this.isThrownByBoss = false;
-        this.speed = this.defaultSpeed;
-      }
-
-      if (this.shouldReverseAtBlockedPlatform()) {
-        this.moveDirection *= -1;
-        this.imgDirectionChange = this.moveDirection < 0;
-        return;
-      }
-
-      this.x += this.moveDirection * this.speed;
-      this.imgDirectionChange = this.moveDirection < 0;
-    }, 1000 / 60);
-
-    this.scheduleDirectionChange();
+    let isLooping = !this.isDying;
+    this.showAnimationFrame(this.animationFrames, isLooping);
   }
 
-  scheduleDirectionChange() {
-    const nextChangeInMs = 2000 + Math.random() * 3000;
+  updatePatrolStep() {
+    if (!this.world) return;
 
-    this.directionTimeout = setTimeout(() => {
-      if (this.isDying) return;
+    if (this.isThrownByBoss && this.vcY <= 0 && this.isStandingOnPlatform()) {
+      this.isThrownByBoss = false;
+      this.speed = this.defaultSpeed;
+    }
+
+    if (this.shouldReverseAtBlockedPlatform()) {
       this.moveDirection *= -1;
-      this.scheduleDirectionChange();
-    }, nextChangeInMs);
+      this.imgDirectionChange = this.moveDirection < 0;
+      return;
+    }
+
+    this.x += this.moveDirection * this.speed;
+    this.imgDirectionChange = this.moveDirection < 0;
+  }
+
+  updateDirectionTimer() {
+    this.directionChangeRemainingMs -= this.world?.updateStepMs ?? 0;
+
+    if (this.directionChangeRemainingMs > 0 || this.isDying) return;
+
+    this.moveDirection *= -1;
+    this.resetDirectionTimer();
+  }
+
+  resetDirectionTimer() {
+    this.directionChangeRemainingMs = 2000 + Math.random() * 3000;
   }
 
   launchFromBoss(direction, startX, startY) {
@@ -107,9 +103,6 @@ export class SkeletonWarriorLVL1 extends MovableObject {
     this.animationFrames = this.DYING;
     this.currentImage = 0;
     this.imgDirectionChange = false;
-
-    clearInterval(this.patrolInterval);
-    clearTimeout(this.directionTimeout);
 
     const dyingDuration = this.DYING.length * this.dyingAnimationSpeed + 50;
 

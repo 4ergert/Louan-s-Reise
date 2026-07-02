@@ -10,6 +10,8 @@ export class ThrowableObject extends DrawableObject {
   isFlying = false;
   speedX = 0;
   speedY = 0;
+  floatElapsed = 0;
+  floatIntervalMs = 25;
 
   constructor(x = 12, y = 100, showCount = false) {
     super();
@@ -20,9 +22,6 @@ export class ThrowableObject extends DrawableObject {
     this.y = y;
     this.baseY = y;
     this.showCount = showCount;
-    if (!this.showCount) {
-      this.animateFloat();
-    }
   }
 
   draw(ctx) {
@@ -40,13 +39,20 @@ export class ThrowableObject extends DrawableObject {
     this.bones = Math.max(0, this.bones - amount);
   }
 
-  animateFloat() {
-    setInterval(() => {
-      if (this.world?.isPaused) return;
-      if (this.isFlying) return;
-      this.floatPhase += 0.08;
-      this.y = this.baseY + Math.sin(this.floatPhase) * 2;
-    }, 1000 / 40);
+  updateStep() {
+    if (this.isWorldPaused()) return;
+
+    if (this.isFlying) {
+      this.updateThrow();
+      return;
+    }
+
+    if (this.showCount) return;
+
+    if (!this.shouldAdvanceTimedStep('floatElapsed', this.floatIntervalMs)) return;
+
+    this.floatPhase += 0.08;
+    this.y = this.baseY + Math.sin(this.floatPhase) * 2;
   }
 
   launch(direction) {
@@ -56,7 +62,7 @@ export class ThrowableObject extends DrawableObject {
   }
 
   updateThrow() {
-    if (this.world?.isPaused) return;
+    if (this.isWorldPaused()) return;
     if (!this.isFlying) return;
 
     this.x += this.speedX;

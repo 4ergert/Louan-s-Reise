@@ -23,6 +23,10 @@ export class BossSwordObject extends DrawableObject {
     this.originX = x;
   }
 
+  updateStep() {
+    this.updateFlight();
+  }
+
   updateFlight() {
     let horizontalStep = this.speed * this.direction;
 

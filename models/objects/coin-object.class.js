@@ -5,6 +5,8 @@ export class Coins extends DrawableObject {
   y = 0;
   width = 40;
   height = 40;
+  animationElapsed = 0;
+  animationIntervalMs = 100;
 
   constructor(x = 0, y = 0) {
     super();
@@ -12,7 +14,6 @@ export class Coins extends DrawableObject {
     this.y = y;
     this.loadImage(this.IMAGES_COINS[0]);
     this.loadImages(this.IMAGES_COINS);
-    this.animation();
   }
 
   IMAGES_COINS = [
@@ -24,14 +25,11 @@ export class Coins extends DrawableObject {
     './assets/img/Collectable Object/Autumn_Forest_2D_Platformer_Tileset_Collectable Object - Coin 06.png'
   ];
 
-  animation() {
-    setInterval(() => {
-      if (this.world?.isPaused) return;
+  updateStep() {
+    if (this.isWorldPaused()) return;
 
-      let i = this.currentImage % this.IMAGES_COINS.length;
-      let path = this.IMAGES_COINS[i];
-      this.img = this.imgCache[path];
-      this.currentImage++;
-    }, 100);
+    if (!this.shouldAdvanceTimedStep('animationElapsed', this.animationIntervalMs)) return;
+
+    this.showAnimationFrame(this.IMAGES_COINS);
   }
 }
