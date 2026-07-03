@@ -131,12 +131,36 @@ export function createThrowableObjectPickupAudio() {
 }
 
 /**
+ * Creates the pickup sound for collectible mushrooms.
+ *
+ * @returns {HTMLAudioElement} The configured mushroom pickup sound effect.
+ */
+export function createMushroomPickupAudio() {
+	return createManagedAudio('assets/audio/pickup-mushroom.mp3', 'effect', {
+		volume: 0.6,
+		preload: 'none',
+	});
+}
+
+/**
  * Creates the sound effect used when the player throws a bone.
  *
  * @returns {HTMLAudioElement} The configured throwing sound effect.
  */
 export function createThrowingAudio() {
 	return createManagedAudio('assets/audio/throwing.mp3', 'effect', {
+		volume: 0.35,
+		preload: 'none',
+	});
+}
+
+/**
+ * Creates the sword slashing sound effect used by Skeleton Warrior 2.
+ *
+ * @returns {HTMLAudioElement} The configured slashing sound effect.
+ */
+export function createSwordSlashingAudio() {
+	return createManagedAudio('assets/audio/sword-slashing.mp3', 'effect', {
 		volume: 0.35,
 		preload: 'none',
 	});

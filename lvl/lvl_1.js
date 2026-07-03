@@ -1,5 +1,6 @@
 import { LVL_1_Boss } from '../models/enemies/lvl-1-boss.class.js';
 import { SkeletonWarriorLVL1 } from '../models/enemies/skeleton_warrior_1.class.js';
+import { SkeletonWarrior2 } from '../models/enemies/skeleton_warrior_2.class.js';
 import { LVL } from '../models/lvl.class.js';
 import { Coins } from '../models/objects/coin-object.class.js';
 import { BackgroundObject } from '../models/objects/background-object.class.js';
@@ -79,16 +80,10 @@ const skeletonWarrior1Array = [];
 
 skeletonWarrior1Array.push(new SkeletonWarriorLVL1(1000, 280));
 skeletonWarrior1Array.push(new SkeletonWarriorLVL1(1500, 280));
-skeletonWarrior1Array.push(new SkeletonWarriorLVL1(2400, 100));
-skeletonWarrior1Array.push(new SkeletonWarriorLVL1(3000, 280));
+skeletonWarrior1Array.push(new SkeletonWarrior2(2300, 100));
+skeletonWarrior1Array.push(new SkeletonWarrior2(3000, 280));
 skeletonWarrior1Array.push(new LVL_1_Boss());
 
-for (let i = 0; i < 0; i++) {
-  const skeletonWarrior = new SkeletonWarriorLVL1();
-  skeletonWarrior.x = 500 + Math.random() * 3000;
-  skeletonWarrior.y = 280;
-  skeletonWarrior1Array.push(skeletonWarrior);
-}
 
 const throwableObjects = [];
 
@@ -100,6 +95,8 @@ const coins = [
   new Coins(2250, 175),
   new Coins(2300, 175),
   new Coins(2350, 175),
+  new Coins(2400, 175),
+  new Coins(2450, 175),
 ];
 
 

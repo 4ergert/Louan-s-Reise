@@ -1,4 +1,5 @@
 import { die, startKnockback } from '../character/char-animation-actions.js';
+import { SkeletonWarrior2 } from '../enemies/skeleton_warrior_2.class.js';
 
 export const worldCollisionMethods = {
   updateCollisions() {
@@ -66,6 +67,7 @@ export const worldCollisionMethods = {
     this.lvl.enemies.forEach((enemy) => {
       if (enemy.isDying || enemy.isDead) return;
       if (enemy.isBoss) return;
+      if (enemy instanceof SkeletonWarrior2) return;
 
       if (this.character.isColliding(enemy) && !this.character.isHurt()) {
         startKnockback(this.character, enemy.x + enemy.width / 2);

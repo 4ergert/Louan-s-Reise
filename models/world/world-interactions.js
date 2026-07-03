@@ -71,6 +71,7 @@ export const worldInteractionMethods = {
     this.lifeBar.maxSegments += totalSegmentBonus;
     this.lifeBar.triggerSegmentBlink();
     this.lifeBar.setPercentage(this.character.energy);
+    playSoundEffect(this.mushroomPickupAudio);
   },
 
   checkBossMusicTrigger() {

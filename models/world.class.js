@@ -4,6 +4,8 @@ import {
   createCoinPickupAudio,
   createEvilLaughAudio,
   createGameOverAudio,
+  createMushroomPickupAudio,
+  createSwordSlashingAudio,
   createThrowableObjectPickupAudio,
   createThrowingAudio,
 } from '../js/audio.js';
@@ -44,7 +46,9 @@ export class World extends WorldIntros {
   isPaused = false;
   coinPickupAudio = createCoinPickupAudio();
   bonePickupAudio = createThrowableObjectPickupAudio();
+  mushroomPickupAudio = createMushroomPickupAudio();
   throwingAudio = createThrowingAudio();
+  swordSlashingAudio = createSwordSlashingAudio();
   boneBreakAudios = createBoneBreakAudios();
   bossMusicAudio = createBossMusicAudio();
   evilLaughAudio = createEvilLaughAudio();

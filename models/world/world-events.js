@@ -3,6 +3,7 @@ import { isSpawning } from '../character/char-movements.js';
 import { startKnockback } from '../character/char-animation-actions.js';
 import { Alia } from '../Alia/alia.class.js';
 import { SkeletonWarriorLVL1 } from '../enemies/skeleton_warrior_1.class.js';
+import { SkeletonWarrior2 } from '../enemies/skeleton_warrior_2.class.js';
 import { BossSwordObject } from '../objects/boss-sword-object.class.js';
 
 export const worldEventMethods = {
@@ -182,7 +183,7 @@ export const worldEventMethods = {
   },
 
   playEnemyDefeatSound(enemy) {
-    if (!(enemy instanceof SkeletonWarriorLVL1)) return;
+    if (!(enemy instanceof SkeletonWarriorLVL1) && !(enemy instanceof SkeletonWarrior2)) return;
 
     this.lastBoneBreakAudioIndex = playRandomVariantSound(this.boneBreakAudios, this.lastBoneBreakAudioIndex);
   },
