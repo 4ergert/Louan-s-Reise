@@ -1,6 +1,16 @@
 import { MovableObject } from './movable-object.class.js';
 
+/**
+ * Static platform object that can be stood on.
+ */
 export class PlatformObjects extends MovableObject {
+  /**
+   * @param {string} imgPath
+   * @param {number} x
+   * @param {number} y
+   * @param {number} width
+   * @param {number} height
+   */
   constructor(imgPath, x, y, width, height) {
     super();
     this.imgPath = imgPath;
@@ -11,6 +21,9 @@ export class PlatformObjects extends MovableObject {
     this.height = height;
   }
 
+  /**
+   * @returns {{ x: number, y: number, width: number, height: number, offsetY: number }}
+   */
   getCollisionArea() {
     return {
       x: this.x,

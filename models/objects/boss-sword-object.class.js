@@ -1,6 +1,10 @@
 import { DrawableObject } from './drawable-objects.class.js';
 
+/**
+ * Returning sword projectile thrown by the boss.
+ */
 export class BossSwordObject extends DrawableObject {
+  /** @type {string} */
   img = './assets/img/Enemies/Skeleton_Warrior_3/PNG/Vector Parts/Sword.png';
   width = 240;
   height = 80;
@@ -14,6 +18,11 @@ export class BossSwordObject extends DrawableObject {
   rotationDirection = -1;
   hasHitCharacter = false;
 
+  /**
+   * @param {number} x
+   * @param {number} y
+   * @param {number} direction
+   */
   constructor(x, y, direction) {
     super();
     this.loadImage(this.img);
@@ -23,10 +32,18 @@ export class BossSwordObject extends DrawableObject {
     this.originX = x;
   }
 
+  /**
+   * @returns {void}
+   */
   updateStep() {
     this.updateFlight();
   }
 
+  /**
+   * Advances the sword's boomerang flight and flips direction at max distance.
+   *
+   * @returns {void}
+   */
   updateFlight() {
     let horizontalStep = this.speed * this.direction;
 
@@ -40,12 +57,19 @@ export class BossSwordObject extends DrawableObject {
     }
   }
 
+  /**
+   * @returns {boolean}
+   */
   hasReturned() {
     if (!this.returning) return false;
 
     return Math.abs(this.x - this.originX) <= this.speed + 2;
   }
 
+  /**
+   * @param {CanvasRenderingContext2D} ctx
+   * @returns {void}
+   */
   draw(ctx) {
     let centerX = this.x + this.width / 2;
     let centerY = this.y + this.height / 2;
@@ -57,6 +81,9 @@ export class BossSwordObject extends DrawableObject {
     ctx.restore();
   }
 
+  /**
+   * @returns {{ x: number, y: number, width: number, height: number, offsetY: number }}
+   */
   getCollisionArea() {
     return {
       x: this.x + 12,
