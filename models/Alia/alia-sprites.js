@@ -1,3 +1,12 @@
+/**
+ * Sprite path collections for Alia's movement and idle animations.
+ *
+ * @type {{
+ *   IDLE_ANIMATION: string[],
+ *   WALK_ANIMATION: string[],
+ *   RUN_ANIMATION: string[]
+ * }}
+ */
 export const ALIA_SPRITES = {
   IDLE_ANIMATION: [
     './assets/img/Character/Alia/Idle/0_Dark_Oracle_Idle_000.png',
