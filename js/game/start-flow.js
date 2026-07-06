@@ -26,14 +26,24 @@ import { syncGameCanvasSize } from './canvas.js';
  */
 
 /**
+ * Applies the initial body classes for sessions that should boot directly into gameplay.
+ *
+ * @returns {void}
+ */
+export function applyInitialBodyState() {
+  if (!shouldBootIntoGame()) return;
+
+  document.body?.classList.remove('intro-mode', 'intro-transition');
+  document.body?.classList.add('game-active', 'skip-start-screen');
+}
+
+/**
  * Restores the saved level immediately when the current session indicates that the intro should be skipped.
  *
  * @returns {void}
  */
 export function startSavedLevelIfNeeded() {
-  const shouldBootIntoGame = shouldSkipStartScreen() || getSelectedLevelId() !== 'lvl_1';
-
-  if (!shouldBootIntoGame) return;
+  if (!shouldBootIntoGame()) return;
 
   setSkipStartScreen(false);
   document.body?.classList.remove('intro-mode', 'intro-transition');
@@ -42,6 +52,10 @@ export function startSavedLevelIfNeeded() {
   gameState.isIntroVisible = false;
   showGameCanvas();
   fadeIntoGame();
+}
+
+function shouldBootIntoGame() {
+  return shouldSkipStartScreen() || getSelectedLevelId() !== 'lvl_1';
 }
 
 /**
