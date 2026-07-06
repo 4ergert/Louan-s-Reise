@@ -1,0 +1,11 @@
+@media only screen and (max-width: 720px) {
+   #gameCanvas {
+     width: 100%;
+   }
+ }
+
+ @media only screen and (max-height: 480px) {
+   #gameCanvas {
+     height: 100vh;
+   }
+ }

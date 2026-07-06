@@ -39,17 +39,23 @@ export async function toggleGameCanvasFullscreen() {
 export function syncGameCanvasSize() {
   if (!(gameState.canvas instanceof HTMLCanvasElement)) return;
 
-  const fullscreenDimensions = getFullscreenCanvasDimensions();
-  const styleWidth = isGameCanvasFullscreen() ? fullscreenDimensions.width : baseCanvasWidth;
-  const styleHeight = isGameCanvasFullscreen() ? fullscreenDimensions.height : baseCanvasHeight;
+  const isFullscreen = isGameCanvasFullscreen();
 
   gameState.canvas.width = baseCanvasWidth;
   gameState.canvas.height = baseCanvasHeight;
 
   if (gameState.isStartTransitionRunning) return;
 
-  gameState.canvas.style.setProperty('width', `${styleWidth}px`);
-  gameState.canvas.style.setProperty('height', `${styleHeight}px`);
+  if (!isFullscreen) {
+    gameState.canvas.style.removeProperty('width');
+    gameState.canvas.style.removeProperty('height');
+    return;
+  }
+
+  const fullscreenDimensions = getFullscreenCanvasDimensions();
+
+  gameState.canvas.style.setProperty('width', `${fullscreenDimensions.width}px`);
+  gameState.canvas.style.setProperty('height', `${fullscreenDimensions.height}px`);
 }
 
 /**

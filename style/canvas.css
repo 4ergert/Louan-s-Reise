@@ -23,8 +23,9 @@ body.game-active #gameCanvasShell {
 }
 
 #gameCanvas {
-  background-color: #000;
   border: 3px solid #261c05;
+  display: block;
+
 }
 
 #gameCanvasShell:fullscreen #gameCanvas {
