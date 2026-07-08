@@ -52,7 +52,41 @@ export function initKeyboardEvents({
   });
 
   window.addEventListener('keyup', handleKeyUp);
+  initIntroStartButton(showStartScreen);
+  initTouchStartScreenTransition(startGameTransition);
   initMobileTouchControls();
+}
+
+/**
+ * Registers the mobile intro start button to use the same flow as the keyboard shortcut.
+ *
+ * @param {() => void} showStartScreen - Transitions from the intro prompt to the start screen.
+ * @returns {void}
+ */
+function initIntroStartButton(showStartScreen) {
+  const introStartButton = document.getElementById('introStartButton');
+
+  if (!(introStartButton instanceof HTMLButtonElement)) return;
+
+  introStartButton.addEventListener('click', () => showStartScreen());
+}
+
+/**
+ * Starts the game when a phone-sized touch device taps the start screen canvas.
+ *
+ * @param {() => void} startGameTransition - Starts the transition from the start screen into gameplay.
+ * @returns {void}
+ */
+function initTouchStartScreenTransition(startGameTransition) {
+  const startScreenCanvas = document.getElementById('startScreenCanvas');
+
+  if (!(startScreenCanvas instanceof HTMLCanvasElement)) return;
+
+  startScreenCanvas.addEventListener('click', () => {
+    if (!isMobileTouchDevice()) return;
+
+    startGameTransition();
+  });
 }
 
 /**
@@ -88,6 +122,19 @@ function registerMobileTouchButton(buttonId, keyboardProperty) {
   button.addEventListener('touchend', () => gameState.keyboard[keyboardProperty] = false);
 
   button.addEventListener('touchcancel', () => gameState.keyboard[keyboardProperty] = false);
+}
+
+/**
+ * Detects whether the current device should use touch-first mobile interactions.
+ *
+ * @returns {boolean}
+ */
+function isMobileTouchDevice() {
+  const hasCoarsePointer = window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(any-pointer: coarse)').matches;
+  const hasTouchInput = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
+  const isSmallViewport = Math.min(window.innerWidth, window.innerHeight) <= 900;
+
+  return isSmallViewport && (hasCoarsePointer || hasTouchInput);
 }
 
 /**

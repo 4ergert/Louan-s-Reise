@@ -263,10 +263,11 @@ export class StartScreen {
 	 * @returns {void}
 	 */
 	drawStartPrompt(ctx, { flicker, emberPulse }) {
-		const { lineOneGradient, lineTwoGradient } = this.createStartPromptGradients(ctx);
+		const promptConfig = this.getStartPromptConfig();
+		const { lineOneGradient, lineTwoGradient } = this.createStartPromptGradients(ctx, promptConfig);
 
 		ctx.save();
-		ctx.font = 'bold 32px Cinzel Decorative';
+		ctx.font = `bold ${promptConfig.fontSize}px Cinzel Decorative`;
 		ctx.textBaseline = 'top';
 
 		ctx.shadowColor = `rgba(255, 82, 0, ${0.45 + emberPulse * 0.25})`;
@@ -274,23 +275,23 @@ export class StartScreen {
 		ctx.shadowOffsetX = 1 + flicker * 1.5;
 		ctx.shadowOffsetY = 3 + emberPulse * 2;
 		ctx.fillStyle = 'rgba(160, 32, 0, 0.6)';
-		this.drawStartPromptText(ctx, 212, 54, 122, 104);
+		this.drawStartPromptText(ctx, promptConfig);
 
 		ctx.shadowColor = `rgba(255, 170, 40, ${0.55 + emberPulse * 0.25})`;
 		ctx.shadowBlur = 22 + emberPulse * 16;
 		ctx.shadowOffsetX = flicker * 2;
 		ctx.shadowOffsetY = 0;
 		ctx.fillStyle = lineOneGradient;
-		ctx.fillText('Drücke Leertaste,', 210, 50);
+		ctx.fillText(promptConfig.lineOneText, promptConfig.lineOneX, promptConfig.lineOneY);
 		ctx.fillStyle = lineTwoGradient;
-		ctx.fillText('um Louans Reise zu beginnen.', 120, 100);
+		ctx.fillText(promptConfig.lineTwoText, promptConfig.lineTwoX, promptConfig.lineTwoY);
 
 		ctx.shadowColor = 'rgba(255, 250, 220, 0.35)';
 		ctx.shadowBlur = 6;
 		ctx.shadowOffsetX = 0;
 		ctx.shadowOffsetY = 0;
 		ctx.fillStyle = '#fff7de';
-		this.drawStartPromptText(ctx, 210, 50, 120, 100);
+		this.drawStartPromptText(ctx, promptConfig);
 
 		ctx.restore();
 	}
@@ -299,15 +300,16 @@ export class StartScreen {
 	 * Creates the gradients used by the start prompt text.
 	 *
 	 * @param {CanvasRenderingContext2D} ctx
+	 * @param {{ lineOneY: number, lineTwoY: number }} promptConfig
 	 * @returns {StartPromptGradients}
 	 */
-	createStartPromptGradients(ctx) {
-		const lineOneGradient = ctx.createLinearGradient(0, 50, 0, 90);
+	createStartPromptGradients(ctx, promptConfig) {
+		const lineOneGradient = ctx.createLinearGradient(0, promptConfig.lineOneY, 0, promptConfig.lineOneY + 40);
 		lineOneGradient.addColorStop(0, '#fff7cf');
 		lineOneGradient.addColorStop(0.45, '#ffd36b');
 		lineOneGradient.addColorStop(1, '#ff7a1a');
 
-		const lineTwoGradient = ctx.createLinearGradient(0, 100, 0, 140);
+		const lineTwoGradient = ctx.createLinearGradient(0, promptConfig.lineTwoY, 0, promptConfig.lineTwoY + 40);
 		lineTwoGradient.addColorStop(0, '#fff7cf');
 		lineTwoGradient.addColorStop(0.45, '#ffd36b');
 		lineTwoGradient.addColorStop(1, '#ff7a1a');
@@ -316,17 +318,56 @@ export class StartScreen {
 	}
 
 	/**
-	 * Draws the two prompt text lines at the given coordinates.
+	 * Returns the prompt text and positioning for the current device type.
+	 *
+	 * @returns {{ fontSize: number, lineOneText: string, lineOneX: number, lineOneY: number, lineTwoText: string, lineTwoX: number, lineTwoY: number }}
+	 */
+	getStartPromptConfig() {
+		if (this.isMobileTouchDevice()) {
+			return {
+				fontSize: 32,
+				lineOneText: 'Berühre den Startbildschirm,',
+				lineOneX: 111,
+				lineOneY: 54,
+				lineTwoText: "um Louan's Reise zu beginnen.",
+				lineTwoX: 120,
+				lineTwoY: 92,
+			};
+		}
+
+		return {
+			fontSize: 32,
+			lineOneText: 'Drücke Leertaste,',
+			lineOneX: 210,
+			lineOneY: 50,
+			lineTwoText: 'um Louans Reise zu beginnen.',
+			lineTwoX: 120,
+			lineTwoY: 100,
+		};
+	}
+
+	/**
+	 * Draws the two prompt text lines at the configured coordinates.
 	 *
 	 * @param {CanvasRenderingContext2D} ctx
-	 * @param {number} lineOneX
-	 * @param {number} lineOneY
-	 * @param {number} lineTwoX
-	 * @param {number} lineTwoY
+	 * @param {{ lineOneText: string, lineOneX: number, lineOneY: number, lineTwoText: string, lineTwoX: number, lineTwoY: number }} promptConfig
 	 * @returns {void}
 	 */
-	drawStartPromptText(ctx, lineOneX, lineOneY, lineTwoX, lineTwoY) {
-		ctx.fillText('Drücke Leertaste,', lineOneX, lineOneY);
-		ctx.fillText('um Louans Reise zu beginnen.', lineTwoX, lineTwoY);
+	drawStartPromptText(ctx, promptConfig) {
+		ctx.fillText(promptConfig.lineOneText, promptConfig.lineOneX, promptConfig.lineOneY);
+		ctx.fillText(promptConfig.lineTwoText, promptConfig.lineTwoX, promptConfig.lineTwoY);
+	}
+
+	/**
+	 * Detects whether the prompt should use the mobile touch copy.
+	 *
+	 * @returns {boolean}
+	 */
+	isMobileTouchDevice() {
+		let hasCoarsePointer = window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(any-pointer: coarse)').matches;
+		let hasTouchInput = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
+		let isSmallViewport = Math.min(window.innerWidth, window.innerHeight) <= 900;
+
+		return isSmallViewport && (hasCoarsePointer || hasTouchInput);
 	}
 }

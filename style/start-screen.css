@@ -54,6 +54,10 @@ body.intro-transition #startScreenMeta {
   gap: 14px;
 }
 
+#startScreenMenuButton {
+  display: none;
+}
+
 #musicToggleButton {
   flex: 0 0 auto;
   align-self: center;

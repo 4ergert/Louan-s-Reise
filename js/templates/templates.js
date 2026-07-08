@@ -151,6 +151,7 @@ export function startScreenMetaTemplate() {
 export function startScreenControlsTemplate() {
 	return `
 		<section id="startScreenControls" aria-label="Steuerung">
+			<button type="button" id="startScreenMenuButton" class="startScreenActionButton" aria-label="Menue">☰</button>
 			<button type="button" id="musicToggleButton" aria-pressed="false" aria-label="Musik stummschalten">♪</button>
 			<button type="button" id="startScreenInstructionsButton" data-dialog-target="instructionsDialog">Steuerung</button>
 		</section>

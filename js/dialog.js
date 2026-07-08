@@ -235,11 +235,13 @@ export function createDialogController({ gameMenuDialogIds, getWorld, isGameCanv
   function initGameMenu() {
     const gameMenuButton = document.getElementById("gameMenuButton");
     const mobileMenuButton = document.getElementById("mobileMenuButton");
+    const startScreenMenuButton = document.getElementById("startScreenMenuButton");
 
     initGameMenuDialogPause();
 
     registerGameMenuButton(gameMenuButton);
     registerGameMenuButton(mobileMenuButton);
+    registerGameMenuButton(startScreenMenuButton);
   }
 
   /**

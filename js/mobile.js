@@ -39,12 +39,7 @@ export function syncMobileOrientationPause() {
  * @returns {boolean}
  */
 export function shouldPauseForMobilePortrait() {
-	let hasCoarsePointer = window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(any-pointer: coarse)').matches;
-	let hasTouchInput = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
-	let isPortrait = window.matchMedia('(orientation: portrait)').matches;
-	let isPhoneViewport = Math.min(window.innerWidth, window.innerHeight) <= 900;
-
-	return isPortrait && isPhoneViewport && (hasCoarsePointer || hasTouchInput) && isGameCanvasVisible();
+	return shouldShowMobilePortraitOverlay() && isGameCanvasVisible();
 }
 
 /**
@@ -76,16 +71,33 @@ export function resumeWorldIfAllowed(world) {
  * @returns {void}
  */
 function updateMobileOrientationPause() {
-	let shouldPauseForPortrait = shouldPauseForMobilePortrait();
+	let shouldShowPortraitOverlay = shouldShowMobilePortraitOverlay();
+	let shouldPauseForPortrait = shouldShowPortraitOverlay && isGameCanvasVisible();
 	let overlay = document.getElementById('mobileOrientationOverlay');
+	let startScreenPrompt = document.getElementById('startScreenOrientationPrompt');
 
-	document.body.classList.toggle('mobile-portrait-active', shouldPauseForPortrait);
+	document.body.classList.toggle('mobile-portrait-active', shouldShowPortraitOverlay);
 
-	if (overlay) overlay.setAttribute('aria-hidden', `${!shouldPauseForPortrait}`);
+	if (overlay) overlay.setAttribute('aria-hidden', `${!shouldShowPortraitOverlay}`);
+	if (startScreenPrompt) startScreenPrompt.setAttribute('aria-hidden', `${!shouldShowPortraitOverlay}`);
 
 	if (shouldPauseForPortrait) return activatePortraitPause();
 
 	deactivatePortraitPause();
+}
+
+/**
+ * Determines whether portrait guidance should be shown on phone-sized touch devices.
+ *
+ * @returns {boolean}
+ */
+function shouldShowMobilePortraitOverlay() {
+	let hasCoarsePointer = window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(any-pointer: coarse)').matches;
+	let hasTouchInput = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
+	let isPortrait = window.matchMedia('(orientation: portrait)').matches;
+	let isPhoneViewport = Math.min(window.innerWidth, window.innerHeight) <= 900;
+
+	return isPortrait && isPhoneViewport && (hasCoarsePointer || hasTouchInput);
 }
 
 /**

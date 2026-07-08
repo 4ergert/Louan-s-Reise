@@ -6,7 +6,65 @@
   display: none;
 }
 
-@media only screen and (max-width: 720px), only screen and (max-height: 480px) {
+#startScreenOrientationPrompt {
+  display: none;
+}
+
+@media only screen and (max-width: 720px),
+only screen and (max-height: 480px) {
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) {
+    overflow-y: hidden;
+  }
+
+  body.intro-mode h1 {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    margin: 0;
+    text-align: center;
+    transform: translate(-50%, -50%);
+  }
+
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) h1 {
+    width: min(90vw, 720px);
+    font-size: 56px;
+    margin: 24px 0 8px;
+    text-align: center;
+  }
+
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreen {
+    margin-top: 0;
+  }
+
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenCanvas {
+    display: block;
+    align-self: center;
+    width: min(72vw, 520px);
+    height: auto;
+    margin: 15px 0 0 -50px;
+  }
+
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenControls {
+    position: fixed;
+    top: auto;
+    bottom: 48px;
+    right: 32px;
+    display: flex;
+    justify-content: flex-end;
+    z-index: 20;
+  }
+
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenMenuButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #musicToggleButton,
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenInstructionsButton {
+    display: none;
+  }
+
   #gameCanvas {
     width: 100%;
   }
@@ -33,7 +91,42 @@
     text-shadow: 2px 2px 4px rgba(199, 48, 2, 0.7);
   }
 
+  #startScreenOrientationPrompt {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 40;
+    color: rgb(255, 202, 103);
+    text-align: center;
+    pointer-events: none;
+  }
+
+  #startScreenOrientationPrompt p {
+    margin: 0;
+    font-size: 42px;
+    font-weight: bold;
+    line-height: 1.3;
+    text-shadow: 2px 2px 4px rgba(199, 48, 2, 0.7);
+  }
+
   body.mobile-portrait-active #mobileOrientationOverlay {
+    display: flex;
+  }
+
+  body.mobile-portrait-active:not(.game-active):not(.skip-start-screen) h1,
+  body.mobile-portrait-active:not(.game-active):not(.skip-start-screen) #introPrompt,
+  body.mobile-portrait-active:not(.game-active):not(.skip-start-screen) #introStartButton,
+  body.mobile-portrait-active:not(.game-active):not(.skip-start-screen) #startScreen,
+  body.mobile-portrait-active:not(.game-active):not(.skip-start-screen) #startScreenCanvas,
+  body.mobile-portrait-active:not(.game-active):not(.skip-start-screen) #startScreenControls,
+  body.mobile-portrait-active:not(.game-active):not(.skip-start-screen) #startScreenMeta {
+    display: none;
+  }
+
+  body.mobile-portrait-active:not(.game-active):not(.skip-start-screen) #startScreenOrientationPrompt {
     display: flex;
   }
 
@@ -118,10 +211,42 @@
     right: 16px;
     bottom: 16px;
   }
+
+  #startScreen p {
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1.4;
+    margin: 20px;
+  }
+
+  body.intro-mode #introPrompt {
+    display: none;
+  }
+
+  body.intro-mode #introStartButton {
+    display: block;
+  }
 }
 
 @media only screen and (max-height: 480px) {
   #gameCanvas {
     height: 100vh;
+  }
+
+  body.intro-mode h1 {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    margin: 0;
+    text-align: center;
+    transform: translate(-50%, -50%);
+  }
+
+  body.intro-mode #introPrompt {
+    display: none;
+  }
+
+  body.intro-mode #introStartButton {
+    top: calc(50% + 140px);
   }
 }
