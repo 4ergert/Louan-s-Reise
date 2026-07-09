@@ -98,7 +98,7 @@ function initMobileTouchControls() {
   registerMobileTouchButton('mobileLeftButton', 'LEFT');
   registerMobileTouchButton('mobileRightButton', 'RIGHT');
   registerMobileTouchButton('mobileJumpButton', 'UP');
-  registerMobileTouchButton('mobileRunningButton', 'A');
+  registerMobileToggleButton('mobileRunningButton', 'A');
   registerMobileTouchButton('mobileThrowButton', 'F');
 }
 
@@ -117,11 +117,48 @@ function registerMobileTouchButton(buttonId, keyboardProperty) {
   button.addEventListener('touchstart', (event) => {
     event.preventDefault();
     gameState.keyboard[keyboardProperty] = true;
+    setMobileButtonActiveState(button, true);
   }, { passive: false });
 
-  button.addEventListener('touchend', () => gameState.keyboard[keyboardProperty] = false);
+  button.addEventListener('touchend', () => {
+    gameState.keyboard[keyboardProperty] = false;
+    setMobileButtonActiveState(button, false);
+  });
 
-  button.addEventListener('touchcancel', () => gameState.keyboard[keyboardProperty] = false);
+  button.addEventListener('touchcancel', () => {
+    gameState.keyboard[keyboardProperty] = false;
+    setMobileButtonActiveState(button, false);
+  });
+}
+
+/**
+ * Wires one mobile control button to toggle a keyboard state property on each touch.
+ *
+ * @param {string} buttonId - DOM id of the mobile control button.
+ * @param {'LEFT' | 'RIGHT' | 'UP' | 'DOWN' | 'SPACE' | 'CTRL' | 'A' | 'D' | 'F'} keyboardProperty - Keyboard flag to toggle.
+ * @returns {void}
+ */
+function registerMobileToggleButton(buttonId, keyboardProperty) {
+  const button = document.getElementById(buttonId);
+
+  if (!(button instanceof HTMLButtonElement)) return;
+
+  button.addEventListener('touchstart', (event) => {
+    event.preventDefault();
+    gameState.keyboard[keyboardProperty] = !gameState.keyboard[keyboardProperty];
+    setMobileButtonActiveState(button, gameState.keyboard[keyboardProperty]);
+  }, { passive: false });
+}
+
+/**
+ * Mirrors a mobile button's pressed state into a data attribute for visual feedback.
+ *
+ * @param {HTMLButtonElement} button - Mobile control button element.
+ * @param {boolean} isActive - Whether the button should appear active.
+ * @returns {void}
+ */
+function setMobileButtonActiveState(button, isActive) {
+  button.dataset.active = isActive ? 'true' : 'false';
 }
 
 /**

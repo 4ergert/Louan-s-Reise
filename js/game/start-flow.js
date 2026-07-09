@@ -86,6 +86,17 @@ export function restartGame() {
 }
 
 /**
+ * Resets the session back to the default start screen and reloads the page.
+ *
+ * @returns {void}
+ */
+export function resetToStartScreen() {
+  setSelectedLevelId('lvl_1');
+  setSkipStartScreen(false);
+  window.location.reload();
+}
+
+/**
  * Starts a specific level by persisting its id and reloading the page.
  *
  * @param {string} levelId - The level id that should be started next.

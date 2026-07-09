@@ -65,12 +65,17 @@ export function createStartScreenAudio() {
 }
 
 /**
- * Creates the main in-game looping background music.
+ * Creates the main in-game looping background music for the selected level.
  *
+ * @param {string} [levelId='lvl_1'] - The level id that determines which track to load.
  * @returns {HTMLAudioElement} The configured gameplay background track.
  */
-export function createGameBackgroundAudio() {
-	return createLoopingAudio('assets/audio/Magical Forest.mp3');
+export function createGameBackgroundAudio(levelId = 'lvl_1') {
+	const backgroundTrack = levelId === 'lvl_2'
+		? 'assets/audio/ObservingTheStar.ogg'
+		: 'assets/audio/Magical Forest.mp3';
+
+	return createLoopingAudio(backgroundTrack);
 }
 
 /**

@@ -5,6 +5,9 @@ import { resumeWorldIfAllowed } from './mobile.js';
  * @property {string[]} gameMenuDialogIds
  * @property {() => any} getWorld
  * @property {() => boolean} isGameCanvasVisible
+ * @property {() => void} restartGame
+ * @property {() => void} resetToStartScreen
+ * @property {(levelId: string) => void} startLevel
  */
 
 /**
@@ -23,7 +26,7 @@ import { resumeWorldIfAllowed } from './mobile.js';
  *   isMetaDialogOpen: () => boolean,
  * }} The public dialog API consumed by the game bootstrap.
  */
-export function createDialogController({ gameMenuDialogIds, getWorld, isGameCanvasVisible }) {
+export function createDialogController({ gameMenuDialogIds, getWorld, isGameCanvasVisible, restartGame, resetToStartScreen, startLevel }) {
   let isGameMenuPauseActive = false;
 
   /**
@@ -264,9 +267,44 @@ export function createDialogController({ gameMenuDialogIds, getWorld, isGameCanv
   function initStartScreenDialogs() {
     const dialogButtons = document.querySelectorAll("[data-dialog-target]");
     const returnButtons = document.querySelectorAll("[data-return-dialog-target]");
+    const menuActionButtons = document.querySelectorAll("[data-menu-action]");
 
     dialogButtons.forEach((button) => registerDialogTargetButton(button));
     returnButtons.forEach((button) => registerReturnDialogButton(button));
+    menuActionButtons.forEach((button) => registerMenuActionButton(button));
+  }
+
+  /**
+   * Registers a button that triggers a predefined menu action.
+   *
+   * @param {Element} button - The potential menu action trigger element.
+   * @returns {void}
+   */
+  function registerMenuActionButton(button) {
+    if (!(button instanceof HTMLButtonElement)) return;
+
+    button.addEventListener("click", () => handleMenuActionButtonClick(button));
+  }
+
+  /**
+   * Runs the configured menu action for the clicked button.
+   *
+   * @param {HTMLButtonElement} button - The clicked menu action button.
+   * @returns {void}
+   */
+  function handleMenuActionButtonClick(button) {
+    const action = button.getAttribute("data-menu-action");
+
+    if (action === "restart-game") {
+      closeDialogById("gameMenuDialog", { skipPauseSync: true });
+      resetToStartScreen();
+      return;
+    }
+
+    if (action === "start-lvl-1") {
+      closeDialogById("gameMenuDialog", { skipPauseSync: true });
+      startLevel("lvl_1");
+    }
   }
 
   /**

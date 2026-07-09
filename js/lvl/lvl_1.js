@@ -1,5 +1,5 @@
 import { LVL_1_Boss } from '../models/enemies/lvl-1-boss.class.js';
-import { SkeletonWarriorLVL1 } from '../models/enemies/skeleton_warrior_1.class.js';
+import { SkeletonWarrior1 } from '../models/enemies/skeleton_warrior_1.class.js';
 import { SkeletonWarrior2 } from '../models/enemies/skeleton_warrior_2.class.js';
 import { LVL } from './lvl.class.js';
 import { Coins } from '../models/objects/coin-object.class.js';
@@ -8,7 +8,7 @@ import { EnvironmentObject } from '../models/objects/environment-objects.class.j
 import { PlatformObjects } from '../models/objects/platform-objects.class.js';
 import { ThrowableObject } from '../models/objects/throwable-objects.class.js';
 
-/** @typedef {SkeletonWarriorLVL1 | SkeletonWarrior2 | LVL_1_Boss} LevelEnemy */
+/** @typedef {SkeletonWarrior1 | SkeletonWarrior2 | LVL_1_Boss} LevelEnemy */
 
 /**
  * @typedef {object} LevelWorldSettings
@@ -53,8 +53,8 @@ for (let index = 0; index < 5; index++) {
 const platformObjects = [];
 
 // Add platform objects for the main level area
-for (let index = 0; index < 70; index++) {
-  const x = index * 50 - 200;
+for (let index = 0; index < 72; index++) {
+  const x = index * 50 - 300;
 
   platformObjects.push(
     new PlatformObjects('./assets/img/Platformer/Autumn_Forest_2D_Platformer_Tileset_Platformer - Ground 02.png', x, 400, 50, 50),
@@ -74,6 +74,9 @@ for (let index = 0; index < 40; index++) {
 
 // Add additional platform objects for the boss arena area
 platformObjects.push(
+  new PlatformObjects('./assets/img/Platformer/Autumn_Forest_2D_Platformer_Tileset_Platformer - Ground 04.png', -350, 400, 50, 50),
+  new PlatformObjects('./assets/img/Platformer/Autumn_Forest_2D_Platformer_Tileset_Platformer - Ground 09.png', -350, 450, 50, 50),
+
   new PlatformObjects('./assets/img/Platformer/Autumn_Forest_2D_Platformer_Tileset_Platformer - Ground 08.png', 3300, 400, 50, 50),
   new PlatformObjects('./assets/img/Platformer/Autumn_Forest_2D_Platformer_Tileset_Platformer - Ground 13.png', 3300, 450, 50, 50),
 
@@ -98,9 +101,10 @@ platformObjects.push(
 const enemiesArray = [];
 
 // Add enemies to the level
-enemiesArray.push(new SkeletonWarriorLVL1(1000, 280));
-enemiesArray.push(new SkeletonWarriorLVL1(1500, 280));
+enemiesArray.push(new SkeletonWarrior1(1000, 280));
+enemiesArray.push(new SkeletonWarrior1(1500, 280));
 enemiesArray.push(new SkeletonWarrior2(2300, 100));
+enemiesArray.push(new SkeletonWarrior1(2150, 280));
 enemiesArray.push(new SkeletonWarrior2(3000, 280));
 enemiesArray.push(new LVL_1_Boss());
 
@@ -203,6 +207,7 @@ const environmentObjects = [
   ...blockingObjects,
   ...coins,
   ...throwableObjects,
+  new EnvironmentObject('assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Signpost 04.png', -300, 333, 70, 70),
   new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - House.png', -150, 200, 250, 200),
   new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 80, 333, 70, 70),
   new EnvironmentObject('./assets/img/Environment/Autumn_Forest_2D_Platformer_Tileset_Environment - Fence 02.png', 140, 333, 70, 70),

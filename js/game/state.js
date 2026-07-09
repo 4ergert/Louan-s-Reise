@@ -1,5 +1,6 @@
 import { Keyboard } from '../models/keyboard.class.js';
 import { createGameBackgroundAudio } from '../audio.js';
+import { getSelectedLevelId } from './level-session.js';
 
 /**
  * @typedef {object} GameState
@@ -19,7 +20,7 @@ export const gameState = {
   world: null,
   keyboard: new Keyboard(),
   startScreen: null,
-  gameBackgroundAudio: createGameBackgroundAudio(),
+  gameBackgroundAudio: createGameBackgroundAudio(getSelectedLevelId()),
   isIntroVisible: true,
   isStartScreenVisible: true,
   isStartTransitionRunning: false,

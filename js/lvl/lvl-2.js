@@ -1,5 +1,5 @@
 import { LVL_1_Boss } from '../models/enemies/lvl-1-boss.class.js';
-import { SkeletonWarriorLVL1 } from '../models/enemies/skeleton_warrior_1.class.js';
+import { SkeletonWarrior1 } from '../models/enemies/skeleton_warrior_1.class.js';
 import { LVL } from './lvl.class.js';
 import { Coins } from '../models/objects/coin-object.class.js';
 import { BackgroundObject } from '../models/objects/background-object.class.js';
@@ -44,6 +44,11 @@ for (let index = 0; index < 70; index++) {
 }
 
 platformObjects.push(
+  new PlatformObjects('./assets/img/lvl-2/Platfromer/Crystal_Caves_Forest_2D_Platformer_Tileset_Platformer - Ground 04.png', -250, 400, 50, 50),
+  new PlatformObjects('./assets/img/lvl-2/Platfromer/Crystal_Caves_Forest_2D_Platformer_Tileset_Platformer - Ground 09.png', -250, 450, 50, 50)
+);
+
+platformObjects.push(
   new PlatformObjects('./assets/img/lvl-2/Platfromer/Crystal_Caves_Forest_2D_Platformer_Tileset_Platformer - Ground 10.png', 700, 290, 50, 50),
   new PlatformObjects('./assets/img/lvl-2/Platfromer/Crystal_Caves_Forest_2D_Platformer_Tileset_Platformer - Ground 11.png', 750, 290, 50, 50),
   new PlatformObjects('./assets/img/lvl-2/Platfromer/Crystal_Caves_Forest_2D_Platformer_Tileset_Platformer - Ground 12.png', 800, 290, 50, 50),
@@ -56,9 +61,9 @@ platformObjects.push(
 );
 
 const enemies = [
-  new SkeletonWarriorLVL1(980, 280),
-  new SkeletonWarriorLVL1(1680, 280),
-  new SkeletonWarriorLVL1(2350, 280),
+  new SkeletonWarrior1(980, 280),
+  new SkeletonWarrior1(1680, 280),
+  new SkeletonWarrior1(2350, 280),
 ];
 
 const coins = [

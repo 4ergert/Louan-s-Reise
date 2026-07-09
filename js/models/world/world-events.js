@@ -2,7 +2,7 @@ import { playRandomVariantSound, playSoundEffect, stopBackgroundAudio } from '..
 import { isSpawning } from '../character/char-movements.js';
 import { startKnockback } from '../character/char-animation-actions.js';
 import { Alia } from '../Alia/alia.class.js';
-import { SkeletonWarriorLVL1 } from '../enemies/skeleton_warrior_1.class.js';
+import { SkeletonWarrior1 } from '../enemies/skeleton_warrior_1.class.js';
 import { SkeletonWarrior2 } from '../enemies/skeleton_warrior_2.class.js';
 import { BossSwordObject } from '../objects/boss-sword-object.class.js';
 
@@ -19,7 +19,7 @@ export const worldEventMethods = {
   spawnSkeletonWarriorFromBoss() {
     if (!this.bossLVL1 || this.bossLVL1.isDying || this.bossLVL1.isDead) return;
 
-    const skeletonWarrior = new SkeletonWarriorLVL1();
+    const skeletonWarrior = new SkeletonWarrior1();
     const spawnDirection = this.character.x < this.bossLVL1.x ? -1 : 1;
     const spawnX = this.bossLVL1.x + (spawnDirection < 0 ? 70 : 100);
     const spawnY = this.bossLVL1.y + 180;
@@ -289,7 +289,7 @@ export const worldEventMethods = {
    * @returns {void}
    */
   playEnemyDefeatSound(enemy) {
-    if (!(enemy instanceof SkeletonWarriorLVL1) && !(enemy instanceof SkeletonWarrior2)) return;
+    if (!(enemy instanceof SkeletonWarrior1) && !(enemy instanceof SkeletonWarrior2)) return;
 
     this.lastBoneBreakAudioIndex = playRandomVariantSound(this.boneBreakAudios, this.lastBoneBreakAudioIndex);
   },

@@ -95,8 +95,8 @@ export function drawVictoryOverlay(ctx, canvas, showNextLevelPrompt = false) {
   ctx.fillStyle = '#d9a441';
   ctx.strokeText('Herzlichen Glückwunsch,', canvas.width / 2, canvas.height / 2 - 24);
   ctx.fillText('Herzlichen Glückwunsch,', canvas.width / 2, canvas.height / 2 - 24);
-  ctx.strokeText('du hast Alia wieder gefunden!', canvas.width / 2, canvas.height / 2 + 28);
-  ctx.fillText('du hast Alia wieder gefunden!', canvas.width / 2, canvas.height / 2 + 28);
+  ctx.strokeText('du hast Alia gerettet!', canvas.width / 2, canvas.height / 2 + 28);
+  ctx.fillText('du hast Alia gerettet!', canvas.width / 2, canvas.height / 2 + 28);
 
   if (showNextLevelPrompt) {
     ctx.font = '24px Georgia';

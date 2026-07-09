@@ -9,7 +9,8 @@ export function gameMenuDialogTemplate() {
 					</form>
 				</div>
 				<div class="metaDialogBody gameMenuActions">
-					<button type="button" class="dialogActionButton" data-music-toggle data-music-toggle-label="Sound" aria-pressed="false" aria-label="Musik stummschalten">Sound</button>
+        <button type="button" class="dialogActionButton" data-menu-action="restart-game">Neustart</button>
+        <button type="button" class="dialogActionButton" data-music-toggle data-music-toggle-label="Sound" aria-pressed="false" aria-label="Musik stummschalten">Sound</button>
 					<button type="button" class="dialogActionButton" data-dialog-target="instructionsDialog">Bedienungsanleitung</button>
 					<button type="button" class="dialogActionButton" data-dialog-target="impressumDialog">Impressum</button>
 					<button type="button" class="dialogActionButton" data-dialog-target="datenschutzDialog">Datenschutz</button>
@@ -127,8 +128,10 @@ export function impressumDialogTemplate() {
 					</form>
 				</div>
 				<div class="metaDialogBody">
-					<p>Verantwortliche Angaben bitte vor der Veroeffentlichung vervollstaendigen.</p>
-					<p>Empfohlen: Name, Anschrift und Kontaktmoeglichkeit.</p>
+					<p><strong>Angaben gemaess Paragraf 5 TMG</strong></p>
+					<p>Julian Hergert<br>Sandhoevelstrasse 32<br>48429 Rheine</p>
+					<p><strong>Kontakt</strong><br>E-Mail: julian.konken@gmx.net</p>
+					<p><strong>Verantwortlich fuer den Inhalt nach Paragraf 18 Abs. 2 MStV</strong><br>Julian Hergert<br>Sandhoevelstrasse 32<br>48429 Rheine</p>
 				</div>
 				<div class="metaDialogFooter">
 					<button type="button" class="dialogSecondaryButton backToMenuButton" data-return-dialog-target="gameMenuDialog" hidden>Zurueck zum Menue</button>

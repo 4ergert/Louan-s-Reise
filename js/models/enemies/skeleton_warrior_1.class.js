@@ -5,7 +5,7 @@ import { SkeletonEnemyBase } from './skeleton-enemy-base.class.js';
  * Ground enemy for level 1 that patrols platforms, can be thrown by the boss,
  * and transitions through a timed death animation.
  */
-export class SkeletonWarriorLVL1 extends SkeletonEnemyBase {
+export class SkeletonWarrior1 extends SkeletonEnemyBase {
   speed = 0.4;
   defaultSpeed = 0.4;
   IDLE = SKELETON_WARRIOR_1_SPRITES.IDLE_ANIMATION;

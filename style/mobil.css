@@ -154,7 +154,7 @@ only screen and (max-height: 480px) {
     height: 48px;
     border: 1px solid rgba(255, 202, 103, 0.58);
     border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(110, 73, 19, 0.9), rgba(38, 28, 5, 0.88));
+    background: radial-gradient(circle at 30% 30%, rgba(110, 73, 19, 0.4), rgba(38, 28, 5, 0.88));
     color: rgb(255, 202, 103);
     font-family: inherit;
     font-size: 24px;
@@ -172,10 +172,32 @@ only screen and (max-height: 480px) {
     outline: none;
   }
 
+  .mobileControlButton:active,
+  .mobileControlButton[data-active="true"] {
+    border-color: rgba(255, 234, 184, 0.96);
+    background: radial-gradient(circle at 30% 30%, rgba(184, 126, 34, 0.55), rgba(88, 60, 11, 0.96));
+    color: rgba(255, 248, 228, 1);
+    box-shadow: 0 0 18px rgba(255, 202, 103, 0.78), 0 10px 22px rgba(0, 0, 0, 0.34), inset 0 1px 6px rgba(255, 241, 205, 0.34);
+  }
+
   .mobileControlButton[data-muted="true"] {
     border-color: rgba(255, 176, 140, 0.52);
     color: rgba(255, 228, 228, 0.84);
     background: radial-gradient(circle at 30% 30%, rgba(117, 52, 34, 0.88), rgba(52, 20, 16, 0.88));
+  }
+
+  #mobileThrowButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #mobileThrowButton img {
+    width: 37px;
+    height: 37px;
+    object-fit: contain;
+    pointer-events: none;
+    margin-bottom: 6px;
   }
 
   #mobileMusicToggleButton {
@@ -199,18 +221,20 @@ only screen and (max-height: 480px) {
   }
 
   #mobileJumpButton {
-    right: 16px;
-    bottom: 74px;
+    right: 60px;
+    bottom: 60px;
+    font-size: 14px;
   }
 
   #mobileRunningButton {
-    right: 74px;
-    bottom: 16px;
+    right: 90px;
+    bottom: 12px;
+    font-size: 14px;
   }
 
   #mobileThrowButton {
-    right: 16px;
-    bottom: 16px;
+    right: 12px;
+    bottom: 90px;
   }
 
   #startScreen p {
