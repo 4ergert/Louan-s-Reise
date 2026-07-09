@@ -1,5 +1,5 @@
 export function gameMenuDialogTemplate() {
-	return `
+  return `
 		<dialog id="gameMenuDialog" class="metaDialog gameMenuDialog" aria-labelledby="gameMenuTitle">
 			<div class="metaDialogContent">
 				<div class="metaDialogHeader">
@@ -21,7 +21,7 @@ export function gameMenuDialogTemplate() {
 }
 
 export function instructionsDialogTemplate() {
-	return `
+  return `
 		<dialog id="instructionsDialog" class="metaDialog" aria-labelledby="instructionsTitle">
 			<div class="metaDialogContent">
 				<div class="metaDialogHeader">
@@ -47,7 +47,7 @@ export function instructionsDialogTemplate() {
 }
 
 export function settingsDialogTemplate() {
-	return `
+  return `
 		<dialog id="settingsDialog" class="metaDialog" aria-labelledby="settingsTitle">
 			<div class="metaDialogContent">
 				<div class="metaDialogHeader">
@@ -69,7 +69,7 @@ export function settingsDialogTemplate() {
 }
 
 export function creditsDialogTemplate() {
-	return `
+  return `
 		<dialog id="creditsDialog" class="metaDialog" aria-labelledby="creditsTitle">
 			<div class="metaDialogContent">
 				<div class="metaDialogHeader">
@@ -80,7 +80,9 @@ export function creditsDialogTemplate() {
 				</div>
 				<div class="metaDialogBody">
 					<p>Spielkonzept und Umsetzung: Julian</p>
-					<p>Asset-, Audio- und Font-Lizenzen hier gesammelt auffuehren.</p>
+					<p>Bild-Assets: Craftpix</p>
+					<p>Soundeffekte und Musik: Pixabay</p>
+					<p>Schriften: Google Fonts</p>
 				</div>
 				<div class="metaDialogFooter">
 					<button type="button" class="dialogSecondaryButton backToMenuButton" data-return-dialog-target="gameMenuDialog" hidden>Zurueck zum Menue</button>
@@ -91,7 +93,7 @@ export function creditsDialogTemplate() {
 }
 
 export function datenschutzDialogTemplate() {
-	return `
+  return `
 		<dialog id="datenschutzDialog" class="metaDialog" aria-labelledby="datenschutzTitle">
 			<div class="metaDialogContent">
 				<div class="metaDialogHeader">
@@ -101,8 +103,10 @@ export function datenschutzDialogTemplate() {
 					</form>
 				</div>
 				<div class="metaDialogBody">
-					<p>Datenschutzhinweise bitte vor der Veroeffentlichung ergaenzen.</p>
-					<p>Relevant bei externen Diensten, Fonts, Analytics oder Formularen.</p>
+					<p>Dieses Spiel verarbeitet innerhalb der Anwendung keine personenbezogenen Daten wie Namen, E-Mail-Adressen oder Formulareingaben.</p>
+					<p>Es werden keine Tracking-, Analyse- oder Werbedienste eingebunden.</p>
+					<p>Bilder, Sounds und Schriften werden lokal aus dem Projekt geladen. Es werden dafuer keine externen Server von Craftpix, Pixabay oder Google Fonts direkt aus der Anwendung heraus kontaktiert.</p>
+					<p>Je nach Hosting koennen durch den Webserver technisch notwendige Verbindungsdaten wie IP-Adresse, Datum, Uhrzeit und aufgerufene Datei in Server-Logs verarbeitet werden. Darauf hat die Anwendung selbst keinen direkten Einfluss.</p>
 				</div>
 				<div class="metaDialogFooter">
 					<button type="button" class="dialogSecondaryButton backToMenuButton" data-return-dialog-target="gameMenuDialog" hidden>Zurueck zum Menue</button>
@@ -113,7 +117,7 @@ export function datenschutzDialogTemplate() {
 }
 
 export function impressumDialogTemplate() {
-	return `
+  return `
 		<dialog id="impressumDialog" class="metaDialog" aria-labelledby="impressumTitle">
 			<div class="metaDialogContent">
 				<div class="metaDialogHeader">
@@ -135,21 +139,20 @@ export function impressumDialogTemplate() {
 }
 
 export function startScreenMetaTemplate() {
-	return `
+  return `
 		<section id="startScreenMeta" aria-label="Rechtliche Hinweise und Credits">
 			<div id="startScreenActions">
 				<button type="button" class="startScreenActionButton" data-dialog-target="impressumDialog">Impressum</button>
 				<button type="button" class="startScreenActionButton" data-dialog-target="datenschutzDialog">Datenschutz</button>
 				<button type="button" class="startScreenActionButton" data-dialog-target="creditsDialog">Credits</button>
 			</div>
-
 			<p id="startScreenCopyright">&copy; 2026 Julian Aergert</p>
-		</section>
+      </section>
 	`;
 }
 
 export function startScreenControlsTemplate() {
-	return `
+  return `
 		<section id="startScreenControls" aria-label="Steuerung">
 			<button type="button" id="startScreenMenuButton" class="startScreenActionButton" aria-label="Menue">MENU</button>
 			<button type="button" id="musicToggleButton" aria-pressed="false" aria-label="Musik stummschalten">♪</button>
@@ -159,7 +162,7 @@ export function startScreenControlsTemplate() {
 }
 
 export function startScreenTemplate() {
-	return `
+  return `
 		<section id="startScreen">
 			<p>
 				Louan, der Krieger, ist ein mutiger und entschlossener Held. <br>

@@ -251,3 +251,39 @@ only screen and (max-height: 480px) {
     top: calc(50% + 140px);
   }
 }
+
+@media only screen and (max-height: 450px) {
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenControls {
+    left: 32px;
+    width: 124px;
+    bottom: 18px;
+  }
+
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenMenuButton {
+    width: 124px;
+    justify-content: center;
+  }
+
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenMeta {
+    left: auto;
+    right: 32px;
+    width: auto;
+    transform: none;
+    align-items: end;
+  }
+
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenActions {
+    flex-direction: column;
+  }
+
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenActions button {
+    width: 124px;
+    font-size: 12px;
+    font-weight: normal;
+  }
+
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenCanvas {
+  margin: -15px 0 0 -80px;
+  }
+
+}
