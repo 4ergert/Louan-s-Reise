@@ -27,6 +27,19 @@ export function gameMenuDialogTemplate() {
 }
 
 /**
+ * Shared story text shown on the start screen and in the about dialog.
+ *
+ * @returns {string}
+ */
+function startScreenStoryTemplate() {
+  return `
+				Louan, der Krieger, ist ein mutiger und entschlossener Held. <br>
+				Aus einem schrecklichen Alptraum ist er erwacht, in dem seine Geschwister verschwunden sind. <br>
+				Er beschließt sich auf die Suche nach ihnen zu machen. <br>
+	`;
+}
+
+/**
  * Returns the HTML template for the instructions dialog.
  *
  * @returns {string}
@@ -51,6 +64,31 @@ export function instructionsDialogTemplate() {
 				</div>
 				<div class="metaDialogFooter">
 					<button type="button" class="dialogSecondaryButton backToMenuButton" data-return-dialog-target="gameMenuDialog" hidden>Zurueck zum Menue</button>
+				</div>
+			</div>
+		</dialog>
+	`;
+}
+
+/**
+ * Returns the about dialog used on compact start screens.
+ *
+ * @returns {string}
+ */
+export function aboutDialogTemplate() {
+  return `
+		<dialog id="aboutDialog" class="metaDialog" aria-labelledby="aboutTitle">
+			<div class="metaDialogContent">
+				<div class="metaDialogHeader">
+					<h2 id="aboutTitle">Ueber</h2>
+					<form method="dialog">
+						<button type="submit" class="metaDialogClose" aria-label="Dialog schliessen">X</button>
+					</form>
+				</div>
+				<div class="metaDialogBody">
+					<p>
+						${startScreenStoryTemplate()}
+					</p>
 				</div>
 			</div>
 		</dialog>
@@ -197,6 +235,7 @@ export function startScreenMetaTemplate() {
 export function startScreenControlsTemplate() {
   return `
 		<section id="startScreenControls" aria-label="Steuerung">
+			<button type="button" id="startScreenAboutButton" class="startScreenActionButton" data-dialog-target="aboutDialog">Ueber</button>
 			<button type="button" id="startScreenMenuButton" class="startScreenActionButton" aria-label="Menue">MENU</button>
 			<button type="button" id="musicToggleButton" aria-pressed="false" aria-label="Musik stummschalten">♪</button>
 			<button type="button" id="startScreenInstructionsButton" data-dialog-target="instructionsDialog">Steuerung</button>
@@ -213,9 +252,7 @@ export function startScreenTemplate() {
   return `
 		<section id="startScreen">
 			<p>
-				Louan, der Krieger, ist ein mutiger und entschlossener Held. <br>
-				Aus einem schrecklichen Alptraum ist er erwacht, in dem seine Geschwister verschwunden sind. <br>
-				Er beschließt sich auf die Suche nach ihnen zu machen. <br>
+				${startScreenStoryTemplate()}
 			</p>
 		</section>
 	`;

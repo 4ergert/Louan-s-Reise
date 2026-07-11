@@ -53,13 +53,18 @@ only screen and (max-height: 480px) {
     right: 32px;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
     justify-content: flex-end;
     z-index: 20;
   }
 
   body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenMenuButton {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenAboutButton {
+    display: none;
     align-items: center;
     justify-content: center;
   }
@@ -161,6 +166,9 @@ only screen and (max-height: 480px) {
 
   .mobileControlButton {
     position: absolute;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 48px;
     height: 48px;
     border: 1px solid rgba(255, 202, 103, 0.58);
@@ -195,6 +203,16 @@ only screen and (max-height: 480px) {
     border-color: rgba(255, 176, 140, 0.52);
     color: rgba(255, 228, 228, 0.84);
     background: radial-gradient(circle at 30% 30%, rgba(117, 52, 34, 0.88), rgba(52, 20, 16, 0.88));
+  }
+
+  #mobileMusicToggleButton[data-muted="true"]::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 999px;
+    transform: rotate(35deg);
   }
 
   #mobileThrowButton {
@@ -276,22 +294,36 @@ only screen and (max-height: 480px) {
 
 @media only screen and (max-height: 450px) {
   body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenControls {
-    left: 32px;
-    width: 124px;
-    bottom: 18px;
+    right: 50%;
+    transform: translateX(50%);
+    flex-direction: row;
   }
 
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreen {
+    display: none;
+  }
+
+
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenAboutButton,
   body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenMenuButton {
     width: 124px;
     justify-content: center;
   }
 
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenAboutButton {
+    display: inline-flex;
+  }
+
   body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenMeta {
-    left: auto;
-    right: 32px;
-    width: auto;
-    transform: none;
-    align-items: end;
+    left: 50%;
+    right: auto;
+    width: min(90vw, 720px);
+    transform: translateX(-50%);
+    align-items: center;
+  }
+
+  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenActions {
+    display: none;
   }
 
   body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenActions {
@@ -304,8 +336,10 @@ only screen and (max-height: 480px) {
     font-weight: normal;
   }
 
-  body:not(.intro-mode):not(.game-active):not(.skip-start-screen) #startScreenCanvas {
-  margin: -15px 0 0 -80px;
-  }
+}
 
+@media only screen and (max-width: 650px) {
+  #introHero h1 {
+    font-size: 42px;
+  }
 }

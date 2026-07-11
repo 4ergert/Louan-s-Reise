@@ -1,4 +1,4 @@
-import { creditsDialogTemplate, datenschutzDialogTemplate, gameMenuDialogTemplate, impressumDialogTemplate, instructionsDialogTemplate, settingsDialogTemplate, startScreenControlsTemplate, startScreenMetaTemplate, startScreenTemplate } from './templates.js';
+import { aboutDialogTemplate, creditsDialogTemplate, datenschutzDialogTemplate, gameMenuDialogTemplate, impressumDialogTemplate, instructionsDialogTemplate, settingsDialogTemplate, startScreenControlsTemplate, startScreenMetaTemplate, startScreenTemplate } from './templates.js';
 
 /**
  * Inserts the game menu dialog into the DOM when it is not present yet.
@@ -28,6 +28,21 @@ export function renderInstructionsDialog() {
 	if (!(gameCanvasShell instanceof HTMLElement)) return;
 
 	gameCanvasShell.insertAdjacentHTML('beforebegin', instructionsDialogTemplate());
+}
+
+/**
+ * Inserts the about dialog into the DOM when it is not present yet.
+ *
+ * @returns {void}
+ */
+export function renderAboutDialog() {
+	if (document.getElementById('aboutDialog')) return;
+
+	const gameCanvasShell = document.getElementById('gameCanvasShell');
+
+	if (!(gameCanvasShell instanceof HTMLElement)) return;
+
+	gameCanvasShell.insertAdjacentHTML('beforebegin', aboutDialogTemplate());
 }
 
 /**

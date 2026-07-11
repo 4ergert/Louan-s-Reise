@@ -6,7 +6,7 @@ import { initMusicToggle } from './game/music-toggle.js';
 import { gameState } from './game/state.js';
 import { initMobileOrientationPause } from './mobile.js';
 import { applyInitialBodyState, finalizeInitialLoadingState, resetToStartScreen, restartGame, showStartScreen, startGameTransition, startLevel, startSavedLevelIfNeeded } from './game/start-flow.js';
-import { renderCreditsDialog, renderDatenschutzDialog, renderGameMenuDialog, renderImpressumDialog, renderInstructionsDialog, renderSettingsDialog, renderStartScreen, renderStartScreenControls, renderStartScreenMeta } from './templates/dom-renderer.js';
+import { renderAboutDialog, renderCreditsDialog, renderDatenschutzDialog, renderGameMenuDialog, renderImpressumDialog, renderInstructionsDialog, renderSettingsDialog, renderStartScreen, renderStartScreenControls, renderStartScreenMeta } from './templates/dom-renderer.js';
 
 /**
  * Shared dialog controller for the start screen and in-game menu flow.
@@ -37,6 +37,7 @@ function init() {
   renderStartScreenControls();
   renderStartScreenMeta();
   renderGameMenuDialog();
+	renderAboutDialog();
 	renderInstructionsDialog();
   renderSettingsDialog();
   renderCreditsDialog();

@@ -39,7 +39,7 @@ function renderMusicToggleButton(button, isMuted) {
     return;
   }
 
-  button.textContent = isMuted ? '✕' : '♪';
+  button.textContent = '♪';
   button.setAttribute('aria-pressed', `${isMuted}`);
   button.setAttribute('aria-label', isMuted ? 'Musik einschalten' : 'Musik stummschalten');
   button.dataset.muted = `${isMuted}`;

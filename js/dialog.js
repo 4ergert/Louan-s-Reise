@@ -327,9 +327,12 @@ export function createDialogController({ gameMenuDialogIds, getWorld, isGameCanv
    */
   function handleDialogTargetButtonClick(button) {
     const dialogId = button.getAttribute("data-dialog-target");
-    const cameFromGameMenu = Boolean(button.closest("#gameMenuDialog"));
+    const currentDialog = button.closest("dialog");
+    const cameFromGameMenu = currentDialog?.id === "gameMenuDialog";
 
-    if (cameFromGameMenu) closeDialogById("gameMenuDialog", { skipPauseSync: true });
+    if (currentDialog instanceof HTMLDialogElement && currentDialog.id) {
+      closeDialogById(currentDialog.id, { skipPauseSync: true });
+    }
 
     openDialogByIdWithOptions(dialogId, { fromGameMenu: cameFromGameMenu });
   }

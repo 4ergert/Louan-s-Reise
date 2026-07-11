@@ -15,7 +15,7 @@ export class Character extends MovableObject {
   world;
   speed = 1;
   currentAnimation = null;
-  energy = 10;
+  energy = 100;
   opacity = 0;
   spawnDuration = 1200;
   spawnStartedAt = Date.now();
