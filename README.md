@@ -138,4 +138,6 @@ Wenn du das Projekt auf GitHub praesentierst, kannst du zusaetzlich noch ergaenz
 
 ## Lizenz
 
-Aktuell ist keine eigene Lizenzdatei hinterlegt. Wenn das Projekt oeffentlich auf GitHub veroeffentlicht wird, sollte eine passende Lizenzdatei ergaenzt werden.
+Dieses Projekt enthaelt jetzt eine [LICENSE](LICENSE) unter der MIT-Lizenz fuer den Quellcode.
+
+Drittanbieter-Assets wie Bilder, Audio-Dateien und Schriften koennen weiterhin eigenen Lizenzbedingungen unterliegen und sind nicht automatisch durch die MIT-Lizenz dieser Datei abgedeckt.
