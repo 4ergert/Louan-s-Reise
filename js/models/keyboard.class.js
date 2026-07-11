@@ -10,6 +10,5 @@ export class Keyboard {
   SPACE = false;
   CTRL = false;
   A = false;
-  D = false;
   F = false;
 }

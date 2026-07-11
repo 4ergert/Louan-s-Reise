@@ -43,7 +43,6 @@ export function die(character) {
   character.isDying = true;
   character.isHurtState = false;
   character.throwingAnimationActive = false;
-  character.slashAnimationActive = false;
   character.knockbackUntil = 0;
   character.currentAnimation = null;
   character.currentImage = 0;
@@ -65,20 +64,6 @@ export function playThrowingAnimation(character) {
 
 /**
  * Plays the one-shot slash animation and clears the active state at the last frame.
- *
- * @param {import('./character.class.js').Character} character - The active character instance.
- * @returns {void}
- */
-export function playSlashAnimation(character) {
-  character.spriteAnimation(character.SLASHING, false);
-
-  if (character.currentAnimation === character.SLASHING && character.currentImage >= character.SLASHING.length - 1) {
-    character.slashAnimationActive = false;
-  }
-}
-
-/**
- * Plays the one-shot dying animation and marks the character as dead at the last frame.
  *
  * @param {import('./character.class.js').Character} character - The active character instance.
  * @returns {void}

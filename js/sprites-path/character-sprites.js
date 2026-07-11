@@ -7,7 +7,6 @@
  * @property {string[]} JUMPING_ANIMATION - Sprite frames for the jump start animation.
  * @property {string[]} JUMPING_LOOP_ANIMATION - Sprite frames for the jump loop animation.
  * @property {string[]} FALLING_ANIMATION - Sprite frames for the falling animation.
- * @property {string[]} SLASHING_ANIMATION - Sprite frames for the slashing animation.
  * @property {string[]} HURT_ANIMATION - Sprite frames for the hurt animation.
  * @property {string[]} THROWING_ANIMATION - Sprite frames for the throwing animation.
  * @property {string[]} DYING_ANIMATION - Sprite frames for the dying animation.
@@ -118,20 +117,6 @@ export const CHARACTER_SPRITES = {
     './assets/img/Character/Louan/Falling Down/0_Dark_Oracle_Falling Down_003.png',
     './assets/img/Character/Louan/Falling Down/0_Dark_Oracle_Falling Down_004.png',
     './assets/img/Character/Louan/Falling Down/0_Dark_Oracle_Falling Down_005.png'
-  ],
-  SLASHING_ANIMATION: [
-    './assets/img/Character/Louan/Run Slashing/0_Dark_Oracle_Run Slashing_000.png',
-    './assets/img/Character/Louan/Run Slashing/0_Dark_Oracle_Run Slashing_001.png',
-    './assets/img/Character/Louan/Run Slashing/0_Dark_Oracle_Run Slashing_002.png',
-    './assets/img/Character/Louan/Run Slashing/0_Dark_Oracle_Run Slashing_003.png',
-    './assets/img/Character/Louan/Run Slashing/0_Dark_Oracle_Run Slashing_004.png',
-    './assets/img/Character/Louan/Run Slashing/0_Dark_Oracle_Run Slashing_005.png',
-    './assets/img/Character/Louan/Run Slashing/0_Dark_Oracle_Run Slashing_006.png',
-    './assets/img/Character/Louan/Run Slashing/0_Dark_Oracle_Run Slashing_007.png',
-    './assets/img/Character/Louan/Run Slashing/0_Dark_Oracle_Run Slashing_008.png',
-    './assets/img/Character/Louan/Run Slashing/0_Dark_Oracle_Run Slashing_009.png',
-    './assets/img/Character/Louan/Run Slashing/0_Dark_Oracle_Run Slashing_010.png',
-    './assets/img/Character/Louan/Run Slashing/0_Dark_Oracle_Run Slashing_011.png'
   ],
   HURT_ANIMATION: [
     './assets/img/Character/Louan/Hurt/0_Dark_Oracle_Hurt_000.png',

@@ -1,5 +1,5 @@
-import { isMoving, isRunning, isSpawning, updateSlashState } from './char-movements.js';
-import { playDyingAnimation, playSlashAnimation, playThrowingAnimation } from './char-animation-actions.js';
+import { isMoving, isRunning, isSpawning } from './char-movements.js';
+import { playDyingAnimation, playThrowingAnimation } from './char-animation-actions.js';
 
 /**
  * Selects and plays the appropriate character animation for the current state.
@@ -10,8 +10,6 @@ import { playDyingAnimation, playSlashAnimation, playThrowingAnimation } from '.
  */
 export function switchCharAnimation(character) {
   if (character.world?.isPaused) return;
-
-  updateSlashState(character);
 
   switch (true) {
     case isSpawning(character):
@@ -25,9 +23,6 @@ export function switchCharAnimation(character) {
       break;
     case character.throwingAnimationActive:
       playThrowingAnimation(character);
-      break;
-    case character.slashAnimationActive:
-      playSlashAnimation(character);
       break;
     case character.isAboveGround() && character.vcY > 3:
       character.spriteAnimation(character.JUMPING, false); // Play the jumping animation once

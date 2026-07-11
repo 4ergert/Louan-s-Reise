@@ -16,8 +16,6 @@ const keyboardStateByKey = {
   ArrowUp: 'UP',
   ArrowRight: 'RIGHT',
   ArrowDown: 'DOWN',
-  d: 'D',
-  D: 'D',
   ' ': 'SPACE',
   Control: 'CTRL',
   a: 'A',
@@ -106,7 +104,7 @@ function initMobileTouchControls() {
  * Wires one mobile control button to a keyboard state property via touch events.
  *
  * @param {string} buttonId - DOM id of the mobile control button.
- * @param {'LEFT' | 'RIGHT' | 'UP' | 'DOWN' | 'SPACE' | 'CTRL' | 'A' | 'D' | 'F'} keyboardProperty - Keyboard flag to toggle.
+ * @param {'LEFT' | 'RIGHT' | 'UP' | 'DOWN' | 'SPACE' | 'CTRL' | 'A' | 'F'} keyboardProperty - Keyboard flag to toggle.
  * @returns {void}
  */
 function registerMobileTouchButton(buttonId, keyboardProperty) {
@@ -135,7 +133,7 @@ function registerMobileTouchButton(buttonId, keyboardProperty) {
  * Wires one mobile control button to toggle a keyboard state property on each touch.
  *
  * @param {string} buttonId - DOM id of the mobile control button.
- * @param {'LEFT' | 'RIGHT' | 'UP' | 'DOWN' | 'SPACE' | 'CTRL' | 'A' | 'D' | 'F'} keyboardProperty - Keyboard flag to toggle.
+ * @param {'LEFT' | 'RIGHT' | 'UP' | 'DOWN' | 'SPACE' | 'CTRL' | 'A' | 'F'} keyboardProperty - Keyboard flag to toggle.
  * @returns {void}
  */
 function registerMobileToggleButton(buttonId, keyboardProperty) {

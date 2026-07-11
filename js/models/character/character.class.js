@@ -20,8 +20,6 @@ export class Character extends MovableObject {
   spawnDuration = 1200;
   spawnStartedAt = Date.now();
   throwingAnimationActive = false;
-  slashAnimationActive = false;
-  slashInputLocked = false;
   isHurtState = false;
   isDying = false;
   isDead = false;
@@ -46,7 +44,6 @@ export class Character extends MovableObject {
   FLYING = CHARACTER_SPRITES.JUMPING_LOOP_ANIMATION;
   FALLING = CHARACTER_SPRITES.FALLING_ANIMATION;
   THROWING = CHARACTER_SPRITES.THROWING_ANIMATION;
-  SLASHING = CHARACTER_SPRITES.SLASHING_ANIMATION;
   HURT = CHARACTER_SPRITES.HURT_ANIMATION;
   DYING = CHARACTER_SPRITES.DYING_ANIMATION;
 
@@ -64,7 +61,6 @@ export class Character extends MovableObject {
     this.loadImages(this.FLYING);
     this.loadImages(this.FALLING);
     this.loadImages(this.THROWING);
-    this.loadImages(this.SLASHING);
     this.loadImages(this.HURT);
     this.loadImages(this.DYING);
 

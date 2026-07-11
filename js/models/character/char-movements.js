@@ -166,22 +166,6 @@ export function isRunning(character) {
 }
 
 /**
- * Starts or unlocks the slash animation based on current input.
- * @param {Character} character - The active character instance.
- * @returns {void}
- */
-export function updateSlashState(character) {
-  if (isSpawning(character)) return;
-
-  if (character.world.keyboard.D && !character.slashInputLocked) {
-    character.slashAnimationActive = true;
-    character.slashInputLocked = true;
-  }
-
-  if (!character.world.keyboard.D) character.slashInputLocked = false;
-}
-
-/**
  * Checks whether the spawn fade-in is still active.
  * @param {Character} character - The active character instance.
  * @returns {boolean} True while the character is still spawning.
