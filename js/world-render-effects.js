@@ -83,6 +83,27 @@ export function syncGameOverActions(isVisible) {
 }
 
 /**
+ * Shows or hides the level-advance button above the game canvas.
+ *
+ * @param {boolean} isVisible - Whether the button should be visible.
+ * @returns {void}
+ */
+export function syncVictoryActions(isVisible) {
+  const victoryActions = document.getElementById('victoryActions');
+  const victoryButton = document.getElementById('victoryFindLiamButton');
+  const isLevel2 = getSelectedLevelId() === 'lvl_2';
+
+  if (!(victoryActions instanceof HTMLDivElement)) return;
+
+  if (victoryButton instanceof HTMLButtonElement) {
+    victoryButton.textContent = isLevel2 ? 'Back to startscreen' : 'Find Liam';
+    victoryButton.setAttribute('aria-label', isLevel2 ? 'Zurueck zum Startscreen' : 'Liam finden');
+  }
+
+  victoryActions.hidden = !isVisible;
+}
+
+/**
  * Draws the full-screen victory overlay text and background.
  * @param {CanvasRenderingContext2D} ctx - The drawing context.
  * @param {HTMLCanvasElement} canvas - The canvas used for layout.
@@ -109,11 +130,7 @@ export function drawVictoryOverlay(ctx, canvas, showNextLevelPrompt = false) {
   ctx.strokeText(victoryText, canvas.width / 2, canvas.height / 2 + 28);
   ctx.fillText(victoryText, canvas.width / 2, canvas.height / 2 + 28);
 
-  if (showNextLevelPrompt && !isLevel2) {
-    ctx.font = '24px Georgia';
-    ctx.strokeText('press any key to find Liam', canvas.width / 2, canvas.height / 2 + 112);
-    ctx.fillText('press any key to find Liam', canvas.width / 2, canvas.height / 2 + 112);
-  }
+  syncVictoryActions(showNextLevelPrompt);
 
   ctx.restore();
 }

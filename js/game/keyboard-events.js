@@ -1,4 +1,5 @@
 import { gameState } from './state.js';
+import { getSelectedLevelId } from './level-session.js';
 
 /**
  * @typedef {object} KeyboardEventActions
@@ -6,6 +7,7 @@ import { gameState } from './state.js';
  * @property {() => void | Promise<void>} toggleGameCanvasFullscreen - Toggles fullscreen mode for the game canvas.
  * @property {() => void} restartGame - Restarts the current game session.
  * @property {(levelId: string) => void} startLevel - Starts the requested level.
+ * @property {() => void} resetToStartScreen - Returns from gameplay to the start screen.
  * @property {() => void} showStartScreen - Transitions from the intro prompt to the start screen.
  * @property {() => void} startGameTransition - Starts the transition from the start screen into gameplay.
  */
@@ -35,6 +37,7 @@ export function initKeyboardEvents({
   toggleGameCanvasFullscreen,
   restartGame,
   startLevel,
+  resetToStartScreen,
   showStartScreen,
   startGameTransition,
 }) {
@@ -44,6 +47,7 @@ export function initKeyboardEvents({
       toggleGameCanvasFullscreen,
       restartGame,
       startLevel,
+      resetToStartScreen,
       showStartScreen,
       startGameTransition,
     });
@@ -220,10 +224,10 @@ function handleGlobalShortcuts(event, { toggleGameCanvasFullscreen, dialogContro
  * @param {KeyboardEventActions} actions - External actions invoked by keyboard shortcuts.
  * @returns {boolean} True when the event was fully handled.
  */
-function handleGameFlowShortcuts(event, { restartGame, startLevel, showStartScreen, startGameTransition }) {
+function handleGameFlowShortcuts(event, { restartGame, startLevel, resetToStartScreen, showStartScreen, startGameTransition }) {
   if (handleGameOverShortcut(restartGame)) return true;
 
-  if (handleVictoryShortcut(startLevel)) return true;
+  if (handleVictoryShortcut(startLevel, resetToStartScreen)) return true;
 
   if (handleIntroShortcut(showStartScreen)) return true;
 
@@ -249,10 +253,16 @@ function handleGameOverShortcut(restartGame) {
  * Handles the shortcut that advances to the next level after the victory prompt appears.
  *
  * @param {(levelId: string) => void} startLevel - Starts the requested level.
+ * @param {() => void} resetToStartScreen - Returns to the start screen.
  * @returns {boolean} True when the shortcut was handled.
  */
-function handleVictoryShortcut(startLevel) {
+function handleVictoryShortcut(startLevel, resetToStartScreen) {
   if (!(gameState.world?.victoryOverlayVisible && gameState.world.isVictoryPromptReady?.())) return false;
+
+  if (getSelectedLevelId() === 'lvl_2') {
+    resetToStartScreen();
+    return true;
+  }
 
   startLevel('lvl_2');
   return true;

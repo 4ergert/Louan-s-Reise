@@ -1,4 +1,5 @@
 import { createDialogController } from './dialog.js';
+import { getSelectedLevelId } from './game/level-session.js';
 import { gameMenuDialogIds } from './game/config.js';
 import { initGameCanvasResizeHandling, isGameCanvasVisible, syncGameCanvasSize, toggleGameCanvasFullscreen } from './game/canvas.js';
 import { initKeyboardEvents } from './game/keyboard-events.js';
@@ -45,6 +46,7 @@ function init() {
   renderImpressumDialog();
   gameState.canvas = document.getElementById('gameCanvas');
   initGameOverRetryButton();
+  initVictoryActionButton();
   syncGameCanvasSize();
   dialogController.initDialogBackdropClose();
   dialogController.initGameMenu();
@@ -75,11 +77,35 @@ function initGameOverRetryButton() {
   startScreenButton.addEventListener('click', () => resetToStartScreen());
 }
 
+/**
+ * Wires the victory button to the correct post-win flow for the active level.
+ *
+ * @returns {void}
+ */
+function initVictoryActionButton() {
+  const victoryActions = document.getElementById('victoryActions');
+  const victoryButton = document.getElementById('victoryFindLiamButton');
+
+  if (!(victoryActions instanceof HTMLDivElement)) return;
+  if (!(victoryButton instanceof HTMLButtonElement)) return;
+
+  victoryActions.hidden = true;
+  victoryButton.addEventListener('click', () => {
+    if (getSelectedLevelId() === 'lvl_2') {
+      resetToStartScreen();
+      return;
+    }
+
+    startLevel('lvl_2');
+  });
+}
+
 initKeyboardEvents({
   dialogController,
   toggleGameCanvasFullscreen,
   restartGame,
   startLevel,
+  resetToStartScreen,
   showStartScreen,
   startGameTransition,
 });
