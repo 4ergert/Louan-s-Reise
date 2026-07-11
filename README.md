@@ -1,20 +1,22 @@
-# Louan der Krieger
+# Louan
 
 Ein browserbasiertes 2D-Canvas-Spiel mit Story-Intro, Startbildschirm, Levelwechsel, Gegnern, Bosskaempfen, Audio-Steuerung und mobilen Touch-Controls.
 
 ## Ueber das Projekt
 
-In **Louan der Krieger** begibst du dich mit Louan auf die Suche nach seinen verschwundenen Geschwistern. Das Spiel startet mit einem Intro, fuehrt in einen animierten Startscreen und wechselt danach in das eigentliche Gameplay auf einem HTML-Canvas.
+In **Louan** begibst du dich mit Louan auf die Suche nach seinen verschwundenen Geschwistern. Das Spiel startet mit einem Intro, fuehrt in einen animierten Startscreen und wechselt danach in das eigentliche Gameplay auf einem HTML-Canvas.
 
 Das Projekt ist in **vanilla JavaScript**, **HTML** und **CSS** umgesetzt und benoetigt kein Build-Tool. Alle Assets wie Bilder, Audio und Fonts werden lokal aus dem Projekt geladen.
 
 ## Features
 
-- Story-Intro mit Startscreen und Uebergangsanimationen
+- Story-Intro mit Start-Button, Startscreen und Uebergangsanimationen
 - Canvas-basiertes 2D-Gameplay
 - Zwei Level mit persistierter Levelauswahl pro Session
 - Gegner, Boss-Logik und Sammelobjekte
-- Sound- und Musikumschaltung im UI
+- Game-Over-Aktionen mit `Try again` und `Back to startscreen`
+- Loading-Overlay fuer Reloads und Neustarts ohne sichtbaren Startscreen-Flash
+- Sound- und Musikumschaltung im UI inklusive persistiertem Mute-Zustand
 - Fullscreen-Unterstuetzung
 - Mobile Touch-Steuerung inklusive Orientierungshinweis
 - Dialoge fuer Steuerung, Credits, Datenschutz und Impressum
@@ -47,7 +49,7 @@ Das Projekt ist in **vanilla JavaScript**, **HTML** und **CSS** umgesetzt und be
 Wichtige Bereiche:
 
 - `index.html`: Einstiegspunkt der Anwendung
-- `js/game/`: Startfluss, Canvas-Setup, Eingaben und globaler Zustand
+- `js/game/`: Startfluss, Reload-Loading, Canvas-Setup, Eingaben und globaler Zustand
 - `js/lvl/`: Leveldefinitionen
 - `js/models/`: Spiellogik fuer Charaktere, Gegner, Objekte und Welt
 - `js/templates/`: HTML-Templates fuer Startscreen und Dialoge
@@ -87,7 +89,13 @@ http://localhost:8000
 - `Pfeil oben`: springen
 - `A` + Pfeiltaste: rennen
 - `F`: werfen
+- `Leertaste`: auf dem Startscreen Spiel starten
 - `F11`: Vollbildmodus
+
+Zusaetzlich:
+
+- Intro ueber den `Start`-Button oder per Tastatureingabe in den Startscreen wechseln
+- Nach `Game Over` ueber die eingeblendeten Buttons neu starten oder zum Startscreen zurueckkehren
 
 ### Mobile
 
@@ -97,10 +105,12 @@ http://localhost:8000
 
 ## Spielablauf
 
-- Intro mit Tastendruck zum Startscreen
+- Intro mit Start-Button oder Tastatureingabe zum Startscreen
 - Startscreen mit Steuerung, Musikumschalter und Meta-Dialogen
-- Uebergang ins Spiel ueber Tastatur oder Touch
+- Uebergang ins Spiel ueber Leertaste oder Touch
+- Nach Niederlage erscheinen Buttons fuer Neustart oder Rueckkehr zum Startscreen
 - Fortschritt und Levelwahl werden innerhalb der Browser-Session gespeichert
+- Der Mute-Zustand bleibt ueber `localStorage` erhalten
 
 ## Assets und Credits
 
@@ -124,7 +134,7 @@ Wenn du das Projekt auf GitHub praesentierst, kannst du zusaetzlich noch ergaenz
 - weitere Level und Gegnerarten
 - Speichersystem ueber die aktuelle Session hinaus
 - Optionsmenue fuer Audio und Grafik
-- Ladebildschirm und feinere Balancing-Anpassungen
+- feinere Balancing-Anpassungen
 
 ## Lizenz
 
