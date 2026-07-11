@@ -2,6 +2,8 @@
  * @typedef {'music' | 'effect'} ManagedAudioCategory
  */
 
+const musicMuteStorageKey = 'loco.audioMuted';
+
 /**
  * Registers an audio element for global mute and category-aware playback handling.
  *
@@ -11,11 +13,25 @@
  */
 const managedAudios = new Set();
 const audioCategories = new WeakMap();
-let isMusicMuted = false;
+let isMusicMuted = readStoredMuteState();
+
+function readStoredMuteState() {
+	try {
+		return localStorage.getItem(musicMuteStorageKey) === 'true';
+	} catch {
+		return false;
+	}
+}
+
+function persistMuteState(nextMuted) {
+	try {
+		localStorage.setItem(musicMuteStorageKey, `${nextMuted}`);
+	} catch {}
+}
 
 function registerManagedAudio(audio, category) {
 	audioCategories.set(audio, category);
-	audio.muted = category === 'music' ? isMusicMuted : audio.muted;
+	audio.muted = isMusicMuted;
 	managedAudios.add(audio);
 	return audio;
 }
@@ -226,17 +242,16 @@ export function createBoneBreakAudios() {
 }
 
 /**
- * Toggles the global mute state for all registered music tracks.
+ * Toggles the global mute state for all registered audio tracks, including sound effects.
  *
- * @param {boolean} nextMuted - Whether music should be muted.
+ * @param {boolean} nextMuted - Whether all managed audio should be muted.
  * @returns {void}
  */
 export function setMusicMuted(nextMuted) {
 	isMusicMuted = nextMuted;
+	persistMuteState(nextMuted);
 	managedAudios.forEach((audio) => {
-		if (audioCategories.get(audio) === 'music') {
-			audio.muted = isMusicMuted;
-		}
+		audio.muted = isMusicMuted;
 	});
 }
 

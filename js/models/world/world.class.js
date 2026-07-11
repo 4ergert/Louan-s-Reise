@@ -17,8 +17,10 @@ import { CoinsBar } from '../character/coins-bar.class.js';
 import { LifeBar } from '../character/life-bar.class.js';
 import { ThrowableObject } from '../objects/throwable-objects.class.js';
 import { WorldIntros } from './world-intros.class.js';
+import { worldBossEventMethods } from './world-boss-events.js';
 import { worldCollisionMethods } from './world-collisions.js';
 import { worldEventMethods } from './world-events.js';
+import { worldIntroRenderingMethods } from './world-intro-rendering.js';
 import { worldInteractionMethods } from './world-interactions.js';
 import { worldLoopMethods } from './world-loop.js';
 import { worldRenderingMethods } from './world-rendering.js';
@@ -116,7 +118,9 @@ Object.assign(
   World.prototype,
   worldLoopMethods,
   worldRenderingMethods,
+  worldIntroRenderingMethods,
   worldCollisionMethods,
   worldInteractionMethods,
+  worldBossEventMethods,
   worldEventMethods,
 );
