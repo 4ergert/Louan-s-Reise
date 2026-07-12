@@ -72,4 +72,61 @@ export const worldOverlayRenderingMethods = {
     this.ctx.fillText(this.openingIntroHintText, this.canvas.width / 2, this.canvas.height * 0.95);
     this.ctx.restore();
   },
+
+  /**
+   * Draws the ending Liam chase speech bubble.
+   *
+   * @returns {void}
+   */
+  drawEndingLiamChaseBubble() {
+    if (!this.liam) return;
+
+    let liamScreenX = this.liam.x + this.camera_x;
+    let bubbleX = Math.max(20, Math.min(this.canvas.width - 380, liamScreenX - 70));
+    let bubbleY = 35;
+    let textLines = this.getVisibleIntroLines(
+      this.endingLiamChaseLines,
+      this.endingLiamChaseStartedAt,
+      this.endingLiamChaseTypeSpeed
+    );
+
+    this.drawIntroBubble({
+      bubbleX,
+      bubbleY,
+      width: 360,
+      height: 86,
+      tailPoints: [
+        [bubbleX + 70, bubbleY + 86],
+        [bubbleX + 105, bubbleY + 86],
+        [bubbleX + 76, bubbleY + 122],
+      ],
+      font: 'bold 16px Cinzel Decorative',
+      textLines,
+    });
+  },
+
+  /**
+   * Draws the highest-priority active intro bubble.
+   *
+   * @returns {void}
+   */
+  drawActiveIntroBubble() {
+    const activeIntroBubble = this.getActiveIntroBubble();
+    if (!activeIntroBubble) return;
+
+    activeIntroBubble();
+  },
+
+  /**
+   * Returns the draw function for the currently active intro bubble.
+   *
+   * @returns {(() => void) | null}
+   */
+  getActiveIntroBubble() {
+    const activeIntroType = this.getActiveIntroType?.();
+    if (!activeIntroType) return null;
+
+    const methodName = `draw${activeIntroType.charAt(0).toUpperCase()}${activeIntroType.slice(1)}IntroBubble`;
+    return this[methodName]?.bind(this) ?? null;
+  },
 };
