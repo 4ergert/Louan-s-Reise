@@ -78,6 +78,10 @@ export class World extends WorldIntros {
   endingLiamChaseStartedAt = 0;
   endingLiamChaseLines = ['Wartet auf mich'];
   endingLiamChaseTypeSpeed = 50;
+  openingIntroHintText = '';
+  openingIntroHintDuration = 3000;
+  openingIntroHintStartedAt = 0;
+  openingIntroHintShown = false;
   victoryOverlayVisible = false;
   victoryOverlayStartedAt = 0;
   victoryPromptDelay = 3000;

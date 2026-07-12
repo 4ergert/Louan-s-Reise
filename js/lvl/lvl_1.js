@@ -179,6 +179,8 @@ const blockingObjects = [
 const worldSettings = {
   bossArenaStartX: 3500,
   fallDeathStartX: 3300,
+  openingIntroHintText: 'F = werfen',
+  openingIntroHintDuration: 3000,
   openingIntroLines: [
     'Irgendwas stimmt hier nicht!',
     'Meine Geschwister Alia und Liam',

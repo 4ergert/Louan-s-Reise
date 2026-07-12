@@ -183,10 +183,28 @@ export const worldInteractionMethods = {
    * @returns {void}
    */
   collectBones() {
+    if (this.shouldShowOpeningIntroHintOnBonePickup()) {
+      this.openingIntroHintStartedAt = Date.now();
+      this.openingIntroHintShown = true;
+    }
+
     this.collectPickupType(
       (object) => object instanceof ThrowableObject,
       (bone) => this.queueFlyingBonePickup(bone),
       this.bonePickupAudio
+    );
+  },
+
+  /**
+   * Returns whether the throw hint should be shown for the first collected bone.
+   *
+   * @returns {boolean}
+   */
+  shouldShowOpeningIntroHintOnBonePickup() {
+    if (!this.openingIntroHintText || this.openingIntroHintShown) return false;
+
+    return this.lvl.environmentObjects.some((object) =>
+      object instanceof ThrowableObject && isCollidingWithCharacter(this.character, object)
     );
   },
 
